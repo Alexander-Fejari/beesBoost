@@ -5,7 +5,7 @@ const port = 5000;
 app.use(express.json());
 
 app.get('/', (req, res) => {
-  res.send('Backend fonctionne correctement !');
+  res.send('Serveur backend fonctionne correctement !');
 });
 
 app.listen(port, () => {
