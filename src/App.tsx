@@ -17,7 +17,7 @@ const router = createBrowserRouter(
           <Route path="*" element={<NotFound />} />
           <Route path="design-system" element={<DesignSystem/>} />
           <Route index element={<Home />} />
-          <Route path="signin" element={<SignIn />} />
+          <Route path="sign-in" element={<SignIn />} />
           <Route path="login" element={<Login />} />
         </Route>
     )
