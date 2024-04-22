@@ -1,9 +1,11 @@
-import {useTranslation} from 'react-i18next'
-import useLocalizeDocumentAttributes from "@/i18n/useLocalizeDocumentAttributes";
-import LanguageSwitcher from "@/components/custom/LanguageSwitcher";
+import { useTranslation } from 'react-i18next';
+import LanguageSwitcher from '@/components/custom/LanguageSwitcher';
+import i18n from '../../i18n/config.ts';
+
+
 const Header = () => {
-    useLocalizeDocumentAttributes();
-    const {t} = useTranslation();
+    const { t } = useTranslation('common');
+
     return (
         <header>
             <ul>
@@ -16,6 +18,7 @@ const Header = () => {
             </ul>
             <LanguageSwitcher/>
         </header>
-    )
-}
-export default Header
+    );
+};
+
+export default Header;

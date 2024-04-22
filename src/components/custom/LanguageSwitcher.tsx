@@ -1,20 +1,22 @@
+import React from 'react';
 import { useTranslation } from 'react-i18next';
-import {Button} from "@/components/ui/button";
+import {Button} from "@/components/ui/button.tsx";
 
-function LanguageSwitcher() {
+const LanguageSelector: React.FC = () => {
     const { i18n } = useTranslation();
 
-    const changeLanguage = (lng) => {
+    const changeLanguage = (lng: string) => {
         i18n.changeLanguage(lng);
+        document.documentElement.lang = lng;
     };
 
     return (
         <div>
-            <Button onClick={() => changeLanguage('fr')}>Fr</Button>
-            <Button onClick={() => changeLanguage('nl')}>Nl</Button>
-            <Button onClick={() => changeLanguage('en')}>En</Button>
+            <Button onClick={() => changeLanguage('fr')}>FR</Button>
+            <Button onClick={() => changeLanguage('en')}>EN</Button>
+            <Button onClick={() => changeLanguage('nl')}>NL</Button>
         </div>
     );
-}
+};
 
-export default LanguageSwitcher;
+export default LanguageSelector;
