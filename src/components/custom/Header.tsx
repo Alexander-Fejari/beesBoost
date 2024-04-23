@@ -3,7 +3,7 @@ import LanguageSwitcher from '@/components/custom/LanguageSwitcher';
 
 
 const Header = () => {
-    const { t } = useTranslation('common');
+    const { t } = useTranslation();
 
     return (
         <header>

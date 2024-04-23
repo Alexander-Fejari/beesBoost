@@ -1,23 +1,47 @@
 import i18n from 'i18next';
+import HttpApi from 'i18next-http-backend';
 import { initReactI18next } from 'react-i18next';
-import LanguageDetector from 'i18next-browser-languagedetector';
-import HttpBackend from 'i18next-http-backend';
+import commonFR from "../locales/fr/commonFR.json";
+import homeFR from "../locales/fr/commonFR.json";
+import commonEN from "../locales/en/commonEN.json";
+import homeEN from "../locales/en/commonEN.json";
+import commonNL from "../locales/nl/commonNL.json";
+import homeNL from "../locales/nl/commonNL.json";
+
+const resources = {
+    fr: {
+        common: commonFR,
+        home: homeFR
+    },
+    en: {
+        common: commonEN,
+        home: homeEN
+    },
+    nl: {
+        common: commonNL,
+        home: homeNL
+    }
+};
 
 i18n
-    .use(HttpBackend)
-    .use(LanguageDetector)
-    .use(initReactI18next) // Utilisez initReactI18next ici
+    .use(HttpApi)
+    .use(initReactI18next)
     .init({
+        resources,
         backend: {
             loadPath: '/locales/{{lng}}/{{ns}}.json',
         },
+        detection: {
+            order: ['cookie', 'htmlTag', 'localStorage', 'subdomain', 'path', 'sessionStorage', 'navigator'],
+            caches: ['cookie'],
+        },
         fallbackLng: 'fr',
+        lng: 'fr',
+        ns: ['common', 'home'],
         debug: true,
         interpolation: {
             escapeValue: false,
         },
-        ns: ['common'],
-        defaultNS: 'common',
     });
 
 export default i18n;
