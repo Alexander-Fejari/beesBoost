@@ -11,13 +11,14 @@ import SignIn from '@/pages/signIn/SignIn.tsx';
 import Login from '@/pages/login/Login.tsx';
 import './App.css'
 
+
 const router = createBrowserRouter(
     createRoutesFromElements(
         <Route path="/">
           <Route path="*" element={<NotFound />} />
           <Route path="design-system" element={<DesignSystem/>} />
           <Route index element={<Home />} />
-          <Route path="signin" element={<SignIn />} />
+          <Route path="sign-in" element={<SignIn />} />
           <Route path="login" element={<Login />} />
         </Route>
     )
