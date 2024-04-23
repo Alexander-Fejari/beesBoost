@@ -2,11 +2,11 @@ import i18n from 'i18next';
 import HttpApi from 'i18next-http-backend';
 import { initReactI18next } from 'react-i18next';
 import commonFR from "../locales/fr/commonFR.json";
-import homeFR from "../locales/fr/commonFR.json";
 import commonEN from "../locales/en/commonEN.json";
-import homeEN from "../locales/en/commonEN.json";
 import commonNL from "../locales/nl/commonNL.json";
-import homeNL from "../locales/nl/commonNL.json";
+import homeFR from "../locales/fr/homeFR.json";
+import homeEN from "../locales/en/homeEN.json";
+import homeNL from "../locales/nl/homeNL.json";
 
 const resources = {
     fr: {

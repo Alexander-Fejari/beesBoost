@@ -7,6 +7,7 @@ const Header = () => {
 
     return (
         <header>
+            <p>{t('home.message', { ns: 'home' })}</p>
             <ul>
                 <li>
                     {t('navbar.home')}
