@@ -1,6 +1,5 @@
 import { useTranslation } from 'react-i18next';
 import LanguageSwitcher from '@/components/custom/LanguageSwitcher';
-import i18n from '../../i18n/config.ts';
 
 
 const Header = () => {
