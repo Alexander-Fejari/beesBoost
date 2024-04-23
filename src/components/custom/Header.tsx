@@ -1,5 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import LanguageSwitcher from '@/components/custom/LanguageSwitcher';
+import {ModeToggle} from "@/components/mode-toggle";
 
 
 const Header = () => {
@@ -17,6 +18,7 @@ const Header = () => {
                 </li>
             </ul>
             <LanguageSwitcher/>
+            <ModeToggle/>
         </header>
     );
 };
