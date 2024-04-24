@@ -1,6 +1,8 @@
 import express, { Request, Response } from 'express';
 import { connectToDatabase, closeDatabase } from './config/db';
 import userRouter from './routes/user.route'
+import studentsRouter from './routes/student.route';
+import enterpriseRouter from './routes/enterprise.route';
 //import getDataRouter from './routes/getData.route';
 
 const app = express();
@@ -23,6 +25,8 @@ app.get('/', (req: Request, res: Response) => {
 });
 
 app.use('/users', userRouter);
+app.use('/students', studentsRouter);
+app.use('/enterprises', enterpriseRouter);
 
 //app.use('/data', getDataRouter);
 

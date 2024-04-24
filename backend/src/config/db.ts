@@ -13,8 +13,10 @@ async function connectToDatabase() {
     client = await MongoClient.connect(uri);
     console.log("Connecté a la DB ma biche");
     db = client.db(dbName);
+    
     return db;
-  } catch (error) {
+  } 
+  catch (error) {
     console.error('Error connecting to MongoDB Atlas:', error);
     throw error;
   }
@@ -33,7 +35,8 @@ async function closeDatabase() {
       await client.close();
       console.log('Déconnecté de la DB');
     }
-  } catch (error) {
+  } 
+  catch (error) {
     console.error('Error closing MongoDB:', error);
     throw error;
   }
