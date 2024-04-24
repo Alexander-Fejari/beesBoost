@@ -2,5 +2,10 @@
     "navbar": {
         "home": "Accueil",
         "services": "Nos services"
+    },
+    "footer": {
+        "contact": "Contactez-nous",
+        "legal": "Mentions légales",
+        "credits": "Tous droits réservés"
     }
 }
