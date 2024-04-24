@@ -18,12 +18,12 @@ export function ModeToggle() {
                     <span className="sr-only">Toggle theme</span>
                 </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
+            <DropdownMenuContent align="center">
                 <DropdownMenuItem onClick={() => setTheme("light")}>
-                    Light
+                   <CiLight className={'h-[1.2rem] w-[1.2rem]'}/>
                 </DropdownMenuItem>
                 <DropdownMenuItem onClick={() => setTheme("dark")}>
-                    Dark
+                   <CiDark className={'h-[1.2rem] w-[1.2rem]'}/>
                 </DropdownMenuItem>
             </DropdownMenuContent>
         </DropdownMenu>
