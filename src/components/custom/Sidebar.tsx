@@ -10,7 +10,7 @@ const Sidebar = () => {
     const { t } = useTranslation();
 
     return (
-        <aside className='hidden md:flex flex-col p-4 md:w-1/12 lg:w-1/5 bg-slate-400'>
+        <aside className='hidden md:flex flex-col p-4 md:w-max bg-slate-400'>
             <a className='flex items-center gap-2 text-center'>
                 <LuLayoutDashboard/>
                 <p className='md:hidden lg:block'>{t('sidebar.dashboard')}</p>
