@@ -2,5 +2,18 @@
     "navbar": {
         "home": "Ontvangst",
         "services": "Onze diensten"
+    },
+    
+    "sidebar": {
+        "dashboard": "Dashboard",
+        "user": "Mijn profiel",
+        "search": "Zoeken",
+        "messages": "Berichten",
+        "notifications": "Meldingen",
+        "calendar": "Kalender",
+        "tasks": "Taken",
+        "payements": "Betalingen",
+        "settings": "Instellingen",
+        "logout": "Uitloggen"
     }
 }

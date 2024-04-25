@@ -7,5 +7,17 @@
         "contact": "Contactez-nous",
         "legal": "Mentions légales",
         "credits": "Tous droits réservés"
+    },
+    "sidebar": {
+        "dashboard": "Tableau de bord",
+        "user": "Mon profil",
+        "search": "Recherche",
+        "messages": "Messages",
+        "notifications": "Notifications",
+        "calendar": "Calendrier",
+        "tasks": "Missions",
+        "payements": "Paiements",
+        "settings": "Paramètres",
+        "logout": "Déconnexion"
     }
 }
