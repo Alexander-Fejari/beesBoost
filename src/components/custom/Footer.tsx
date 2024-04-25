@@ -1,31 +1,67 @@
-// import { useTranslation } from 'react-i18next';
-// import LanguageSwitcher from '@/components/custom/LanguageSwitcher';
-// import {ModeToggle} from "@/components/mode-toggle";
+import { useTranslation } from 'react-i18next';
+import LanguageSwitcher from '@/components/custom/LanguageSwitcher';
+import { LegalSelector } from '../legal-selector';
+import { LuHexagon } from "react-icons/lu";// import {ModeToggle} from "@/components/mode-toggle";
 
 import logo from '@/assets/logo.png';
+import { FaFacebook, FaInstagram, FaTiktok, FaLinkedinIn, FaYoutube } from "react-icons/fa6";
 
 
 const Footer = () => {
-    // const { t } = useTranslation();
+    const { t } = useTranslation();
 
     return (
-        <footer className="max-w-full h-auto flex justify-between bg-zinc-100">
-            <div className="flex-col">
-                <div className="justify-center">
-                    <img className='h-[3rem] w-auto ' src={logo} alt="logo" />
-                    <div className="flex ">
-                        <img className="w-7 h-7  " src="https://via.placeholder.com/27x27" />
-                        <img className="w-7 h-7 " src="https://via.placeholder.com/27x27" />
-                        <img className="w-7 h-7  " src="https://via.placeholder.com/27x28" />
-                        <img className="w-7 h-7  " src="https://via.placeholder.com/27x28" />
-                        <img className="w-7 h-7  " src="https://via.placeholder.com/27x27" />
-                    </div>
+        <footer className="w-full h-auto flex flex-col justify-around items-center bg-zinc-100 p-4 gap-y-2">
+            {/* LOGO */}
+            <div className="flex flex-col items-center w-full">
+                <img className='h-[3rem] w-auto pb-4' src={logo} alt="logo" />
+            </div>
+            {/* NAVBAR */}
+            <ul className='md:flex gap-4 text-xs'>
+                <li className='flex gap-1 items-center'>
+                    <LuHexagon className='text-primary'/>
+                    <a href="/">{t('navbar.home')}</a>
+                </li>
+                <li className='flex gap-1 items-center'>
+                    <LuHexagon className='text-primary'/>
+                    <a href="/services">{t('navbar.services')}</a>
+                </li>
+                <li className='flex gap-1 items-center'>
+                    <LuHexagon className='text-primary'/>
+                    <a href="/contact">Contact</a>
+                </li>
+            </ul>
+            {/* SERVICES */}
+            <div className='flex flex-col md:flex-row w-full justify-between items-center'>
+                <div className="order-last md:order-first md:basis-1/3 md:flex md:justify-start">
+                <LegalSelector />
+                </div>
+                <div className="md:basis-1/3 md:flex md:justify-center ">
+                <div className="gap-2 flex justify-center">
+                    <a href="https://www.facebook.com/yourPage" target="_blank" rel="noopener noreferrer">
+                        <FaFacebook className="transition-transform transform hover:scale-110"/>
+                    </a>
+                    <a href="https://www.instagram.com/yourPage" target="_blank" rel="noopener noreferrer">
+                        <FaInstagram className="transition-transform transform hover:scale-110"/>
+                    </a>
+                    <a href="https://www.tiktok.com/yourPage" target="_blank" rel="noopener noreferrer">
+                        <FaTiktok className="transition-transform transform hover:scale-110"/>
+                    </a>
+                    <a href="https://www.linkedin.com/yourPage" target="_blank" rel="noopener noreferrer">
+                        <FaLinkedinIn className="transition-transform transform hover:scale-110"/>
+                    </a>
+                    <a href="https://www.youtube.com/yourPage" target="_blank" rel="noopener noreferrer">
+                        <FaYoutube className="transition-transform transform hover:scale-110"/>
+                    </a>
+                </div>
+                </div>
+                <div className="order-first md:order-last md:basis-1/3 md:flex md:justify-end">
+                <LanguageSwitcher />
                 </div>
             </div>
-
-            <div className="w-40 h-3.5 text-right text-black text-base font-light font-['Poppins'] leading-none">Politique de vie privée</div>
-            <div className="w-16 h-7 text-black text-base font-normal font-['Poppins'] leading-relaxed">Français</div>
-            <div className="w-96 h-3.5  text-center text-neutral-400 text-sm font-normal font-['Poppins'] leading-none">Copyrights © 2023 Bees Boost | Powered by Bees Boost</div>
+            <hr />
+            {/* COPYRIGHT */}
+            <div className="text-center pt-4 text-neutral-400 text-sm font-normal font-['Poppins'] leading-none w-full">Copyrights © 2023 Bees Boost | Powered by Bees Boost</div>
         </footer>
     );
 };
