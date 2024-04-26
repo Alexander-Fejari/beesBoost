@@ -21,8 +21,8 @@ const SidebarTest = () => {
   };
 
   return (
-    <aside className={`h-screen transition-none duration-0 ${expanded ? 'w-fit' : 'w-11'}`}>
-      <nav className="h-full flex flex-col bg-white border-r shadow-sm">
+    <aside className={`h-screen transition-none duration-0 w-fit`}>
+      <nav className="h-full flex flex-col">
         <SidebarContext.Provider value={{ expanded, setExpanded: toggleExpanded }}>
           <ul className="flex flex-col px-3">
             <li onClick={toggleExpanded} className="py-2 flex items-center">
