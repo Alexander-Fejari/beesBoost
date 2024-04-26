@@ -2,5 +2,9 @@
     "navbar": {
         "home": "Ontvangst",
         "services": "Onze diensten"
+    },
+    "ctaUser": {
+        "ctaSignin": "S'inschrijven",
+        "ctaLogIn": "Inloggen"
     }
 }

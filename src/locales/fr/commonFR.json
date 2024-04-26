@@ -2,5 +2,9 @@
     "navbar": {
         "home": "Accueil",
         "services": "Nos services"
+    },
+    "ctaUser": {
+        "ctaSignin": "S'inscrire",
+        "ctaLogIn": "Connection"
     }
 }
