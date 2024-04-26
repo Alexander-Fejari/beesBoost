@@ -23,71 +23,67 @@ const SidebarTest = () => {
   return (
     <aside className={`h-screen transition-none duration-0 ${expanded ? 'w-fit' : 'w-11'}`}>
       <nav className="h-full flex flex-col bg-white border-r shadow-sm">
-        <div className="p-4 pb-2 flex justify-between items-center header">
-
-        </div>
-
         <SidebarContext.Provider value={{ expanded, setExpanded: toggleExpanded }}>
-          <ul className="flex-1 px-3">
+          <ul className="flex flex-col px-3">
             <li onClick={toggleExpanded} className="py-2 flex items-center">
-              <div className="w-6 mr-2">
+              <div className="w-6 h-6 mr-2 flex justify-center items-center">
                 <LuLayoutDashboard />
               </div>
-              <span className={`transition-all duration-300 ${expanded ? 'opacity-100' : 'opacity-0'}`}>{t('sidebar.dashboard')}</span>
+              <div className={`transition-none duration-0 ${expanded ? 'visible' : 'invisible'}`}>{t('sidebar.dashboard')}</div>
             </li>
             <li onClick={toggleExpanded} className="py-2 flex items-center">
-              <div className="w-6 mr-2">
+              <div className="w-6 h-6 mr-2 flex justify-center items-center">
                 <LuUser2 />
               </div>
-              <span className={`transition-all duration-300 ${expanded ? 'opacity-100' : 'opacity-0'}`}>{t('sidebar.user')}</span>
+              <div className={`transition-none duration-0 ${expanded ? 'visible' : 'invisible'}`}>{t('sidebar.user')}</div>
             </li>
             <li onClick={toggleExpanded} className="py-2 flex items-center">
-              <div className="w-6 mr-2">
+              <div className="w-6 h-6 mr-2 flex justify-center items-center">
                 <MdOutlineSearch />
               </div>
-              <span className={`transition-all duration-300 ${expanded ? 'opacity-100' : 'opacity-0'}`}>{t('sidebar.search')}</span>
+              <div className={`transition-none duration-0 ${expanded ? 'visible' : 'invisible'}`}>{t('sidebar.search')}</div>
             </li>
             <li onClick={toggleExpanded} className="py-2 flex items-center">
-              <div className="w-6 mr-2">
+              <div className="w-6 h-6 mr-2 flex justify-center items-center">
                 <MdOutlineMessage />
               </div>
-              <span className={`transition-all duration-300 ${expanded ? 'opacity-100' : 'opacity-0'}`}>{t('sidebar.messages')}</span>
+              <div className={`transition-none duration-0 ${expanded ? 'visible' : 'invisible'}`}>{t('sidebar.messages')}</div>
            </li>
             <li onClick={toggleExpanded} className="py-2 flex items-center">
-              <div className="w-6 mr-2">
+              <div className="w-6 h-6 mr-2 flex justify-center items-center">
                 <MdOutlineNotifications />
               </div>
-              <span className={`transition-all duration-300 ${expanded ? 'opacity-100' : 'opacity-0'}`}>{t('sidebar.notifications')}</span>
+              <div className={`transition-none duration-0 ${expanded ? 'visible' : 'invisible'}`}>{t('sidebar.notifications')}</div>
             </li>
             <li onClick={toggleExpanded} className="py-2 flex items-center">
-              <div className="w-6 mr-2">
+              <div className="w-6 h-6 mr-2 flex justify-center items-center">
                 <MdOutlineCalendarMonth />
               </div>
-              <span className={`transition-all duration-300 ${expanded ? 'opacity-100' : 'opacity-0'}`}>{t('sidebar.calendar')}</span>
+              <div className={`transition-none duration-0 ${expanded ? 'visible' : 'invisible'}`}>{t('sidebar.calendar')}</div>
             </li>
             <li onClick={toggleExpanded} className="py-2 flex items-center">
-              <div className="w-6 mr-2">
+              <div className="w-6 h-6 mr-2 flex justify-center items-center">
                 <FaTasks />
               </div>
-              <span className={`transition-all duration-300 ${expanded ? 'opacity-100' : 'opacity-0'}`}>{t('sidebar.tasks')}</span>
+              <div className={`transition-none duration-0 ${expanded ? 'visible' : 'invisible'}`}>{t('sidebar.tasks')}</div>
             </li>
             <li onClick={toggleExpanded} className="py-2 flex items-center">
-              <div className="w-6 mr-2">
+              <div className="w-6 h-6 mr-2 flex justify-center items-center">
                 <RiBankFill />
               </div>
-              <span className={`transition-all duration-300 ${expanded ? 'opacity-100' : 'opacity-0'}`}>{t('sidebar.payements')}</span>
+              <div className={`transition-none duration-0 ${expanded ? 'visible' : 'invisible'}`}>{t('sidebar.payements')}</div>
             </li>
             <li onClick={toggleExpanded} className="py-2 flex items-center">
-              <div className="w-6 mr-2">
+              <div className="w-6 h-6 mr-2 flex justify-center items-center">
                 <MdOutlineSettings />
               </div>
-              <span className={`transition-all duration-300 ${expanded ? 'opacity-100' : 'opacity-0'}`}>{t('sidebar.settings')}</span>
+              <div className={`transition-none duration-0 ${expanded ? 'visible' : 'invisible'}`}>{t('sidebar.settings')}</div>
             </li>
             <li onClick={toggleExpanded} className="py-2 flex items-center">
-              <div className="w-6 mr-2">
+              <div className="w-6 h-6 mr-2 flex justify-center items-center">
                 <MdOutlineLogout />
               </div>
-              <span className={`transition-all duration-300 ${expanded ? 'opacity-100' : 'opacity-0'}`}>{t('sidebar.logout')}</span>
+              <div className={`transition-none duration-0 ${expanded ? 'visible' : 'invisible'}`}>{t('sidebar.logout')}</div>
             </li>
           </ul>
         </SidebarContext.Provider>
