@@ -1,6 +1,15 @@
 {
     "navbar": {
+        "beesBoost": "Bees Boost",
         "home": "Accueil",
-        "services": "Nos services"
+        "FAQ": "FAQ",
+        "contact": "Contact",
+        "blog": "Blog"
+    },
+    "ctaUser": {
+        "ctaSignIn": "S'inscrire",
+        "ctaLogIn": "Connection",
+        "ctaGreetingUser": "Bienvenue"
+
     }
 }

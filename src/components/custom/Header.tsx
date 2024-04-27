@@ -1,24 +1,19 @@
-import { useTranslation } from 'react-i18next';
 import LanguageSwitcher from '@/components/custom/LanguageSwitcher';
 import {ModeToggle} from "@/components/mode-toggle";
+import CTALogsUser from "@/components/custom/CTALogsUser.tsx";
+import Logo from "@/components/custom/Logo";
+import Nav from "@/components/custom/Nav";
 
 
 const Header = () => {
-    const { t } = useTranslation();
 
     return (
         <header>
-            <p>{t('home.message', { ns: 'home' })}</p>
-            <ul>
-                <li>
-                    {t('navbar.home')}
-                </li>
-                <li>
-                    {t('navbar.services')}
-                </li>
-            </ul>
+            <Logo size={'sm'}/>
+            <Nav/>
             <LanguageSwitcher/>
             <ModeToggle/>
+            <CTALogsUser isLog={false}/>
         </header>
     );
 };
