@@ -1,11 +1,14 @@
 {
     "navbar": {
+        "beesBoost": "Bees Boost",
         "home": "Home",
-        "services": "Our services"
+        "FAQ": "FAQ",
+        "contact": "Contact",
+        "blog": "Blog"
     },
     "ctaUser": {
-        "ctaSignin": "Sign in",
+        "ctaSignIn": "Sign in",
         "ctaLogIn": "Log in",
-        "ctaGreetingUser": ""
+        "ctaGreetingUser": "Welcome"
     }
 }

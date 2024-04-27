@@ -1,10 +1,14 @@
 {
     "navbar": {
+        "beesBoost": "Bees Boost",
         "home": "Ontvangst",
-        "services": "Onze diensten"
+        "FAQ": "FAQ",
+        "contact": "Contact",
+        "blog": "Blog"
     },
     "ctaUser": {
-        "ctaSignin": "S'inschrijven",
-        "ctaLogIn": "Inloggen"
+        "ctaSignIn": "S'inschrijven",
+        "ctaLogIn": "Inloggen",
+        "ctaGreetingUser": "Welkome"
     }
 }

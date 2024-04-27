@@ -7,31 +7,30 @@ import {
     DialogTrigger,
 } from "@/components/ui/dialog"
 import {Button} from "@/components/ui/button"
-import {Avatar, AvatarFallback, AvatarImage} from "@/components/ui/avatar"
 import {useTranslation} from "react-i18next";
+import {Avatar, AvatarFallback, AvatarImage} from "@/components/ui/avatar";
 
 interface CTALogsUserProps {
-    islog?: boolean
+    isLog?: boolean
 
 }
 
-const CTALogsUser = ({islog}: CTALogsUserProps) => {
+const CTALogsUser = ({isLog}: CTALogsUserProps) => {
     const {t} = useTranslation()
-
     return (
         <>
-            {islog === false && (
-                <section>
+            {isLog === false && (
+                <section className='flex items-center gap-x-4'>
                     <Dialog>
                         <DialogTrigger asChild>
                             <Button size={'lg'} variant={'outline'}>
-                                {t('ctaUser.ctaSignin')}
+                                {t('ctaUser.ctaSignIn')}
                             </Button>
                         </DialogTrigger>
                         <DialogContent>
                             <DialogHeader>
                                 <DialogTitle>
-                                    {t('ctaUser.ctaSignin')}
+                                    {t('ctaUser.ctaSignIn')}
                                 </DialogTitle>
                                 <DialogDescription>
                                     form inscription
@@ -58,12 +57,13 @@ const CTALogsUser = ({islog}: CTALogsUserProps) => {
                     </Dialog>
                 </section>
             )}
-            {islog === true && (
-                <section>
+            {isLog === true && (
+                <section className='flex items-center gap-x-4'>
                     <Avatar>
                         <AvatarImage src="https://github.com/shadcn.png" />
-                        <AvatarFallback>CN</AvatarFallback>
+                        <AvatarFallback>JL007</AvatarFallback>
                     </Avatar>
+                    <h3>{t('ctaUser.ctaGreetingUser')} {'user.name'}</h3>
                 </section>
             )}
         </>

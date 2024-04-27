@@ -23,6 +23,13 @@ const resources = {
     }
 };
 
+// Fonction pour sauvegarder la langue sélectionnée dans les cookies
+const saveLanguageToLocalStorage = (lng:string) => {
+    localStorage.setItem('language', lng);
+};
+
+const defaultLanguage = localStorage.getItem('language') || 'fr'; // Récupère la langue depuis les cookies ou utilise le français par défaut
+
 i18n
     .use(HttpApi)
     .use(initReactI18next)
@@ -36,12 +43,17 @@ i18n
             caches: ['cookie'],
         },
         fallbackLng: 'fr',
-        lng: 'fr',
+        lng: defaultLanguage, // Utilise la langue par défaut
         ns: ['common', 'home'],
         debug: true,
         interpolation: {
             escapeValue: false,
         },
     });
+
+// Écoute les changements de langue et les sauvegarde dans les cookies
+i18n.on('languageChanged', (lng) => {
+    saveLanguageToLocalStorage(lng);
+});
 
 export default i18n;
