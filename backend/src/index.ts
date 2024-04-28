@@ -6,7 +6,7 @@ import { connectToDatabase, closeDatabase } from './config/db';
 import userRouter from './routes/user.route';
 import studentRouter from './routes/student.route';
 
-// Initialize
+// Initialize ouesh
 const app = express();
 const port = 5000;
 
