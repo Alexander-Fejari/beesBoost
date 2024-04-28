@@ -1,26 +1,19 @@
-import { Collection, ObjectId } from 'mongodb';
-import { db } from '../config/db';
+import { Schema, model, Document } from 'mongoose';
 
-export interface User {
+interface IUser extends Document {
   username: string;
   profile_pic: string;
   role: string;
   email: string;
 }
 
-const UserModel = {
-  async addUser(userData: User): Promise<string> {
-    const collection: Collection<User> = db.collection('users');
-    const result = await collection.insertOne(userData);
+const userSchema = new Schema<IUser>({
+  username: { type: String, required: true },
+  profile_pic: { type: String},
+  role: { type: String, required: true },
+  email: { type: String, required: true },
+});
 
-    return result.insertedId.toHexString();
-  },
-  async getUsers(): Promise<User[]> {
-    const collection: Collection<User> = db.collection('users');
-    const users = await collection.find({}).toArray();
-    
-    return users;
-  },
-};
+const UserModel = model<IUser>('User', userSchema);
 
-export { UserModel };
+export { UserModel, IUser };

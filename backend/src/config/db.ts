@@ -1,45 +1,36 @@
-import { MongoClient, Db } from 'mongodb';
+import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 
 dotenv.config();
-const uri = process.env.MONGODB_URI || '';
-const dbName = process.env.DB_NAME || '';
 
-let client: MongoClient;
-let db: Db;
+const dbUri = process.env.MONGODB_URI || '';
+const dbName = process.env.DB_NAME || '';
 
 async function connectToDatabase() {
   try {
-    client = await MongoClient.connect(uri);
-    console.log("Connecté a la DB ma biche");
-    db = client.db(dbName);
-    
-    return db;
-  } 
-  catch (error) {
-    console.error('Error connecting to MongoDB Atlas:', error);
+    await mongoose.connect(dbUri, {
+      dbName: dbName
+    });
+    console.log(`Connecté à la base de données ${dbName}`);
+    return mongoose.connection;
+  } catch (error) {
+    console.error(`Erreur de connexion à la base de données ${dbName} :`, error);
     throw error;
   }
 }
 
-function getClient() {
-  if (!client) {
-    throw new Error('MongoDB client is not connected');
-  }
-  return client;
+function getConnection() {
+  return mongoose.connection;
 }
 
 async function closeDatabase() {
   try {
-    if (client) {
-      await client.close();
-      console.log('Déconnecté de la DB');
-    }
-  } 
-  catch (error) {
-    console.error('Error closing MongoDB:', error);
+    await mongoose.disconnect();
+    console.log('Déconnecté de la base de données');
+  } catch (error) {
+    console.error('Erreur lors de la fermeture de MongoDB :', error);
     throw error;
   }
 }
 
-export { connectToDatabase, getClient, closeDatabase, db };
+export { connectToDatabase, getConnection, closeDatabase };

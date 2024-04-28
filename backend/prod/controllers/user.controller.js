@@ -1,28 +1,43 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const user_model_1 = require("../models/user.model");
-const UserController = {
+class UserController {
     async addUser(req, res) {
         try {
             const { username, profile_pic, role, email } = req.body;
-            const userData = { username, profile_pic, role, email };
-            const userId = await user_model_1.UserModel.addUser(userData);
-            res.status(201).json({ message: 'Utilisateur ajouté avec succès', userId });
+            const newUser = new user_model_1.UserModel({ username, profile_pic, role, email });
+            await newUser.save();
+            res.status(201).json({ message: 'User added successfully', userId: newUser._id });
         }
         catch (error) {
-            console.error('Erreur lors de l\'ajout de l\'utilisateur :', error);
-            res.status(500).json({ error: 'Erreur lors de l\'ajout de l\'utilisateur' });
+            console.error('Error adding user:', error);
+            res.status(500).json({ error: 'Error adding user' });
         }
-    },
-    async getUsers(req, res) {
+    }
+    async getAllUsers(req, res) {
         try {
-            const users = await user_model_1.UserModel.getUsers();
+            const users = await user_model_1.UserModel.find({});
             res.json(users);
         }
         catch (error) {
-            console.error('Erreur lors de la récupération des utilisateurs :', error);
-            res.status(500).json({ error: 'Erreur lors de la récupération des utilisateurs' });
+            console.error('Error retrieving users:', error);
+            res.status(500).json({ error: 'Error retrieving users' });
         }
-    },
-};
+    }
+    async getUser(req, res) {
+        try {
+            const { username } = req.params;
+            const user = await user_model_1.UserModel.findOne({ username });
+            if (!user) {
+                res.status(404).json({ message: 'User not found' });
+                return;
+            }
+            res.json(user);
+        }
+        catch (error) {
+            console.error('Error retrieving user:', error);
+            res.status(500).json({ error: 'Error retrieving user' });
+        }
+    }
+}
 exports.default = UserController;
