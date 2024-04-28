@@ -1,10 +1,12 @@
+import {NavLink} from "react-router-dom";
 import logo from "@/assets/logo.png";
 
 interface LogoProps {
-    size: 'sm' | 'l'
+    size: 'sm' | 'l',
+    link: boolean
 }
 
-const Logo = ({size}:LogoProps) => {
+const Logo = ({size, link}: LogoProps) => {
     let sizesClasses;
     switch (size) {
         case "sm":
@@ -13,10 +15,16 @@ const Logo = ({size}:LogoProps) => {
         case "l":
             sizesClasses = 'w-52 h-auto'
     }
-    return  (
+    return (
         <>
-            <img className={`${sizesClasses}`} src={logo} alt={'logo Bees Boost'}/>
-
+            {link === false && (
+                <img className={`${sizesClasses}`} src={logo} alt={'logo Bees Boost'}/>
+            )}
+            {link === true && (
+                <NavLink to={'/'}>
+                    <img className={`${sizesClasses}`} src={logo} alt={'logo Bees Boost'}/>
+                </NavLink>
+            )}
         </>
     )
 }

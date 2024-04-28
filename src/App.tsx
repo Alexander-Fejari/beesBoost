@@ -7,8 +7,9 @@ import {
 import NotFound from '@/pages/notFound/NotFound.tsx';
 import DesignSystem from '@/pages/designSystem/DesignSystem.tsx';
 import Home from '@/pages/home/Home.tsx';
-import SignIn from '@/pages/signIn/SignIn.tsx';
-import Login from '@/pages/login/Login.tsx';
+import Faq from '@/pages/FAQ/Faq.tsx';
+import Contact from '@/pages/contact/Contact.tsx';
+import Blog from '@/pages/blog/Blog.tsx';
 import './App.css'
 
 
@@ -18,8 +19,9 @@ const router = createBrowserRouter(
           <Route path="*" element={<NotFound />} />
           <Route path="design-system" element={<DesignSystem/>} />
           <Route index element={<Home />} />
-          <Route path="sign-in" element={<SignIn />} />
-          <Route path="login" element={<Login />} />
+          <Route path="faq" element={<Faq />} />
+          <Route path="contact" element={<Contact />} />
+          <Route path="blog" element={<Blog />} />
         </Route>
     )
 );
