@@ -10,5 +10,14 @@
         "ctaSignIn": "S'inschrijven",
         "ctaLogIn": "Inloggen",
         "ctaGreetingUser": "Welkome"
+    },
+    "signIn": {
+        "lastname": "Achternaam:",
+        "firstname": "Voornaam:",
+        "email": "Email: ",
+        "pseudo": "Pseudo:",
+        "password": "Wachtwoord",
+        "reset": "Annuleren",
+        "submit": "Indienen"
     }
 }
