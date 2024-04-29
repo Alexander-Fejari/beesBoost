@@ -17,7 +17,12 @@ const swaggerDefinition = {
     servers: [
         {
             url: `http://localhost:${port}`,
+            description: `Local Development Server`
         },
+        {
+            url: `https://cinemania.space`,
+            description: `Production Server`
+        }
     ],
     components: {
         schemas: {

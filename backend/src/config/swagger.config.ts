@@ -10,12 +10,17 @@ const swaggerDefinition = {
     info: {
       title: 'BeesBoost API',
       version: '0.1.0',
-      description: 'API built for BeesBoost website (Méline <3)',
+      description: 'API built for BeesBoost website',
     },
     servers: [
       {
         url: `http://localhost:${port}`,
+        description: `Local Development Server`
       },
+      {
+        url: `https://cinemania.space`,
+        description: `Production Server`
+      }
     ],
     components: {
       schemas: {
