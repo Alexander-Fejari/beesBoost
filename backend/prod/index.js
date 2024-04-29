@@ -4,33 +4,36 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
-const swagger_jsdoc_1 = __importDefault(require("swagger-jsdoc"));
+// import swaggerJsdoc from 'swagger-jsdoc';
 const swagger_ui_express_1 = __importDefault(require("swagger-ui-express"));
-const db_1 = require("./config/db");
+const swagger_config_1 = __importDefault(require("./config/swagger.config"));
+const dotenv_1 = __importDefault(require("dotenv"));
+const database_config_1 = require("./config/database.config");
 const user_route_1 = __importDefault(require("./routes/user.route"));
 const student_route_1 = __importDefault(require("./routes/student.route"));
+dotenv_1.default.config();
 // Initialize
 const app = (0, express_1.default)();
-const port = 5000;
+const port = process.env.PORT || 5000;
 // Swagger setup
-const swaggerOptions = {
-    definition: {
-        openapi: '3.0.0',
-        info: {
-            title: 'BeesBoost API',
-            version: '0.1.0',
-            description: 'API built for BeesBoost website (Méline <3)',
-        },
-        servers: [
-            {
-                url: `http://localhost:${port}`,
-            },
-        ],
-    },
-    apis: ['./src/routes/*.ts'],
-};
-const swaggerSpec = (0, swagger_jsdoc_1.default)(swaggerOptions);
-app.use('/api-docs', swagger_ui_express_1.default.serve, swagger_ui_express_1.default.setup(swaggerSpec));
+// const swaggerOptions = {
+//   definition: {
+//     openapi: '3.0.0',
+//     info: {
+//       title: 'BeesBoost API',
+//       version: '0.1.0',
+//       description: 'API built for BeesBoost website (Méline <3)',
+//     },
+//     servers: [
+//       {
+//         url: `http://localhost:${port}`,
+//       },
+//     ],
+//   },
+//   apis: ['./src/routes/*.ts'],
+// };
+// const swaggerSpec = swaggerJsdoc(swaggerOptions);
+app.use('/api-docs', swagger_ui_express_1.default.serve, swagger_ui_express_1.default.setup(swagger_config_1.default));
 // Middleware
 app.use(express_1.default.json());
 // Test route
@@ -41,7 +44,7 @@ app.get('/', (req, res) => {
 app.use('/user', user_route_1.default);
 app.use('/student', student_route_1.default);
 // Connection database + Launching server
-(0, db_1.connectToDatabase)()
+(0, database_config_1.connectToDatabase)()
     .then(() => {
     app.listen(port, () => {
         console.log(`Server launched on http://localhost:${port}`);
@@ -52,6 +55,6 @@ app.use('/student', student_route_1.default);
 });
 // Closing database when server is closed
 process.on('SIGINT', async () => {
-    await (0, db_1.closeDatabase)();
+    await (0, database_config_1.closeDatabase)();
     process.exit(0);
 });
