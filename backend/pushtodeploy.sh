@@ -13,7 +13,9 @@ npx tsc
 cd ..
 
 # Push aussi sur cette branche
-git add . && git commit -m "$1" && git push
+git add . 
+git commit -m "$1" 
+git push origin $current_branch
 
 # Obtenir le nom de la branche courante
 current_branch=$(git rev-parse --abbrev-ref HEAD)
@@ -32,7 +34,7 @@ git merge $current_branch --strategy-option theirs
 # Push to repo
 git add .
 git commit -m "$1"
-git push
+git push origin backend_deploy
 
 # Retour à la branche initiale
 git checkout $current_branch
