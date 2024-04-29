@@ -24,14 +24,30 @@ const swaggerDefinition = {
     ],
     components: {
       schemas: {
+        User: {
+          type: 'object',
+          required: ['username', 'role', 'email'],
+          properties: {
+            username: { type: 'string', example: 'johndoe' },
+            password: { type: 'string'},
+            profile_pic: { type: 'string', example: 'http://example.com/profile.jpg' },
+            role: { type: 'string', example: 'admin' },
+            email: { type: 'string', example: 'johndoe@example.com' },
+            is_verified: { type: 'boolean', default: false },
+            is_active: { type: 'boolean', default: false }
+          }
+        },
         Student: {
           type: 'object',
           required: ['username', 'role', 'email', 'name', 'firstname', 'school', 'occupation', 'location'],
           properties: {
             username: { type: 'string', example: 'johndoe' },
+            password: { type: 'string' },
             profile_pic: { type: 'string', example: 'http://example.com/profile.jpg' },
             role: { type: 'string', example: 'student' },
             email: { type: 'string', example: 'john.doe@example.com' },
+            is_verified: { type: 'boolean', default: false },
+            is_active: { type: 'boolean', default: false },
             name: { type: 'string', example: 'John' },
             firstname: { type: 'string', example: 'Doe' },
             school: { type: 'string', example: 'University of Example' },

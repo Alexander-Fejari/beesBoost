@@ -15,24 +15,6 @@ dotenv_1.default.config();
 // Initialize
 const app = (0, express_1.default)();
 const port = process.env.PORT || 5000;
-// Swagger setup
-// const swaggerOptions = {
-//   definition: {
-//     openapi: '3.0.0',
-//     info: {
-//       title: 'BeesBoost API',
-//       version: '0.1.0',
-//       description: 'API built for BeesBoost website (Méline <3)',
-//     },
-//     servers: [
-//       {
-//         url: `http://localhost:${port}`,
-//       },
-//     ],
-//   },
-//   apis: ['./src/routes/*.ts'],
-// };
-// const swaggerSpec = swaggerJsdoc(swaggerOptions);
 app.use('/api-docs', swagger_ui_express_1.default.serve, swagger_ui_express_1.default.setup(swagger_config_1.default));
 // Middleware
 app.use(express_1.default.json());

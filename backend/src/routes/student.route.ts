@@ -31,7 +31,6 @@ const studentController = new StudentController();
  *                 error:
  *                   type: string
  */
-
 router.get('/getAllStudents', (req, res) => studentController.getAllStudents(req, res));
 
 /**
@@ -75,7 +74,6 @@ router.get('/getAllStudents', (req, res) => studentController.getAllStudents(req
  *                 error:
  *                   type: string
  */
-
 router.get('/getStudent/:username', (req, res) => studentController.getStudent(req, res));
 
 /**
@@ -114,7 +112,6 @@ router.get('/getStudent/:username', (req, res) => studentController.getStudent(r
  *                 error:
  *                   type: string
  */
-
 router.post('/addStudent', (req, res) => studentController.addStudent(req, res));
 
 /**
@@ -164,7 +161,6 @@ router.post('/addStudent', (req, res) => studentController.addStudent(req, res))
  *                 error:
  *                   type: string
  */
-
 router.delete('/deleteStudent', (req, res) => studentController.deleteStudent(req, res));
 
 /**
@@ -217,7 +213,6 @@ router.delete('/deleteStudent', (req, res) => studentController.deleteStudent(re
  *                 error:
  *                   type: string
  */
-
 router.put('/updateStudent/:username', (req, res) => studentController.updateStudent(req, res));
 
 export default router;

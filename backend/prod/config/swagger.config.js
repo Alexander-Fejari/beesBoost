@@ -46,6 +46,16 @@ const swaggerDefinition = {
                     certification: { type: 'array', items: { type: 'object', additionalProperties: true } },
                     languages: { type: 'array', items: { type: 'object', additionalProperties: true } },
                 }
+            },
+            User: {
+                type: 'object',
+                required: ['username', 'role', 'email'],
+                properties: {
+                    username: { type: 'string', example: 'johndoe' },
+                    profile_pic: { type: 'string', example: 'http://example.com/profile.jpg' },
+                    role: { type: 'string', example: 'admin' },
+                    email: { type: 'string', example: 'johndoe@example.com' }
+                }
             }
         }
     },
