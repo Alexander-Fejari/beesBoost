@@ -47,7 +47,7 @@ echo "\n"
 # Retour à la branche initiale
 git checkout $current_branch
 
-echo "Deployement on deploy_backend succesfull"
+echo "Deployment on deploy_backend succesfull"
 
 # Revenir dans le dossier backend
 cd backend/
