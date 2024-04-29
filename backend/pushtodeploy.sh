@@ -6,13 +6,20 @@ if [ -z "$1" ]; then
     exit 1
 fi
 
+echo "Compiling:"
+
 # Compile l'API (ts -> js)
 npx tsc
 
-echo "Compilation réussie \n"
+echo "Compiling successfull"
 
 # Aller à la racine du repo
 cd ..
+
+# Obtenir le nom de la branche courante
+current_branch=$(git rev-parse --abbrev-ref HEAD)
+
+echo "Pushing to $current_branch :"
 
 # Push aussi sur cette branche
 git add . 
@@ -21,8 +28,7 @@ git push origin $current_branch
 
 echo "\n"
 
-# Obtenir le nom de la branche courante
-current_branch=$(git rev-parse --abbrev-ref HEAD)
+echo "Pushing on backend_deploy:" 
 
 # Changement pour la branche backend_deploy
 git checkout backend_deploy
@@ -41,7 +47,7 @@ echo "\n"
 # Retour à la branche initiale
 git checkout $current_branch
 
-echo "Déploiement sur 'backend_deploy' terminé avec succès."
+echo "Deployement on deploy_backend succesfull"
 
 # Revenir dans le dossier backend
 cd backend/
