@@ -27,7 +27,7 @@ git checkout backend_deploy
 git pull origin backend_deploy
 
 # Fusion de la branche actuelle dans backend_deploy
-git merge $current_branch
+git merge $current_branch --strategy-option theirs
 
 # Push to repo
 git add . && git commit -m "$1" && git push
