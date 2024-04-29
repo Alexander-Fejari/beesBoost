@@ -33,10 +33,10 @@ git pull origin backend_deploy
 # Fusion de la branche actuelle dans backend_deploy
 git merge $current_branch --strategy-option theirs
 
-echo "\n"
-
 # Push to repo
 git push origin backend_deploy
+
+echo "\n"
 
 # Retour à la branche initiale
 git checkout $current_branch
