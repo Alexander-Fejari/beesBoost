@@ -11,7 +11,7 @@ echo "Compiling:"
 # Compile l'API (ts -> js)
 npx tsc
 
-echo "Compiling successfull"
+echo "Compiling successfull \n"
 
 # Aller à la racine du repo
 cd ..
