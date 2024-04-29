@@ -19,5 +19,10 @@
         "password": "Password:",
         "reset": "Cancel",
         "submit": "Submit"
+    },
+    "logIn": {
+        "email": "Email:",
+        "password": "Password:",
+        "connect": "Connexion"
     }
 }
