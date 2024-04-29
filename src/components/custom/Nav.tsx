@@ -9,8 +9,8 @@ interface NavProps {
 const Nav = ({className}: NavProps) => {
     const {t} = useTranslation();
     return (
-        <nav className={`${className} w-full h-full`}>
-            <ul className={'h-full flex flex-col justify-center items-center gap-y-8 md:flex-row md:items-center md:gap-x-16'}>
+        <nav className={`${className} w-full h-1/2`}>
+            <ul className={'h-full flex flex-col justify-end items-center gap-y-8 md:flex-row md:items-center md:justify-center md:gap-x-16'}>
                 <li>
                     <NavLink to={'https://beesboost.com/fr/page-daccueil/'} target="_blank" rel="noopener noreferrer">
                         {t('navbar.beesBoost')}
