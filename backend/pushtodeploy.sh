@@ -30,7 +30,9 @@ git pull origin backend_deploy
 git merge $current_branch --strategy-option theirs
 
 # Push to repo
-git add . && git commit -m "$1" && git push
+git add .
+git commit -m "$1"
+git push
 
 # Retour à la branche initiale
 git checkout $current_branch
