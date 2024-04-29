@@ -14,12 +14,6 @@ current_branch=$(git rev-parse --abbrev-ref HEAD)
 
 echo "Branche actuelle : $current_branch"
 
-# Vérification pour s'assurer qu'on n'est pas déjà sur 'backend_deploy'
-if [[ "$current_branch" == "backend_deploy" ]]; then
-  echo "Vous êtes déjà sur la branche 'backend_deploy'"
-  exit 1
-fi
-
 # Changement pour la branche backend_deploy
 git checkout backend_deploy
 
