@@ -10,5 +10,14 @@
         "ctaSignIn": "Sign in",
         "ctaLogIn": "Log in",
         "ctaGreetingUser": "Welcome"
+    },
+    "signIn": {
+        "lastname": "Lastname:",
+        "firstname": "Firstname:",
+        "email": "E-mail: ",
+        "pseudo": "Pseudo:",
+        "password": "Password:",
+        "reset": "Cancel",
+        "submit": "Submit"
     }
 }

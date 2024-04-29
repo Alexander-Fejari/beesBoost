@@ -24,7 +24,7 @@ const Header = () => {
                         <LanguageSwitcher/>
                         <ModeToggle/>
                     </section>
-                    <CTALogsUser isLog={true} />
+                    <CTALogsUser isLog={false} />
                 </section>
             </section>
         </header>

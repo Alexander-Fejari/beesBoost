@@ -9,6 +9,7 @@ import {
 import {Button} from "@/components/ui/button"
 import {useTranslation} from "react-i18next";
 import {Avatar, AvatarFallback, AvatarImage} from "@/components/ui/avatar";
+import SignIn from "@/components/custom/SignIn.tsx";
 
 interface CTALogsUserProps {
     isLog?: boolean
@@ -20,7 +21,7 @@ const CTALogsUser = ({isLog}: CTALogsUserProps) => {
     return (
         <>
             {isLog === false && (
-                <section className='flex items-center gap-x-4'>
+                <section className='flex justify-center items-center gap-x-4'>
                     <Dialog>
                         <DialogTrigger asChild>
                             <Button size={'lg'} variant={'outline'}>
@@ -29,11 +30,11 @@ const CTALogsUser = ({isLog}: CTALogsUserProps) => {
                         </DialogTrigger>
                         <DialogContent>
                             <DialogHeader>
-                                <DialogTitle>
+                                <DialogTitle className={'my-4 self-center'}>
                                     {t('ctaUser.ctaSignIn')}
                                 </DialogTitle>
-                                <DialogDescription>
-                                    form inscription
+                                <DialogDescription asChild>
+                                    <SignIn/>
                                 </DialogDescription>
                             </DialogHeader>
                         </DialogContent>
