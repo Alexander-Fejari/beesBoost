@@ -1,5 +1,11 @@
 #!/bin/zsh
 
+# Check si un paramètre existe bien
+if [ -z "$1" ]; then
+    echo "Un message de commit est requis."
+    exit 1
+fi
+
 # Compile l'API (ts -> js)
 npx tsc
 
