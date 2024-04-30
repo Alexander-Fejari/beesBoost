@@ -14,12 +14,12 @@ const Header = () => {
     };
 
     return (
-        <header className="bg-card relative flex justify-between items-center md:h-20">
+        <header className="bg-card relative flex justify-between items-center lg:h-20">
             <Logo link={true} size={'sm'} />
-            <BtnMenu className={'z-20 md:hidden'} onClick={toggleMenu} isOpen={!isOpen} size={32} />
-            <section className={`${isOpen ? 'h-full' : 'hidden h-auto md:flex md:items-center'} bg-card w-full fixed top-0 left-0 z-10 md:z-0 md:static transform transition-transform duration-1000 ease-in-out`}>
+            <BtnMenu className={'z-20 lg:hidden'} onClick={toggleMenu} isOpen={!isOpen} size={32} />
+            <section className={`${isOpen ? 'h-full' : 'hidden h-auto lg:flex lg:items-center'} bg-card w-full fixed top-0 left-0 z-10 lg:z-0 lg:static transform transition-transform duration-1000 ease-in-out`}>
                 <Nav className={'h-1/2'} />
-                <section className="h-1/2 flex flex-col justify-center items-center gap-y-4 md:flex-row md:items-center md:gap-x-4">
+                <section className="h-1/2 flex flex-col justify-center items-center gap-y-4 lg:flex-row lg:items-center lg:gap-x-4">
                     <section className="flex items-center gap-x-4">
                         <LanguageSwitcher/>
                         <ModeToggle/>
