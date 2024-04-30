@@ -21,7 +21,7 @@
         "logout": "Uitloggen"
     },
     "ctaUser": {
-        "ctaSignIn": "S'inschrijven",
+        "ctaSignIn": "Inschrijven",
         "ctaLogIn": "Inloggen",
         "ctaGreetingUser": "Welkome"
     },
@@ -33,5 +33,10 @@
         "password": "Wachtwoord",
         "reset": "Annuleren",
         "submit": "Indienen"
+    },
+    "logIn": {
+        "email": "Email:",
+        "password": "Wachtwoord",
+        "connect": "Connexion"
     }
 }

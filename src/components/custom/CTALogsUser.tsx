@@ -10,6 +10,7 @@ import {Button} from "@/components/ui/button"
 import {useTranslation} from "react-i18next";
 import {Avatar, AvatarFallback, AvatarImage} from "@/components/ui/avatar";
 import SignIn from "@/components/custom/SignIn.tsx";
+import LogIn from "@/components/custom/LogIn.tsx";
 
 interface CTALogsUserProps {
     isLog?: boolean
@@ -47,11 +48,11 @@ const CTALogsUser = ({isLog}: CTALogsUserProps) => {
                         </DialogTrigger>
                         <DialogContent>
                             <DialogHeader>
-                                <DialogTitle>
+                                <DialogTitle className={'my-4 self-center'}>
                                     {t('ctaUser.ctaLogIn')}
                                 </DialogTitle>
-                                <DialogDescription>
-                                    form connection
+                                <DialogDescription asChild>
+                                    <LogIn />
                                 </DialogDescription>
                             </DialogHeader>
                         </DialogContent>

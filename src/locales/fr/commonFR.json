@@ -30,12 +30,17 @@
     "ctaGreetingUser": "Bienvenue"
   },
   "signIn": {
-    "lastname": "Ton nom:",
-    "firstname": "Ton prénom:",
-    "email": "Ton e-mail: ",
-    "pseudo": "Ton pseudo:",
-    "password": "Ton mot de passe:",
+    "lastname": "Nom:",
+    "firstname": "Prénom:",
+    "email": "E-mail: ",
+    "pseudo": "Pseudo:",
+    "password": "Mot de passe:",
     "reset": "Annuler",
     "submit": "Envoyer"
+  },
+  "logIn": {
+    "email": "E-mail:",
+    "password": "Mot de passe:",
+    "connect": "Connexion"
   }
 }
