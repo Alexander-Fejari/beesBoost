@@ -1,62 +1,95 @@
+import { createContext, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { LuLayoutDashboard, LuUser2 } from 'react-icons/lu';
 import { MdOutlineSearch, MdOutlineMessage, MdOutlineNotifications, MdOutlineCalendarMonth, MdOutlineSettings, MdOutlineLogout } from 'react-icons/md';
 import { FaTasks } from 'react-icons/fa';
 import { RiBankFill } from 'react-icons/ri';
-// import LanguageSwitcher from '@/components/custom/LanguageSwitcher';
 
+interface SidebarContextType {
+  expanded: boolean;
+  setExpanded: React.Dispatch<React.SetStateAction<boolean>>;
+}
 
-const Sidebar = () => {
-    const { t } = useTranslation();
+const SidebarContext = createContext<SidebarContextType | undefined>(undefined);
 
-    return (
-        <aside className='hidden md:flex flex-col p-4 md:w-max bg-slate-400'>
-            <a className='flex items-center gap-2 text-center'>
-                <LuLayoutDashboard/>
-                <p className='md:hidden lg:block'>{t('sidebar.dashboard')}</p>
-            </a>
-            <div className="md:w-1/2 lg:w-full h-px border border-black mt-4"/>
-            <div className='flex flex-col gap-2 mt-4'>
-                <a className='flex items-center gap-2'>
-                    <LuUser2 />
-                    <p className='md:hidden lg:block'>{t('sidebar.user')}</p>
-                </a>
-                <a className='flex items-center gap-2'>
-                    <MdOutlineSearch/>
-                    <p className='md:hidden lg:block'>{t('sidebar.search')}</p>
-                </a>
-                <a className='flex items-center gap-2'>
-                    <MdOutlineMessage/>
-                    <p className='md:hidden lg:block'>{t('sidebar.messages')}</p>
-                </a>
-                <a className='flex items-center gap-2'>
-                    <MdOutlineNotifications/>
-                    <p className='md:hidden lg:block'>{t('sidebar.notifications')}</p>
-                </a>
-                <a className='flex items-center gap-2'>
-                    <MdOutlineCalendarMonth/>
-                    <p className='md:hidden lg:block'>{t('sidebar.calendar')}</p>
-                </a>
-                <a className='flex items-center gap-2'>
-                    <FaTasks/>
-                    <p className='md:hidden lg:block'>{t('sidebar.tasks')}</p>
-                </a>
-                <a className='flex items-center gap-2'>
-                    <RiBankFill/>
-                    <p className='md:hidden lg:block'>{t('sidebar.payements')}</p>
-                </a>
-                <div className="md:w-1/2 lg:w-full h-px border border-black mt-4"/>
-                <a className='flex items-center gap-2'>
-                    <MdOutlineSettings/>
-                    <p className='md:hidden lg:block'>{t('sidebar.settings')}</p>
-                </a>
-                <a className='flex items-center gap-2'>
-                    <MdOutlineLogout/>
-                    <p className='md:hidden lg:block'>{t('sidebar.logout')}</p>
-                </a>
-                </div>
-        </aside>
-    );
+const SidebarTest = () => {
+  const [expanded, setExpanded] = useState(false);
+  const { t } = useTranslation();
+
+  const toggleExpanded = () => {
+    setExpanded((prevExpanded) => !prevExpanded);
+  };
+
+  return (
+    <aside className={`h-screen transition-none duration-0 w-fit`}>
+      <nav className="h-full flex flex-col">
+        <SidebarContext.Provider value={{ expanded, setExpanded: toggleExpanded }}>
+          <ul className="flex flex-col px-3">
+            <li onClick={toggleExpanded} className="py-2 flex items-center">
+              <div className="w-6 h-6 mr-2 flex justify-center items-center">
+                <LuLayoutDashboard />
+              </div>
+              <div className={`transition-none duration-0 ${expanded ? 'visible' : 'invisible'}`}>{t('sidebar.dashboard')}</div>
+            </li>
+            <li onClick={toggleExpanded} className="py-2 flex items-center">
+              <div className="w-6 h-6 mr-2 flex justify-center items-center">
+                <LuUser2 />
+              </div>
+              <div className={`transition-none duration-0 ${expanded ? 'visible' : 'invisible'}`}>{t('sidebar.user')}</div>
+            </li>
+            <li onClick={toggleExpanded} className="py-2 flex items-center">
+              <div className="w-6 h-6 mr-2 flex justify-center items-center">
+                <MdOutlineSearch />
+              </div>
+              <div className={`transition-none duration-0 ${expanded ? 'visible' : 'invisible'}`}>{t('sidebar.search')}</div>
+            </li>
+            <li onClick={toggleExpanded} className="py-2 flex items-center">
+              <div className="w-6 h-6 mr-2 flex justify-center items-center">
+                <MdOutlineMessage />
+              </div>
+              <div className={`transition-none duration-0 ${expanded ? 'visible' : 'invisible'}`}>{t('sidebar.messages')}</div>
+           </li>
+            <li onClick={toggleExpanded} className="py-2 flex items-center">
+              <div className="w-6 h-6 mr-2 flex justify-center items-center">
+                <MdOutlineNotifications />
+              </div>
+              <div className={`transition-none duration-0 ${expanded ? 'visible' : 'invisible'}`}>{t('sidebar.notifications')}</div>
+            </li>
+            <li onClick={toggleExpanded} className="py-2 flex items-center">
+              <div className="w-6 h-6 mr-2 flex justify-center items-center">
+                <MdOutlineCalendarMonth />
+              </div>
+              <div className={`transition-none duration-0 ${expanded ? 'visible' : 'invisible'}`}>{t('sidebar.calendar')}</div>
+            </li>
+            <li onClick={toggleExpanded} className="py-2 flex items-center">
+              <div className="w-6 h-6 mr-2 flex justify-center items-center">
+                <FaTasks />
+              </div>
+              <div className={`transition-none duration-0 ${expanded ? 'visible' : 'invisible'}`}>{t('sidebar.tasks')}</div>
+            </li>
+            <li onClick={toggleExpanded} className="py-2 flex items-center">
+              <div className="w-6 h-6 mr-2 flex justify-center items-center">
+                <RiBankFill />
+              </div>
+              <div className={`transition-none duration-0 ${expanded ? 'visible' : 'invisible'}`}>{t('sidebar.payements')}</div>
+            </li>
+            <li onClick={toggleExpanded} className="py-2 flex items-center">
+              <div className="w-6 h-6 mr-2 flex justify-center items-center">
+                <MdOutlineSettings />
+              </div>
+              <div className={`transition-none duration-0 ${expanded ? 'visible' : 'invisible'}`}>{t('sidebar.settings')}</div>
+            </li>
+            <li onClick={toggleExpanded} className="py-2 flex items-center">
+              <div className="w-6 h-6 mr-2 flex justify-center items-center">
+                <MdOutlineLogout />
+              </div>
+              <div className={`transition-none duration-0 ${expanded ? 'visible' : 'invisible'}`}>{t('sidebar.logout')}</div>
+            </li>
+          </ul>
+        </SidebarContext.Provider>
+      </nav>
+    </aside>
+  );
 };
 
-export default Sidebar;
+export default SidebarTest;

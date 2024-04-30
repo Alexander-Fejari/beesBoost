@@ -1,6 +1,6 @@
 import Footer from "@/components/custom/Footer"
 import Header from "@/components/custom/Header"
-import SidebarTest from "@/components/custom/sidetest"
+import Sidebar from "@/components/custom/Sidebar"
 import CustomCalendar from "@/components/custom/Calendar"
 
 const DesignSystem = () => {
@@ -9,7 +9,7 @@ const DesignSystem = () => {
         <h1>Design System</h1>
         <Header />
         <Footer />
-        <SidebarTest />
+        <Sidebar />
         <CustomCalendar />
         </div>
     )
