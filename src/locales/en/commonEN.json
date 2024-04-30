@@ -2,9 +2,23 @@
     "navbar": {
         "beesBoost": "Bees Boost",
         "home": "Home",
+        "services": "Our services",
         "FAQ": "FAQ",
         "contact": "Contact",
         "blog": "Blog"
+    },
+    "sidebar": {
+        "dashboard": "Dashboard",
+        "user": "My Profile",
+        "search": "Search",
+        "messages": "Messages",
+        "notifications": "Notifications",
+        "calendar": "Calendar",
+        "tasks": "Tasks",
+        "payements": "Payments",
+        "settings": "Settings",
+        "logout": "Log Out"
+
     },
     "ctaUser": {
         "ctaSignIn": "Sign in",

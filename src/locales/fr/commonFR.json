@@ -1,11 +1,29 @@
 {
-  "navbar": {
-    "beesBoost": "Bees Boost",
-    "home": "Accueil",
-    "FAQ": "FAQ",
-    "contact": "Contact",
-    "blog": "Blog"
-  },
+    "navbar": {
+        "beesBoost": "Bees Boost",
+        "home": "Accueil",
+        "FAQ": "FAQ",
+        "contact": "Contact",
+        "blog": "Blog"
+    },
+    "footer": {
+        "contact": "Contactez-nous",
+        "legal": "Mentions légales",
+        "credits": "Tous droits réservés"
+    },
+    "sidebar": {
+        "dashboard": "Tableau de bord",
+        "user": "Mon profil",
+        "search": "Recherche",
+        "messages": "Messages",
+        "notifications": "Notifications",
+        "calendar": "Calendrier",
+        "tasks": "Missions",
+        "payements": "Paiements",
+        "settings": "Paramètres",
+        "logout": "Déconnexion"
+    },
+
   "ctaUser": {
     "ctaSignIn": "S'inscrire",
     "ctaLogIn": "Connection",
