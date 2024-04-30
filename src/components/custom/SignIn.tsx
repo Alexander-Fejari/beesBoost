@@ -49,6 +49,7 @@ const SignIn = () => {
                     id={'email'}
                     type="email"
                     placeholder="e-mail"
+                    autoComplete="username"
                     {...register("email")}
                     error={formState.errors.email?.message}
                 />
@@ -69,6 +70,7 @@ const SignIn = () => {
                     id={'password'}
                     type="password"
                     placeholder="password"
+                    autoComplete="current-password"
                     {...register("password")}
                     error={formState.errors.password?.message}
                 />
