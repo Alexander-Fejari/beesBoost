@@ -12,7 +12,6 @@ const DesignSystem = () => {
         <SidebarTest />
         <CustomCalendar />
         </div>
-
     )
 }
 

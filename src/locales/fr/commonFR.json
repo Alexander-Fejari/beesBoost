@@ -1,7 +1,10 @@
 {
     "navbar": {
+        "beesBoost": "Bees Boost",
         "home": "Accueil",
-        "services": "Nos services"
+        "FAQ": "FAQ",
+        "contact": "Contact",
+        "blog": "Blog"
     },
     "footer": {
         "contact": "Contactez-nous",
@@ -19,5 +22,20 @@
         "payements": "Paiements",
         "settings": "Paramètres",
         "logout": "Déconnexion"
-    }
+    },
+
+  "ctaUser": {
+    "ctaSignIn": "S'inscrire",
+    "ctaLogIn": "Connection",
+    "ctaGreetingUser": "Bienvenue"
+  },
+  "signIn": {
+    "lastname": "Ton nom:",
+    "firstname": "Ton prénom:",
+    "email": "Ton e-mail: ",
+    "pseudo": "Ton pseudo:",
+    "password": "Ton mot de passe:",
+    "reset": "Annuler",
+    "submit": "Envoyer"
+  }
 }
