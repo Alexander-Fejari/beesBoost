@@ -1,5 +1,4 @@
 import express, { Request, Response } from 'express';
-// import swaggerJsdoc from 'swagger-jsdoc';
 import swaggerUi from 'swagger-ui-express';
 import swaggerSpec from './config/swagger.config'
 import dotenv from 'dotenv';

@@ -13,11 +13,11 @@ interface IUser extends Document {
 const userSchema = new Schema<IUser>({
   username: { type: String, required: true },
   password: { type: String, required: true },
-  profile_pic: { type: String},
+  profile_pic: { type: String },
   role: { type: String, required: true },
   email: { type: String, required: true },
-  is_verified: { type: Boolean, required: true },
-  is_active: { type: Boolean, required: true }
+  is_verified: { type: Boolean, required: true, default: false },
+  is_active: { type: Boolean, required: true, default: false }
 });
 
 const UserModel = model<IUser>('User', userSchema);
