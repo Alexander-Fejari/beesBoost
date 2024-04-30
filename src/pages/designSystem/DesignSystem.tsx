@@ -1,12 +1,17 @@
-import Header from "@/components/custom/Header.tsx";
+import Footer from "@/components/custom/Footer"
+import Header from "@/components/custom/Header"
+import Sidebar from "@/components/custom/Sidebar"
+import CustomCalendar from "@/components/custom/Calendar"
 
 const DesignSystem = () => {
     return (
-        <>
-            <h1>Design System</h1>
-            <Header/>
-        </>
-
+        <div>
+        <h1>Design System</h1>
+        <Header />
+        <Footer />
+        <Sidebar />
+        <CustomCalendar />
+        </div>
     )
 }
 

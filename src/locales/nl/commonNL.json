@@ -2,9 +2,23 @@
     "navbar": {
         "beesBoost": "Bees Boost",
         "home": "Ontvangst",
+        "services": "Onze diensten",
         "FAQ": "FAQ",
         "contact": "Contact",
         "blog": "Blog"
+    },
+    
+    "sidebar": {
+        "dashboard": "Dashboard",
+        "user": "Mijn profiel",
+        "search": "Zoeken",
+        "messages": "Berichten",
+        "notifications": "Meldingen",
+        "calendar": "Kalender",
+        "tasks": "Taken",
+        "payements": "Betalingen",
+        "settings": "Instellingen",
+        "logout": "Uitloggen"
     },
     "ctaUser": {
         "ctaSignIn": "Inschrijven",
