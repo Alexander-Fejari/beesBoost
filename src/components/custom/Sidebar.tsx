@@ -21,7 +21,7 @@ const SidebarTest = () => {
   };
 
   return (
-    <aside className={`h-screen transition-none duration-0 w-fit`}>
+    <aside className={'transition-none duration-0 w-fit'}>
       <nav className="h-full flex flex-col">
         <SidebarContext.Provider value={{ expanded, setExpanded: toggleExpanded }}>
           <ul className="flex flex-col px-3">
