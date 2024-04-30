@@ -205,27 +205,33 @@ router.delete('/deleteUser', (req, res) => userController.deleteUser(req, res));
 
 /**
  * @openapi
- * /user/updateUser/{username}:
+ * /user/updateProfilePicture/{username}:
  *   put:
- *     summary: Update a user's information
+ *     summary: Update a user's profile picture
  *     tags:
  *       - User
+ *     description: Updates the profile picture URL of a specified user.
  *     parameters:
  *       - in: path
  *         name: username
  *         required: true
  *         schema:
  *           type: string
- *         description: The username of the user to update
+ *         description: The username of the user whose profile picture is to be updated.
  *     requestBody:
  *       required: true
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/User'
+ *             type: object
+ *             properties:
+ *               profile_pic:
+ *                 type: string
+ *                 example: 'https://example.com/new-profile.jpg'
+ *                 description: The new URL of the user's profile picture.
  *     responses:
  *       200:
- *         description: User updated successfully.
+ *         description: Profile picture updated successfully.
  *         content:
  *           application/json:
  *             schema:
@@ -233,25 +239,22 @@ router.delete('/deleteUser', (req, res) => userController.deleteUser(req, res));
  *               properties:
  *                 message:
  *                   type: string
+ *                   example: 'Profile picture updated successfully'
+ *       400:
+ *         description: Invalid input, object invalid.
  *       404:
  *         description: User not found.
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
  *       500:
- *         description: Error updating user.
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 error:
- *                   type: string
+ *         description: Server error or unable to update the profile picture.
  */
-router.put('/updateUser/:username', (req, res) => userController.updateUser(req, res));
+router.put('/updateProfilePicture/:username', (req, res) => userController.updateProfilePicture(req, res));
+
+router.put('/updateIsVerified/:username', (req, res) => userController.updateIsVerified(req, res));
+
+router.put('/updateIsActive/:username', (req, res) => userController.updateIsActive(req, res));
+
+router.put('/updatePassword/:username', (req, res) => userController.updatePassword(req, res));
+
+router.put('/updateEmail/:username', (req, res) => userController.updateEmail(req, res));
 
 export default router;
