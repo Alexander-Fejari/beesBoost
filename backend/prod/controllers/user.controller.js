@@ -13,8 +13,9 @@ class UserController {
     async findUserById(_id) {
         return await user_model_1.UserModel.findById(_id);
     }
-    // protected async getUserObject(param: string) {
-    // }
+    async getUserObject(username_or_id) {
+        return (username_or_id.length < 24 ? await user_model_1.UserModel.findOne({ username: username_or_id }) : await user_model_1.UserModel.findById(username_or_id));
+    }
     async getUserByUsername(req, res, username) {
         try {
             const user = await user_model_1.UserModel.findOne({ username });
@@ -115,11 +116,10 @@ class UserController {
     // PUT
     async updateField(req, res, fieldToUpdate) {
         try {
-            const username = req.params.username;
-            //const { _id } = req.params;
+            const param = req.params.param;
             const updateData = req.body;
             // Check if user exists
-            const user = await this.findUserByUsername(username);
+            const user = await this.getUserObject(param);
             if (!user) {
                 res.status(404).json({ message: `User not found` });
                 return;
@@ -153,7 +153,7 @@ class UserController {
                 const hashedPassword = await bcrypt_1.default.hash(updateData.password, 10);
                 updateData.password = hashedPassword;
             }
-            await user_model_1.UserModel.updateOne({ username }, updateData);
+            await user_model_1.UserModel.updateOne(param.length < 24 ? { username: param } : { _id: param }, updateData);
             // Mettre la logique du mailer plus tard
             res.json({ message: `User ${fieldToUpdate} updated successfully` });
         }

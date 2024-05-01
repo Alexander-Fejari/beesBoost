@@ -159,16 +159,16 @@ router.delete(`/deleteUser`, (req, res) => userController.deleteUser(req, res));
  *       500:
  *         description: Server error or unable to update the profile picture.
  */
-router.put(`/updateProfilePicture/:username`, (req, res) => userController.updateProfilePicture(req, res));
+router.put(`/updateProfilePicture/:param`, (req, res) => userController.updateProfilePicture(req, res));
 
-router.put(`/updateIsVerified/:username`, (req, res) => userController.updateIsVerified(req, res));// Swagger à faire + Ajouter protection : Possible que si admin/superAdmin
+router.put(`/updateIsVerified/:param`, (req, res) => userController.updateIsVerified(req, res));// Swagger à faire + Ajouter protection : Possible que si admin/superAdmin
 
-router.put(`/updateIsActive/:username`, (req, res) => userController.updateIsActive(req, res)); // Swagger à faire
+router.put(`/updateIsActive/:param`, (req, res) => userController.updateIsActive(req, res)); // Swagger à faire
 
-router.put(`/updatePassword/:username`, (req, res) => userController.updatePassword(req, res)); // Swagger à faire
+router.put(`/updatePassword/:param`, (req, res) => userController.updatePassword(req, res)); // Swagger à faire
 
-router.put(`/updateEmail/:username`, (req, res) => userController.updateEmail(req, res)); // Swagger à faire
+router.put(`/updateEmail/:param`, (req, res) => userController.updateEmail(req, res)); // Swagger à faire
 
-router.put(`/updateUsername/:username`, (req, res) => userController.updateUsername(req, res));// Swagger à faire + Ajouter protection : Possible que si admin/superAdmin
+router.put(`/updateUsername/:param`, (req, res) => userController.updateUsername(req, res));// Swagger à faire + Ajouter protection : Possible que si admin/superAdmin
 
 export default router;
