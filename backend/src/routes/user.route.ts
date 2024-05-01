@@ -99,7 +99,7 @@ router.post(`/addUser`, (req, res) => userController.addUser(req, res));
  *                   type: string
  *                   description: Error message describing the server error.
  */
-router.get(`/getAllUsers`, (req, res) => userController.getAllUsers(req, res)); // Swagger a changé
+router.get(`/getAllUsers`, (req, res) => userController.getAllUsers(req, res)); // Swagger a changer
 
 /**
  * @openapi
