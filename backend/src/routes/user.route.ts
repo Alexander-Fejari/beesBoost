@@ -59,6 +59,7 @@ router.post(`/addUser`, (req, res) => userController.addUser(req, res));
 
 // GET
 
+
 router.get(`/getAllUsers`, (req, res) => userController.getAllUsers(req, res)); // Swagger à faire
 
 router.get(`/getUser/:param`, (req, res) => userController.getUser(req, res)); // Swagger à faire
@@ -115,50 +116,7 @@ router.delete(`/deleteUser`, (req, res) => userController.deleteUser(req, res));
 
 // PUT
 
-/**
- * @openapi
- * /user/updateProfilePicture/{username}:
- *   put:
- *     summary: Update a user's profile picture
- *     tags:
- *       - User
- *     description: Updates the profile picture URL of a specified user.
- *     parameters:
- *       - in: path
- *         name: username
- *         required: true
- *         schema:
- *           type: string
- *         description: The username of the user whose profile picture is to be updated.
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               profile_pic:
- *                 type: string
- *                 example: 'https://example.com/new-profile.jpg'
- *                 description: The new URL of the user's profile picture.
- *     responses:
- *       200:
- *         description: Profile picture updated successfully.
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                   example: 'Profile picture updated successfully'
- *       400:
- *         description: Invalid input, object invalid.
- *       404:
- *         description: User not found.
- *       500:
- *         description: Server error or unable to update the profile picture.
- */
+
 router.put(`/updateProfilePicture/:param`, (req, res) => userController.updateProfilePicture(req, res));
 
 router.put(`/updateIsVerified/:param`, (req, res) => userController.updateIsVerified(req, res));// Swagger à faire + Ajouter protection : Possible que si admin/superAdmin
