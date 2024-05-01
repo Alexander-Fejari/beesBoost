@@ -10,9 +10,9 @@ class UserController {
     static async findUserByUsername(username) {
         return await user_model_1.UserModel.findOne({ username });
     }
-    // private static async findUserById(_id: string){
-    //   return await UserModel.findOne({ _id });
-    // }
+    static async findUserById(_id) {
+        return await user_model_1.UserModel.findById(_id);
+    }
     // POST
     async addUser(req, res) {
         try {
@@ -47,25 +47,6 @@ class UserController {
             res.status(500).json({ error: `Error retrieving users` });
         }
     }
-    async getUser(req, res) {
-        try {
-            const { param } = req.params;
-            if (param.length < 24) {
-                return (this.getUserByUsername(req, res, param));
-            }
-            else if (param.length == 24) {
-                return (this.getUserById(req, res, param));
-            }
-            else {
-                res.status(400).json({ message: `Impossible id/username` });
-                return;
-            }
-        }
-        catch (error) {
-            console.error(`Error retrieving user:`, error);
-            res.status(500).json({ error: `Error retrieving user` });
-        }
-    }
     async getUserByUsername(req, res, username) {
         try {
             const user = await user_model_1.UserModel.findOne({ username });
@@ -88,6 +69,25 @@ class UserController {
                 return;
             }
             res.json(user);
+        }
+        catch (error) {
+            console.error(`Error retrieving user:`, error);
+            res.status(500).json({ error: `Error retrieving user` });
+        }
+    }
+    async getUser(req, res) {
+        try {
+            const { param } = req.params;
+            if (param.length < 24) {
+                return (this.getUserByUsername(req, res, param));
+            }
+            else if (param.length == 24) {
+                return (this.getUserById(req, res, param));
+            }
+            else {
+                res.status(400).json({ message: `Impossible id/username` });
+                return;
+            }
         }
         catch (error) {
             console.error(`Error retrieving user:`, error);
