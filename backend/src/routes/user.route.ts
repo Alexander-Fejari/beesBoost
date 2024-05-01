@@ -99,7 +99,7 @@ router.post(`/addUser`, (req, res) => userController.addUser(req, res));
  *                   type: string
  *                   description: Error message describing the server error.
  */
-router.get(`/getAllUsers`, (req, res) => userController.getAllUsers(req, res));
+router.get(`/getAllUsers`, (req, res) => userController.getAllUsers(req, res)); // Swagger a changé
 
 /**
  * @openapi
@@ -154,8 +154,6 @@ router.get(`/getAllUsers`, (req, res) => userController.getAllUsers(req, res));
  *                   type: string
  */
 router.get(`/getUser/:username`, (req, res) => userController.getUser(req, res));
-
-router.get()
 
 /**
  * @openapi
@@ -251,7 +249,7 @@ router.delete(`/deleteUser`, (req, res) => userController.deleteUser(req, res));
  */
 router.put(`/updateProfilePicture/:username`, (req, res) => userController.updateProfilePicture(req, res));
 
-router.put(`/updateIsVerified/:username`, (req, res) => userController.updateIsVerified(req, res));// Ajouter protection : Possible que si Admin/superAdmin
+router.put(`/updateIsVerified/:username`, (req, res) => userController.updateIsVerified(req, res));// Ajouter protection : Possible que si admin/superAdmin
 
 router.put(`/updateIsActive/:username`, (req, res) => userController.updateIsActive(req, res));
 

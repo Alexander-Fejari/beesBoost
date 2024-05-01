@@ -69,8 +69,6 @@ class UserController {
     }
   }
 
-  
-
   // DELETE
   async deleteUser(req: Request, res: Response): Promise<void> {
     try {
