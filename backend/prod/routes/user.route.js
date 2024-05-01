@@ -7,6 +7,7 @@ const express_1 = __importDefault(require("express"));
 const user_controller_1 = __importDefault(require("../controllers/user.controller"));
 const router = express_1.default.Router();
 const userController = new user_controller_1.default();
+// POST
 /**
  * @openapi
  * /user/addUser:
@@ -57,6 +58,7 @@ const userController = new user_controller_1.default();
  *                   type: string
  */
 router.post(`/addUser`, (req, res) => userController.addUser(req, res));
+// GET
 /**
  * @openapi
  * /user/getAllUsers:
@@ -101,7 +103,8 @@ router.post(`/addUser`, (req, res) => userController.addUser(req, res));
  *                   type: string
  *                   description: Error message describing the server error.
  */
-router.get(`/getAllUsers`, (req, res) => userController.getAllUsers(req, res)); // Swagger a changé
+router.get(`/getAllUsers`, (req, res) => userController.getAllUsers(req, res)); // Swagger a changer
+router.get(`/getUser/:param`, (req, res) => userController.getUser(req, res)); //
 /**
  * @openapi
  * /user/getUser/{username}:
@@ -154,7 +157,9 @@ router.get(`/getAllUsers`, (req, res) => userController.getAllUsers(req, res)); 
  *                 error:
  *                   type: string
  */
-router.get(`/getUser/:username`, (req, res) => userController.getUser(req, res));
+//router.get(`/getUserByUsername/:username`, (req, res) => userController.getUserByUsername(req, res));
+//router.get(`/getUserById/:_id`, (req, res) => userController.getUserById(req, res));
+// DELETE
 /**
  * @openapi
  * /user/deleteUser:
@@ -202,6 +207,7 @@ router.get(`/getUser/:username`, (req, res) => userController.getUser(req, res))
  *                   type: string
  */
 router.delete(`/deleteUser`, (req, res) => userController.deleteUser(req, res));
+// PUT
 /**
  * @openapi
  * /user/updateProfilePicture/{username}:

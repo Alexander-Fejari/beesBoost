@@ -49,8 +49,40 @@ class UserController {
     }
     async getUser(req, res) {
         try {
-            const { username } = req.params;
+            const { param } = req.params;
+            if (param.length < 24) {
+                return (this.getUserByUsername(req, res, param));
+            }
+            else if (param.length == 24) {
+                return (this.getUserById(req, res, param));
+            }
+            else {
+                res.status(400).json({ message: `Impossible id/username` });
+                return;
+            }
+        }
+        catch (error) {
+            console.error(`Error retrieving user:`, error);
+            res.status(500).json({ error: `Error retrieving user` });
+        }
+    }
+    async getUserByUsername(req, res, username) {
+        try {
             const user = await user_model_1.UserModel.findOne({ username });
+            if (!user) {
+                res.status(404).json({ message: `User not found` });
+                return;
+            }
+            res.json(user);
+        }
+        catch (error) {
+            console.error(`Error retrieving user:`, error);
+            res.status(500).json({ error: `Error retrieving user` });
+        }
+    }
+    async getUserById(req, res, _id) {
+        try {
+            const user = await user_model_1.UserModel.findById(_id);
             if (!user) {
                 res.status(404).json({ message: `User not found` });
                 return;

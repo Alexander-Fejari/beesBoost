@@ -2,7 +2,6 @@ import { Request, Response } from 'express';
 import { UserModel, IUser } from '../models/user.model';
 import bcrypt from 'bcrypt';
 
-
 class UserController {
   
   // UTILS
@@ -10,9 +9,9 @@ class UserController {
     return await UserModel.findOne({ username });
   }
 
-  // private static async findUserById(_id: string){
-  //   return await UserModel.findOne({ _id });
-  // }
+  private static async findUserById(_id: string){
+    return await UserModel.findById(_id);
+  }
 
   // POST
   async addUser(req: Request, res: Response): Promise<void> {
@@ -58,9 +57,8 @@ class UserController {
     }
   }
 
-  async getUser(req: Request, res: Response): Promise<void> {
+  async getUserByUsername(req: Request, res: Response, username: string): Promise<void> {
     try {
-      const { username } = req.params;
       const user = await UserModel.findOne({ username });
 
       if (!user) {
@@ -68,6 +66,44 @@ class UserController {
         return ;
       }
       res.json(user);
+    }
+    catch (error) {
+      console.error(`Error retrieving user:`, error);
+      res.status(500).json({ error: `Error retrieving user` });
+    }
+  }
+
+  async getUserById(req: Request, res: Response, _id:string): Promise<void> {
+    try {
+      const user = await UserModel.findById(_id);
+
+      if (!user) {
+        res.status(404).json({ message: `User not found` });
+        return ;
+      }
+      res.json(user);
+    }
+    catch (error) {
+      console.error(`Error retrieving user:`, error);
+      res.status(500).json({ error: `Error retrieving user` });
+    }
+  }
+
+
+  async getUser(req: Request, res: Response): Promise<void> {
+    try {
+      const { param } = req.params;
+      
+      if (param.length < 24) {
+        return (this.getUserByUsername(req, res, param));
+      }
+      else if (param.length == 24) {
+        return (this.getUserById(req, res, param));
+      }
+      else {
+        res.status(400).json({ message: `Impossible id/username` });
+        return ;
+      }
     }
     catch (error) {
       console.error(`Error retrieving user:`, error);
