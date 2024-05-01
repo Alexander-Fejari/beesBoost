@@ -49,6 +49,64 @@ class UserController {
     }
   }
 
+  protected async updateField(req: Request, res: Response, fieldToUpdate: string): Promise<void> {
+    try {
+      const param = req.params.param;
+      const updateData = req.body;
+
+      // Check if user exists
+      const user = await this.getUserObject(param);
+      if (!user) {
+        res.status(404).json({ message: `User not found` });
+        return ;
+      }
+
+      // Check if the field is updatable
+      const allowedFields = [`username`, `password`, `profile_pic`, `email`, `is_verified`, `is_active`];
+      if (!allowedFields.includes(fieldToUpdate)) {
+        res.status(400).json({ error: `Invalid field '${fieldToUpdate}'` });
+        return ;
+      }
+
+      // Check if there is only one field to update
+      if (Object.keys(updateData).length !== 1) {
+        if (Object.keys(updateData).length === 0) {
+          res.status(400).json({ error: `Empty request : Need ${ fieldToUpdate }` });
+          return ;
+        }
+        res.status(400).json({ error: `Only one field (${ fieldToUpdate }) can be updated at a time` });
+        return ;
+      }
+
+      // Check if its the good field to update
+      if (!(fieldToUpdate in updateData)) {
+        res.status(400).json({ error: `Only the ${fieldToUpdate} can be updated` });
+        return ;
+      }
+
+      // Encrypt the password if needed
+      if (fieldToUpdate === `password`) {
+        if (!updateData.password) {
+          res.status(400).json({ error: `Password field is required` });
+          return ;
+        }
+        const hashedPassword = await bcrypt.hash(updateData.password, 10);
+        
+        updateData.password = hashedPassword;
+      }
+
+      await UserModel.updateOne(param.length < 24 ? { username: param } : { _id: param } , updateData);
+
+      // Mettre la logique du mailer plus tard
+
+      res.json({ message: `User ${fieldToUpdate} updated successfully` });
+    }
+    catch(error) {
+      console.error(`Error updating user's ${fieldToUpdate}:`, error);
+      res.status(500).json({ error: `Error updating user` });
+    }
+  }
+
   // POST
   async addUser(req: Request, res: Response): Promise<void> {
     try {
@@ -134,64 +192,6 @@ class UserController {
   }
 
   // PUT
-  async updateField(req: Request, res: Response, fieldToUpdate: string): Promise<void> {
-    try {
-      const param = req.params.param;
-      const updateData = req.body;
-
-      // Check if user exists
-      const user = await this.getUserObject(param);
-      if (!user) {
-        res.status(404).json({ message: `User not found` });
-        return ;
-      }
-
-      // Check if the field is updatable
-      const allowedFields = [`username`, `password`, `profile_pic`, `email`, `is_verified`, `is_active`];
-      if (!allowedFields.includes(fieldToUpdate)) {
-        res.status(400).json({ error: `Invalid field '${fieldToUpdate}'` });
-        return ;
-      }
-
-      // Check if there is only one field to update
-      if (Object.keys(updateData).length !== 1) {
-        if (Object.keys(updateData).length === 0) {
-          res.status(400).json({ error: `Empty request : Need ${ fieldToUpdate }` });
-          return ;
-        }
-        res.status(400).json({ error: `Only one field (${ fieldToUpdate }) can be updated at a time` });
-        return ;
-      }
-
-      // Check if its the good field to update
-      if (!(fieldToUpdate in updateData)) {
-        res.status(400).json({ error: `Only the ${fieldToUpdate} can be updated` });
-        return ;
-      }
-
-      // Encrypt the password if needed
-      if (fieldToUpdate === `password`) {
-        if (!updateData.password) {
-          res.status(400).json({ error: `Password field is required` });
-          return ;
-        }
-        const hashedPassword = await bcrypt.hash(updateData.password, 10);
-        
-        updateData.password = hashedPassword;
-      }
-
-      await UserModel.updateOne(param.length < 24 ? { username: param } : { _id: param } , updateData);
-
-      // Mettre la logique du mailer plus tard
-
-      res.json({ message: `User ${fieldToUpdate} updated successfully` });
-    }
-    catch(error) {
-      console.error(`Error updating user's ${fieldToUpdate}:`, error);
-      res.status(500).json({ error: `Error updating user` });
-    }
-  }
-
   async updateProfilePicture(req: Request, res: Response): Promise<void> {
     await this.updateField(req, res, 'profile_pic');
   }
