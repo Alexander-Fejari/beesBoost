@@ -7,17 +7,47 @@ const user_model_1 = require("../models/user.model");
 const bcrypt_1 = __importDefault(require("bcrypt"));
 class UserController {
     // UTILS
-    static async findUserByUsername(username) {
+    async findUserByUsername(username) {
         return await user_model_1.UserModel.findOne({ username });
     }
-    static async findUserById(_id) {
+    async findUserById(_id) {
         return await user_model_1.UserModel.findById(_id);
+    }
+    // protected async getUserObject(param: string) {
+    // }
+    async getUserByUsername(req, res, username) {
+        try {
+            const user = await user_model_1.UserModel.findOne({ username });
+            if (!user) {
+                res.status(404).json({ message: `User not found` });
+                return;
+            }
+            res.json(user);
+        }
+        catch (error) {
+            console.error(`Error retrieving user:`, error);
+            res.status(500).json({ error: `Error retrieving user` });
+        }
+    }
+    async getUserById(req, res, _id) {
+        try {
+            const user = await user_model_1.UserModel.findById(_id);
+            if (!user) {
+                res.status(404).json({ message: `User not found` });
+                return;
+            }
+            res.json(user);
+        }
+        catch (error) {
+            console.error(`Error retrieving user:`, error);
+            res.status(500).json({ error: `Error retrieving user` });
+        }
     }
     // POST
     async addUser(req, res) {
         try {
             const { username, password, profile_pic, role, email } = req.body;
-            const existingUser = await UserController.findUserByUsername(username);
+            const existingUser = await this.findUserByUsername(username);
             if (existingUser) {
                 res.status(400).json({ error: `User already exists` });
                 return;
@@ -45,34 +75,6 @@ class UserController {
         catch (error) {
             console.error(`Error retrieving users:`, error);
             res.status(500).json({ error: `Error retrieving users` });
-        }
-    }
-    async getUserByUsername(req, res, username) {
-        try {
-            const user = await user_model_1.UserModel.findOne({ username });
-            if (!user) {
-                res.status(404).json({ message: `User not found` });
-                return;
-            }
-            res.json(user);
-        }
-        catch (error) {
-            console.error(`Error retrieving user:`, error);
-            res.status(500).json({ error: `Error retrieving user` });
-        }
-    }
-    async getUserById(req, res, _id) {
-        try {
-            const user = await user_model_1.UserModel.findById(_id);
-            if (!user) {
-                res.status(404).json({ message: `User not found` });
-                return;
-            }
-            res.json(user);
-        }
-        catch (error) {
-            console.error(`Error retrieving user:`, error);
-            res.status(500).json({ error: `Error retrieving user` });
         }
     }
     async getUser(req, res) {
@@ -113,11 +115,11 @@ class UserController {
     // PUT
     async updateField(req, res, fieldToUpdate) {
         try {
-            const { username } = req.params;
+            const username = req.params.username;
             //const { _id } = req.params;
             const updateData = req.body;
             // Check if user exists
-            const user = await UserController.findUserByUsername(username);
+            const user = await this.findUserByUsername(username);
             if (!user) {
                 res.status(404).json({ message: `User not found` });
                 return;
