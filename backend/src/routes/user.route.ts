@@ -112,12 +112,12 @@ router.get(`/getUser/:param`, (req, res) => userController.getUser(req, res)); /
  *                 error:
  *                   type: string
  */
-router.delete(`/deleteUser`, (req, res) => userController.deleteUser(req, res));
+router.delete(`/deleteUser`, (req, res) => userController.deleteUser(req, res)); // Ajouter Protection : admin/superAdmin 
 
 // PUT
 
 
-router.put(`/updateProfilePicture/:param`, (req, res) => userController.updateProfilePicture(req, res));
+router.put(`/updateProfilePicture/:param`, (req, res) => userController.updateProfilePicture(req, res)); // Swagger à faire
 
 router.put(`/updateIsVerified/:param`, (req, res) => userController.updateIsVerified(req, res));// Swagger à faire + Ajouter protection : Possible que si admin/superAdmin
 

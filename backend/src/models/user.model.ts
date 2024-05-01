@@ -1,8 +1,6 @@
-import mongoose from 'mongoose';
 import { Schema, model, Document } from 'mongoose';
 
 interface IUser extends Document {
-  _id: mongoose.Schema.Types.ObjectId;
   username: string;
   password: string;
   profile_pic: string;
