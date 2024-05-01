@@ -1,15 +1,34 @@
 import { Request, Response } from 'express';
 import { UserModel, IUser } from '../models/user.model';
+import bcrypt from 'bcrypt';
+
 
 class UserController {
+  
+  // UTILS
   private static async findUserByUsername(username: string){
     return await UserModel.findOne({ username });
   }
 
+  // private static async findUserById(_id: string){
+  //   return await UserModel.findOne({ _id });
+  // }
+
+  // POST
   async addUser(req: Request, res: Response): Promise<void> {
     try {
-      const { username, profile_pic, role, email } = req.body as IUser;
-      const newUser = new UserModel({ username, profile_pic, role, email });
+      const { username, password, profile_pic, role, email } = req.body as IUser;
+
+      const existingUser = await UserController.findUserByUsername(username);
+
+      if (existingUser) {
+        res.status(400).json({ error: `User already exists` });
+        return ;
+      }
+
+      const hashedPassword = await bcrypt.hash(password, 10);
+
+      const newUser = new UserModel({ username, password: hashedPassword, profile_pic, role, email });
       await newUser.save();
 
       res.status(201).json({ message: `User added successfully`, userId: newUser._id });
@@ -20,6 +39,7 @@ class UserController {
     }
   }
 
+  // GET
   async getAllUsers(req: Request, res: Response): Promise<void> {
     try {
       const users = await UserModel.find({});
@@ -49,6 +69,9 @@ class UserController {
     }
   }
 
+  
+
+  // DELETE
   async deleteUser(req: Request, res: Response): Promise<void> {
     try {
       const { username } = req.body;
@@ -67,27 +90,52 @@ class UserController {
     }
   }
 
+  // PUT
   async updateField(req: Request, res: Response, fieldToUpdate: string): Promise<void> {
     try {
       const { username } = req.params;
+      //const { _id } = req.params;
       const updateData = req.body;
 
+      // Check if user exists
       const user = await UserController.findUserByUsername(username);
       if (!user) {
         res.status(404).json({ message: `User not found` });
         return ;
       }
+
       // Check if the field is updatable
-      const allowedFields = [`profile_pic`, `password`, `email`, `is_verified`, `is_active`];
+      const allowedFields = [`username`, `password`, `profile_pic`, `email`, `is_verified`, `is_active`];
       if (!allowedFields.includes(fieldToUpdate)) {
         res.status(400).json({ error: `Invalid field '${fieldToUpdate}'` });
         return ;
       }
 
       // Check if there is only one field to update
-      if (Object.keys(updateData.length !== 1) || !(fieldToUpdate in updateData)) {
+      if (Object.keys(updateData).length !== 1) {
+        if (Object.keys(updateData).length === 0) {
+          res.status(400).json({ error: `Empty request : Need ${ fieldToUpdate }` });
+          return ;
+        }
+        res.status(400).json({ error: `Only one field (${ fieldToUpdate }) can be updated at a time` });
+        return ;
+      }
+
+      // Check if its the good field to update
+      if (!(fieldToUpdate in updateData)) {
         res.status(400).json({ error: `Only the ${fieldToUpdate} can be updated` });
         return ;
+      }
+
+      // Encrypt the password if needed
+      if (fieldToUpdate === `password`) {
+        if (!updateData.password) {
+          res.status(400).json({ error: `Password field is required` });
+          return ;
+        }
+        const hashedPassword = await bcrypt.hash(updateData.password, 10);
+        
+        updateData.password = hashedPassword;
       }
 
       await UserModel.updateOne({ username }, updateData);
@@ -122,124 +170,9 @@ class UserController {
     await this.updateField(req, res, 'email');
   }
 
-  // async updateProfilePicture(req: Request, res: Response): Promise<void> {
-  //   try {
-  //     const { username } = req.params;
-  //     const updateData = req.body;
-
-  //     if (Object.keys(updateData).length !== 1 || !('profile_pic' in updateData)) {
-  //       res.status(400).json({ error: `Only the profile picture can be updated` });
-  //       return;
-  //     }
-      
-  //     const user = await UserModel.findOne({ username });
-
-  //     if (!user) {
-  //       res.status(404).json({ message: 'User not found' });
-  //       return ;
-  //     }
-
-  //     await UserModel.updateOne({ username }, updateData);
-
-  //     res.json({ message: 'User updated successfully' });
-  //   } catch (error) {
-  //     console.error('Error updating user:', error);
-  //     res.status(500).json({ error: 'Error updating user' });
-  //   }
-  // }
-
-  // async updateIsVerifiedIsActive(req: Request, res: Response): Promise<void> {
-  //   try {
-  //     const updateData = req.body;
-  //     const username = updateData.username;
-
-  //     // Condition
-  //     const allowedFields = ['is_active', 'is_verified'];
-  //     for (const field of Object.keys(updateData)) {
-  //       if (!allowedFields.includes(field)) {
-  //         res.status(400).json({ error: `Field '${field}' cannot be updated` });
-  //         return;
-  //       }
-  //     }
-
-  //     const user = await UserModel.findOne({ username });
-
-  //     if (!user) {
-  //       res.status(404).json({ message: 'User not found' });
-  //       return ;
-  //     }
-
-  //     await UserModel.updateOne({ username }, updateData);
-
-  //     // Ajouter logique Mailer
-
-  //     res.json({ message: 'User updated successfully' });
-  //   }
-  //   catch (error) {
-  //     console.error('Error updating user:', error);
-  //     res.status(500).json({ error: 'Error updating user'}); 
-  //   }
-  // }
-
-  // async updatePassword(req: Request, res: Response): Promise<void> {
-  //   try {
-  //     const updateData = req.body;
-  //     const username = updateData.username;
-
-  //     // Condition
-  //     if (Object.keys(updateData).length !== 1 || !('password' in updateData)) {
-  //       res.status(400).json({ error: `Only the password can be updated` });
-  //       return;
-  //     }
-
-  //     const user = await UserModel.findOne({ username });
-
-  //     if (!user) {
-  //       res.status(404).json({ message: 'User not found' });
-  //       return ;
-  //     }
-
-  //     await UserModel.updateOne({ username }, updateData);
-
-  //     // Ajouter logique avec le mailer
-
-  //     res.json({ message: 'User updated successfully' });
-  //   }
-  //   catch (error) {
-  //     console.error('Error updating user:', error);
-  //     res.status(500).json({ error: 'Error updating user'}); 
-  //   }
-  // }
-
-  // async updateEmail(req: Request, res: Response): Promise<void> {
-  //   try {
-  //     const updateData = req.body;
-  //     const username = updateData.username;
-
-  //     // Condition
-  //     if (Object.keys(updateData).length !== 1 || !('email' in updateData)) {
-  //       res.status(400).json({ error: `Only the email address can be updated` });
-  //       return;
-  //     }
-
-  //     const user = await UserModel.findOne({ username });
-
-  //     if (!user) {
-  //       res.status(404).json({ message: 'User not found' });
-  //       return ;
-  //     }
-
-  //     await UserModel.updateOne({ username }, updateData);
-
-  //     // Ajouter logique avec le mailer
-
-  //     res.json({ message: 'User updated successfully' });
-  //   }
-  //   catch (error) {
-  //     console.error('Error updating user:', error);
-  //     res.status(500).json({ error: 'Error updating user'}); 
-  //   }
-  // }
+  async updateUsername(req: Request, res: Response): Promise<void> {
+    await this.updateField(req, res, `username`);
+  }
 }
 
 export default UserController;
