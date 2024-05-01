@@ -9,6 +9,56 @@ const router = express_1.default.Router();
 const userController = new user_controller_1.default();
 /**
  * @openapi
+ * /user/addUser:
+ *   post:
+ *     tags:
+ *       - User
+ *     summary: Adds a new user
+ *     description: Creates a new user in the database with the provided username, profile picture, role, and email.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               username:
+ *                 type: string
+ *                 required: true
+ *               profile_pic:
+ *                 type: string
+ *                 required: false
+ *               role:
+ *                 type: string
+ *                 required: true
+ *               email:
+ *                 type: string
+ *                 required: true
+ *     responses:
+ *       201:
+ *         description: User added successfully.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                 userId:
+ *                   type: string
+ *       500:
+ *         description: Server error adding the user.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ */
+router.post(`/addUser`, (req, res) => userController.addUser(req, res));
+/**
+ * @openapi
  * /user/getAllUsers:
  *   get:
  *     tags:
@@ -51,7 +101,7 @@ const userController = new user_controller_1.default();
  *                   type: string
  *                   description: Error message describing the server error.
  */
-router.get('/getAllUsers', (req, res) => userController.getAllUsers(req, res));
+router.get(`/getAllUsers`, (req, res) => userController.getAllUsers(req, res)); // Swagger a changé
 /**
  * @openapi
  * /user/getUser/{username}:
@@ -104,57 +154,7 @@ router.get('/getAllUsers', (req, res) => userController.getAllUsers(req, res));
  *                 error:
  *                   type: string
  */
-router.get('/getUser/:username', (req, res) => userController.getUser(req, res));
-/**
- * @openapi
- * /user/addUser:
- *   post:
- *     tags:
- *       - User
- *     summary: Adds a new user
- *     description: Creates a new user in the database with the provided username, profile picture, role, and email.
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               username:
- *                 type: string
- *                 required: true
- *               profile_pic:
- *                 type: string
- *                 required: false
- *               role:
- *                 type: string
- *                 required: true
- *               email:
- *                 type: string
- *                 required: true
- *     responses:
- *       201:
- *         description: User added successfully.
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                 userId:
- *                   type: string
- *       500:
- *         description: Server error adding the user.
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 error:
- *                   type: string
- */
-router.post('/addUser', (req, res) => userController.addUser(req, res));
+router.get(`/getUser/:username`, (req, res) => userController.getUser(req, res));
 /**
  * @openapi
  * /user/deleteUser:
@@ -201,7 +201,7 @@ router.post('/addUser', (req, res) => userController.addUser(req, res));
  *                 error:
  *                   type: string
  */
-router.delete('/deleteUser', (req, res) => userController.deleteUser(req, res));
+router.delete(`/deleteUser`, (req, res) => userController.deleteUser(req, res));
 /**
  * @openapi
  * /user/updateProfilePicture/{username}:
@@ -246,9 +246,10 @@ router.delete('/deleteUser', (req, res) => userController.deleteUser(req, res));
  *       500:
  *         description: Server error or unable to update the profile picture.
  */
-router.put('/updateProfilePicture/:username', (req, res) => userController.updateProfilePicture(req, res));
-router.put('/updateIsVerified/:username', (req, res) => userController.updateIsVerified(req, res));
-router.put('/updateIsActive/:username', (req, res) => userController.updateIsActive(req, res));
-router.put('/updatePassword/:username', (req, res) => userController.updatePassword(req, res));
-router.put('/updateEmail/:username', (req, res) => userController.updateEmail(req, res));
+router.put(`/updateProfilePicture/:username`, (req, res) => userController.updateProfilePicture(req, res));
+router.put(`/updateIsVerified/:username`, (req, res) => userController.updateIsVerified(req, res)); // Ajouter protection : Possible que si admin/superAdmin
+router.put(`/updateIsActive/:username`, (req, res) => userController.updateIsActive(req, res));
+router.put(`/updatePassword/:username`, (req, res) => userController.updatePassword(req, res));
+router.put(`/updateEmail/:username`, (req, res) => userController.updateEmail(req, res));
+router.put(`/updateUsername/:username`, (req, res) => userController.updateUsername(req, res)); // Ajouter protection : Possible que si admin/superAdmin
 exports.default = router;

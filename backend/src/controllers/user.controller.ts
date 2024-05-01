@@ -42,7 +42,13 @@ class UserController {
   // GET
   async getAllUsers(req: Request, res: Response): Promise<void> {
     try {
-      const users = await UserModel.find({});
+      let query = {};
+
+      if (req.query && Object.keys(req.query).length > 0) {
+        query = req.query;
+      }
+
+      const users = await UserModel.find(query);
       
       res.json(users);
     } 

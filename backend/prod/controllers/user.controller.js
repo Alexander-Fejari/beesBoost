@@ -6,12 +6,14 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const user_model_1 = require("../models/user.model");
 const bcrypt_1 = __importDefault(require("bcrypt"));
 class UserController {
+    // UTILS
     static async findUserByUsername(username) {
         return await user_model_1.UserModel.findOne({ username });
     }
     // private static async findUserById(_id: string){
     //   return await UserModel.findOne({ _id });
     // }
+    // POST
     async addUser(req, res) {
         try {
             const { username, password, profile_pic, role, email } = req.body;
@@ -30,9 +32,14 @@ class UserController {
             res.status(500).json({ error: `Error adding user` });
         }
     }
+    // GET
     async getAllUsers(req, res) {
         try {
-            const users = await user_model_1.UserModel.find({});
+            let query = {};
+            if (req.query && Object.keys(req.query).length > 0) {
+                query = req.query;
+            }
+            const users = await user_model_1.UserModel.find(query);
             res.json(users);
         }
         catch (error) {
@@ -55,6 +62,7 @@ class UserController {
             res.status(500).json({ error: `Error retrieving user` });
         }
     }
+    // DELETE
     async deleteUser(req, res) {
         try {
             const { username } = req.body;
@@ -70,18 +78,20 @@ class UserController {
             res.status(500).json({ error: `Error deleting user` });
         }
     }
+    // PUT
     async updateField(req, res, fieldToUpdate) {
         try {
             const { username } = req.params;
             //const { _id } = req.params;
             const updateData = req.body;
+            // Check if user exists
             const user = await UserController.findUserByUsername(username);
             if (!user) {
                 res.status(404).json({ message: `User not found` });
                 return;
             }
             // Check if the field is updatable
-            const allowedFields = [`profile_pic`, `password`, `email`, `is_verified`, `is_active`];
+            const allowedFields = [`username`, `password`, `profile_pic`, `email`, `is_verified`, `is_active`];
             if (!allowedFields.includes(fieldToUpdate)) {
                 res.status(400).json({ error: `Invalid field '${fieldToUpdate}'` });
                 return;
@@ -100,8 +110,8 @@ class UserController {
                 res.status(400).json({ error: `Only the ${fieldToUpdate} can be updated` });
                 return;
             }
+            // Encrypt the password if needed
             if (fieldToUpdate === `password`) {
-                console.log(`testing password`);
                 if (!updateData.password) {
                     res.status(400).json({ error: `Password field is required` });
                     return;
@@ -132,6 +142,9 @@ class UserController {
     }
     async updateEmail(req, res) {
         await this.updateField(req, res, 'email');
+    }
+    async updateUsername(req, res) {
+        await this.updateField(req, res, `username`);
     }
 }
 exports.default = UserController;
