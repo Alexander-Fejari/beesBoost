@@ -33,7 +33,7 @@ class UserController {
     }
   }
 
-  protected async getUserById(req: Request, res: Response, _id:string): Promise<void> {
+  protected async getUserById(req: Request, res: Response, _id: string): Promise<void> {
     try {
       const user = await UserModel.findById(_id);
 
@@ -53,6 +53,11 @@ class UserController {
     try {
       const param = req.params.param;
       const updateData = req.body;
+
+      if (param.length > 24) {
+        res.status(404).json({ error: `Wrong username or id: ${param}`});
+        return ;
+      }
 
       // Check if user exists
       const user = await this.getUserObject(param);
