@@ -44,24 +44,30 @@ class UserController {
             res.status(500).json({ error: `Error retrieving user` });
         }
     }
+    async checkErrorUpdateField(req, res, param) {
+        try {
+            if (param.length > 24) {
+                res.status(404).json({ error: `Wrong username or id: ${param}` });
+                return true;
+            }
+            const user = await this.getUserObject(param);
+            if (!user) {
+                res.status(404).json({ message: `User not found` });
+                return true;
+            }
+            return false;
+        }
+        catch (error) {
+            console.error(`Error checking error for users:`, error);
+            res.status(500).json({ error: `Error updating user` });
+            return true;
+        }
+    }
     async updateField(req, res, fieldToUpdate) {
         try {
             const param = req.params.param;
             const updateData = req.body;
-            if (param.length > 24) {
-                res.status(404).json({ error: `Wrong username or id: ${param}` });
-                return;
-            }
-            // Check if user exists
-            const user = await this.getUserObject(param);
-            if (!user) {
-                res.status(404).json({ message: `User not found` });
-                return;
-            }
-            // Check if the field is updatable
-            const allowedFields = [`username`, `password`, `profile_pic`, `email`, `is_verified`, `is_active`];
-            if (!allowedFields.includes(fieldToUpdate)) {
-                res.status(400).json({ error: `Invalid field '${fieldToUpdate}'` });
+            if (await this.checkErrorUpdateField(req, res, param) == true) {
                 return;
             }
             // Check if there is only one field to update
@@ -77,15 +83,6 @@ class UserController {
             if (!(fieldToUpdate in updateData)) {
                 res.status(400).json({ error: `Only the ${fieldToUpdate} can be updated` });
                 return;
-            }
-            // Encrypt the password if needed
-            if (fieldToUpdate === `password`) {
-                if (!updateData.password) {
-                    res.status(400).json({ error: `Password field is required` });
-                    return;
-                }
-                const hashedPassword = await bcrypt_1.default.hash(updateData.password, 10);
-                updateData.password = hashedPassword;
             }
             await user_model_1.UserModel.updateOne(param.length < 24 ? { username: param } : { _id: param }, updateData);
             // Mettre la logique du mailer plus tard
@@ -166,20 +163,41 @@ class UserController {
         }
     }
     // PUT
-    async updateProfilePicture(req, res) {
-        await this.updateField(req, res, 'profile_pic');
+    async updateFields(req, res, allowedFields) {
+        try {
+            const param = req.params.param;
+            const updateData = req.body;
+            if (await this.checkErrorUpdateField(req, res, param) == true) {
+                return;
+            }
+            for (const field of Object.keys(updateData)) {
+                if (field === `password`) {
+                    if (!updateData.password) {
+                        res.status(400).json({ error: `Password field is required` });
+                        return;
+                    }
+                    const hashedPassword = await bcrypt_1.default.hash(updateData.password, 10);
+                    updateData.password = hashedPassword;
+                }
+                if (!allowedFields.includes(field)) {
+                    res.status(400).json({ error: `Invalid field in the body, only this can be updated ${allowedFields}` });
+                    return;
+                }
+            }
+            // Mettre la logique du mailer plus tard
+            user_model_1.UserModel.updateOne(param.length < 24 ? { username: param } : { _id: param }, updateData);
+            res.json({ message: `User's infos have been updated successfully` });
+        }
+        catch (error) {
+            console.error(`Error updating user's infos:`, error);
+            res.status(500).json({ error: `Error updating user` });
+        }
     }
     async updateIsVerified(req, res) {
-        await this.updateField(req, res, 'is_verified');
+        await this.updateField(req, res, `is_verified`);
     }
     async updateIsActive(req, res) {
-        await this.updateField(req, res, 'is_active');
-    }
-    async updatePassword(req, res) {
-        await this.updateField(req, res, 'password');
-    }
-    async updateEmail(req, res) {
-        await this.updateField(req, res, 'email');
+        await this.updateField(req, res, `is_active`);
     }
     async updateUsername(req, res) {
         await this.updateField(req, res, `username`);
