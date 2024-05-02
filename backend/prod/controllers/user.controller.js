@@ -3,22 +3,21 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const user_model_1 = require("../models/user.model");
 const bcrypt_1 = __importDefault(require("bcrypt"));
 class UserController {
     // UTILS
-    async findUserByUsername(username) {
-        return await user_model_1.UserModel.findOne({ username });
+    async findUserByUsername(model, username) {
+        return await model.findOne({ username });
     }
-    async findUserById(_id) {
-        return await user_model_1.UserModel.findById(_id);
+    async findUserById(model, _id) {
+        return await model.findById(_id);
     }
-    async getUserObject(username_or_id, model) {
+    async getUserObject(model, username_or_id) {
         return (username_or_id.length < 24 ? await model.findOne({ username: username_or_id }) : await model.findById(username_or_id));
     }
-    async getUserByUsername(req, res, username) {
+    async getUserByUsername(req, res, model, username) {
         try {
-            const user = await user_model_1.UserModel.findOne({ username });
+            const user = await model.findOne({ username });
             if (!user) {
                 res.status(404).json({ message: `User not found` });
                 return;
@@ -30,9 +29,9 @@ class UserController {
             res.status(500).json({ error: `Error retrieving user` });
         }
     }
-    async getUserById(req, res, _id) {
+    async getUserById(req, res, model, _id) {
         try {
-            const user = await user_model_1.UserModel.findById(_id);
+            const user = await model.findById(_id);
             if (!user) {
                 res.status(404).json({ message: `User not found` });
                 return;
@@ -44,13 +43,13 @@ class UserController {
             res.status(500).json({ error: `Error retrieving user` });
         }
     }
-    async checkErrorUpdateField(req, res, param, model) {
+    async checkErrorUpdateField(req, res, model, param) {
         try {
             if (param.length > 24) {
                 res.status(404).json({ error: `Wrong username or id: ${param}` });
                 return true;
             }
-            const user = await this.getUserObject(param, model);
+            const user = await this.getUserObject(model, param);
             if (!user) {
                 res.status(404).json({ message: `User not found` });
                 return true;
@@ -63,11 +62,11 @@ class UserController {
             return true;
         }
     }
-    async updateField(req, res, fieldToUpdate, model) {
+    async updateField(req, res, model, fieldToUpdate) {
         try {
             const param = req.params.param;
             const updateData = req.body;
-            if (await this.checkErrorUpdateField(req, res, param, model) == true) {
+            if (await this.checkErrorUpdateField(req, res, model, param) == true) {
                 return;
             }
             // Check if there is only one field to update
@@ -84,7 +83,7 @@ class UserController {
                 res.status(400).json({ error: `Only the ${fieldToUpdate} can be updated` });
                 return;
             }
-            await user_model_1.UserModel.updateOne(param.length < 24 ? { username: param } : { _id: param }, updateData);
+            await model.updateOne(param.length < 24 ? { username: param } : { _id: param }, updateData);
             // Mettre la logique du mailer plus tard
             res.json({ message: `User ${fieldToUpdate} updated successfully` });
         }
@@ -94,16 +93,16 @@ class UserController {
         }
     }
     // POST
-    async addUser(req, res) {
+    async addUser(req, res, Model) {
         try {
             const { username, password, profile_pic, role, email } = req.body;
-            const existingUser = await this.findUserByUsername(username);
+            const existingUser = await this.findUserByUsername(Model, username);
             if (existingUser) {
                 res.status(400).json({ error: `User already exists` });
                 return;
             }
             const hashedPassword = await bcrypt_1.default.hash(password, 10);
-            const newUser = new user_model_1.UserModel({ username, password: hashedPassword, profile_pic, role, email });
+            const newUser = new Model({ username, password: hashedPassword, profile_pic, role, email });
             await newUser.save();
             res.status(201).json({ message: `User added successfully`, userId: newUser._id });
         }
@@ -113,13 +112,13 @@ class UserController {
         }
     }
     // GET
-    async getAllUsers(req, res) {
+    async getAllUsers(req, res, model) {
         try {
             let query = {};
             if (req.query && Object.keys(req.query).length > 0) {
                 query = req.query;
             }
-            const users = await user_model_1.UserModel.find(query);
+            const users = await model.find(query);
             res.json(users);
         }
         catch (error) {
@@ -127,14 +126,14 @@ class UserController {
             res.status(500).json({ error: `Error retrieving users` });
         }
     }
-    async getUser(req, res) {
+    async getUser(req, res, model) {
         try {
             const { param } = req.params;
             if (param.length < 24) {
-                return (this.getUserByUsername(req, res, param));
+                return (this.getUserByUsername(req, res, model, param));
             }
             else if (param.length == 24) {
-                return (this.getUserById(req, res, param));
+                return (this.getUserById(req, res, model, param));
             }
             else {
                 res.status(400).json({ message: `Impossible id/username` });
@@ -147,10 +146,10 @@ class UserController {
         }
     }
     // DELETE
-    async deleteUser(req, res) {
+    async deleteUser(req, res, model) {
         try {
             const { username } = req.body;
-            const result = await user_model_1.UserModel.deleteOne({ username });
+            const result = await model.deleteOne({ username });
             if (result.deletedCount == 0) {
                 res.status(404).json({ message: `User not found` });
                 return;
@@ -167,7 +166,7 @@ class UserController {
         try {
             const param = req.params.param;
             const updateData = req.body;
-            if (await this.checkErrorUpdateField(req, res, param, model) == true) {
+            if (await this.checkErrorUpdateField(req, res, model, param) == true) {
                 return;
             }
             for (const field of Object.keys(updateData)) {
@@ -194,13 +193,13 @@ class UserController {
         }
     }
     async updateIsVerified(req, res, model) {
-        await this.updateField(req, res, `is_verified`, model);
+        await this.updateField(req, res, model, `is_verified`);
     }
     async updateIsActive(req, res, model) {
-        await this.updateField(req, res, `is_active`, model);
+        await this.updateField(req, res, model, `is_active`);
     }
     async updateUsername(req, res, model) {
-        await this.updateField(req, res, `username`, model);
+        await this.updateField(req, res, model, `username`);
     }
 }
 exports.default = UserController;

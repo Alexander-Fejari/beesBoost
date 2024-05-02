@@ -56,14 +56,14 @@ const userController = new UserController();
  *                 error:
  *                   type: string
  */
-router.post(`/addUser`, (req, res) => userController.addUser(req, res));
+router.post(`/addUser`, (req, res) => userController.addUser(req, res, UserModel));
 
 // GET
 
 
-router.get(`/getAllUsers`, (req, res) => userController.getAllUsers(req, res)); // Swagger à faire
+router.get(`/getAllUsers`, (req, res) => userController.getAllUsers(req, res, UserModel)); // Swagger à faire
 
-router.get(`/getUser/:param`, (req, res) => userController.getUser(req, res)); // Swagger à faire
+router.get(`/getUser/:param`, (req, res) => userController.getUser(req, res, UserModel)); // Swagger à faire
 
 // DELETE
 
@@ -113,7 +113,7 @@ router.get(`/getUser/:param`, (req, res) => userController.getUser(req, res)); /
  *                 error:
  *                   type: string
  */
-router.delete(`/deleteUser`, (req, res) => userController.deleteUser(req, res)); // Ajouter Protection : admin/superAdmin 
+router.delete(`/deleteUser`, (req, res) => userController.deleteUser(req, res, UserModel)); // Ajouter Protection : admin/superAdmin 
 
 // PUT
 

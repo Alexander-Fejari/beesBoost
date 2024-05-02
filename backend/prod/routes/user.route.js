@@ -58,10 +58,10 @@ const userController = new user_controller_1.default();
  *                 error:
  *                   type: string
  */
-router.post(`/addUser`, (req, res) => userController.addUser(req, res));
+router.post(`/addUser`, (req, res) => userController.addUser(req, res, user_model_1.UserModel));
 // GET
-router.get(`/getAllUsers`, (req, res) => userController.getAllUsers(req, res)); // Swagger à faire
-router.get(`/getUser/:param`, (req, res) => userController.getUser(req, res)); // Swagger à faire
+router.get(`/getAllUsers`, (req, res) => userController.getAllUsers(req, res, user_model_1.UserModel)); // Swagger à faire
+router.get(`/getUser/:param`, (req, res) => userController.getUser(req, res, user_model_1.UserModel)); // Swagger à faire
 // DELETE
 /**
  * @openapi
@@ -109,7 +109,7 @@ router.get(`/getUser/:param`, (req, res) => userController.getUser(req, res)); /
  *                 error:
  *                   type: string
  */
-router.delete(`/deleteUser`, (req, res) => userController.deleteUser(req, res)); // Ajouter Protection : admin/superAdmin 
+router.delete(`/deleteUser`, (req, res) => userController.deleteUser(req, res, user_model_1.UserModel)); // Ajouter Protection : admin/superAdmin 
 // PUT
 router.put(`/updateUserInfo/:param`, (req, res) => userController.updateFields(req, res, user_model_1.UserModel, [`password`, `profile_pic`, `email`])); // Swagger à faire
 router.put(`/updateIsVerified/:param`, (req, res) => userController.updateIsVerified(req, res, user_model_1.UserModel)); // Swagger à faire + Ajouter protection : Possible que si admin/superAdmin

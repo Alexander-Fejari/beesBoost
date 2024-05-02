@@ -1,26 +1,25 @@
 import { Request, Response } from 'express';
 import { Model } from 'mongoose';
-import { UserModel, IUser } from '../models/user.model';
 import bcrypt from 'bcrypt';
 
 class UserController {
   
   // UTILS
-  protected async findUserByUsername(username: string) {
-    return await UserModel.findOne({ username });
+  protected async findUserByUsername<T>(model: Model<T>, username: string) {
+    return await model.findOne({ username });
   }
 
-  protected async findUserById(_id: string) {
-    return await UserModel.findById(_id);
+  protected async findUserById<T>(model: Model<T>, _id: string) {
+    return await model.findById(_id);
   }
 
   protected async getUserObject<T>(model: Model<T>, username_or_id: string) {
     return (username_or_id.length < 24 ? await model.findOne({ username: username_or_id }) : await model.findById(username_or_id));
   }
 
-  protected async getUserByUsername(req: Request, res: Response, username: string): Promise<void> {
+  protected async getUserByUsername<T>(req: Request, res: Response, model: Model<T>, username: string): Promise<void> {
     try {
-      const user = await UserModel.findOne({ username });
+      const user = await model.findOne({ username });
 
       if (!user) {
         res.status(404).json({ message: `User not found` });
@@ -34,9 +33,9 @@ class UserController {
     }
   }
 
-  protected async getUserById(req: Request, res: Response, _id: string): Promise<void> {
+  protected async getUserById<T>(req: Request, res: Response, model: Model<T>,  _id: string): Promise<void> {
     try {
-      const user = await UserModel.findById(_id);
+      const user = await model.findById(_id);
 
       if (!user) {
         res.status(404).json({ message: `User not found` });
@@ -97,7 +96,7 @@ class UserController {
         return ;
       }
 
-      await UserModel.updateOne(param.length < 24 ? { username: param } : { _id: param } , updateData);
+      await model.updateOne(param.length < 24 ? { username: param } : { _id: param } , updateData);
 
       // Mettre la logique du mailer plus tard
 
@@ -111,11 +110,11 @@ class UserController {
 
 
   // POST
-  async addUser(req: Request, res: Response): Promise<void> {
+  async addUser<T>(req: Request, res: Response, Model: Model<T>): Promise<void> {
     try {
-      const { username, password, profile_pic, role, email } = req.body as IUser;
+      const { username, password, profile_pic, role, email } = req.body;
 
-      const existingUser = await this.findUserByUsername(username);
+      const existingUser = await this.findUserByUsername(Model, username);
 
       if (existingUser) {
         res.status(400).json({ error: `User already exists` });
@@ -124,7 +123,7 @@ class UserController {
 
       const hashedPassword = await bcrypt.hash(password, 10);
 
-      const newUser = new UserModel({ username, password: hashedPassword, profile_pic, role, email });
+      const newUser = new Model({ username, password: hashedPassword, profile_pic, role, email });
       await newUser.save();
 
       res.status(201).json({ message: `User added successfully`, userId: newUser._id });
@@ -136,7 +135,7 @@ class UserController {
   }
 
   // GET
-  async getAllUsers(req: Request, res: Response): Promise<void> {
+  async getAllUsers<T>(req: Request, res: Response, model: Model<T>): Promise<void> {
     try {
       let query = {};
 
@@ -144,7 +143,7 @@ class UserController {
         query = req.query;
       }
 
-      const users = await UserModel.find(query);
+      const users = await model.find(query);
       
       res.json(users);
     } 
@@ -154,15 +153,15 @@ class UserController {
     }
   }
 
-  async getUser(req: Request, res: Response): Promise<void> {
+  async getUser<T>(req: Request, res: Response, model: Model<T>): Promise<void> {
     try {
       const { param } = req.params;
       
       if (param.length < 24) {
-        return (this.getUserByUsername(req, res, param));
+        return (this.getUserByUsername(req, res, model, param));
       }
       else if (param.length == 24) {
-        return (this.getUserById(req, res, param));
+        return (this.getUserById(req, res, model, param));
       }
       else {
         res.status(400).json({ message: `Impossible id/username` });
@@ -176,10 +175,10 @@ class UserController {
   }
 
   // DELETE
-  async deleteUser(req: Request, res: Response): Promise<void> {
+  async deleteUser<T>(req: Request, res: Response, model: Model<T>): Promise<void> {
     try {
       const { username } = req.body;
-      const result = await UserModel.deleteOne({ username });
+      const result = await model.deleteOne({ username });
 
       if (result.deletedCount == 0) {
         res.status(404).json({ message: `User not found` });
