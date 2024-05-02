@@ -13,8 +13,8 @@ class UserController {
     async findUserById(_id) {
         return await user_model_1.UserModel.findById(_id);
     }
-    async getUserObject(username_or_id) {
-        return (username_or_id.length < 24 ? await user_model_1.UserModel.findOne({ username: username_or_id }) : await user_model_1.UserModel.findById(username_or_id));
+    async getUserObject(username_or_id, model) {
+        return (username_or_id.length < 24 ? await model.findOne({ username: username_or_id }) : await model.findById(username_or_id));
     }
     async getUserByUsername(req, res, username) {
         try {
@@ -44,13 +44,13 @@ class UserController {
             res.status(500).json({ error: `Error retrieving user` });
         }
     }
-    async checkErrorUpdateField(req, res, param) {
+    async checkErrorUpdateField(req, res, param, model) {
         try {
             if (param.length > 24) {
                 res.status(404).json({ error: `Wrong username or id: ${param}` });
                 return true;
             }
-            const user = await this.getUserObject(param);
+            const user = await this.getUserObject(param, model);
             if (!user) {
                 res.status(404).json({ message: `User not found` });
                 return true;
@@ -63,11 +63,11 @@ class UserController {
             return true;
         }
     }
-    async updateField(req, res, fieldToUpdate) {
+    async updateField(req, res, fieldToUpdate, model) {
         try {
             const param = req.params.param;
             const updateData = req.body;
-            if (await this.checkErrorUpdateField(req, res, param) == true) {
+            if (await this.checkErrorUpdateField(req, res, param, model) == true) {
                 return;
             }
             // Check if there is only one field to update
@@ -163,11 +163,11 @@ class UserController {
         }
     }
     // PUT
-    async updateFields(req, res, allowedFields) {
+    async updateFields(req, res, model, allowedFields) {
         try {
             const param = req.params.param;
             const updateData = req.body;
-            if (await this.checkErrorUpdateField(req, res, param) == true) {
+            if (await this.checkErrorUpdateField(req, res, param, model) == true) {
                 return;
             }
             for (const field of Object.keys(updateData)) {
@@ -185,7 +185,7 @@ class UserController {
                 }
             }
             // Mettre la logique du mailer plus tard
-            user_model_1.UserModel.updateOne(param.length < 24 ? { username: param } : { _id: param }, updateData);
+            model.updateOne(param.length < 24 ? { username: param } : { _id: param }, updateData);
             res.json({ message: `User's infos have been updated successfully` });
         }
         catch (error) {
@@ -193,14 +193,14 @@ class UserController {
             res.status(500).json({ error: `Error updating user` });
         }
     }
-    async updateIsVerified(req, res) {
-        await this.updateField(req, res, `is_verified`);
+    async updateIsVerified(req, res, model) {
+        await this.updateField(req, res, `is_verified`, model);
     }
-    async updateIsActive(req, res) {
-        await this.updateField(req, res, `is_active`);
+    async updateIsActive(req, res, model) {
+        await this.updateField(req, res, `is_active`, model);
     }
-    async updateUsername(req, res) {
-        await this.updateField(req, res, `username`);
+    async updateUsername(req, res, model) {
+        await this.updateField(req, res, `username`, model);
     }
 }
 exports.default = UserController;

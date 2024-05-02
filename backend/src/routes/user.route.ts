@@ -1,5 +1,6 @@
 import express, { Router } from 'express';
 import UserController from '../controllers/user.controller';
+import { UserModel } from '../models/user.model';
 
 const router: Router = express.Router();
 const userController = new UserController();
@@ -117,12 +118,12 @@ router.delete(`/deleteUser`, (req, res) => userController.deleteUser(req, res));
 // PUT
 
 
-router.put(`/updateUserInfo/:param`, (req, res) => userController.updateFields(req, res, [`password`, `profile_pic`, `email`])); // Swagger à faire
+router.put(`/updateUserInfo/:param`, (req, res) => userController.updateFields(req, res, UserModel, [`password`, `profile_pic`, `email`])); // Swagger à faire
 
-router.put(`/updateIsVerified/:param`, (req, res) => userController.updateIsVerified(req, res));// Swagger à faire + Ajouter protection : Possible que si admin/superAdmin
+router.put(`/updateIsVerified/:param`, (req, res) => userController.updateIsVerified(req, res, UserModel));// Swagger à faire + Ajouter protection : Possible que si admin/superAdmin
 
-router.put(`/updateIsActive/:param`, (req, res) => userController.updateIsActive(req, res)); // Swagger à faire
+router.put(`/updateIsActive/:param`, (req, res) => userController.updateIsActive(req, res, UserModel)); // Swagger à faire
 
-router.put(`/updateUsername/:param`, (req, res) => userController.updateUsername(req, res));// Swagger à faire + Ajouter protection : Possible que si admin/superAdmin + pas nécéssaire a priori sauf si l'admin doit pouvoir le changer dans la verif
+router.put(`/updateUsername/:param`, (req, res) => userController.updateUsername(req, res, UserModel));// Swagger à faire + Ajouter protection : Possible que si admin/superAdmin + pas nécéssaire a priori sauf si l'admin doit pouvoir le changer dans la verif
 
 export default router;

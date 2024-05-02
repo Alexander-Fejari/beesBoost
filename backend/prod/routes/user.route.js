@@ -5,6 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const user_controller_1 = __importDefault(require("../controllers/user.controller"));
+const user_model_1 = require("../models/user.model");
 const router = express_1.default.Router();
 const userController = new user_controller_1.default();
 // POST
@@ -110,8 +111,8 @@ router.get(`/getUser/:param`, (req, res) => userController.getUser(req, res)); /
  */
 router.delete(`/deleteUser`, (req, res) => userController.deleteUser(req, res)); // Ajouter Protection : admin/superAdmin 
 // PUT
-router.put(`/updateUserInfo/:param`, (req, res) => userController.updateFields(req, res, [`password`, `profile_pic`, `email`])); // Swagger à faire
-router.put(`/updateIsVerified/:param`, (req, res) => userController.updateIsVerified(req, res)); // Swagger à faire + Ajouter protection : Possible que si admin/superAdmin
-router.put(`/updateIsActive/:param`, (req, res) => userController.updateIsActive(req, res)); // Swagger à faire
-router.put(`/updateUsername/:param`, (req, res) => userController.updateUsername(req, res)); // Swagger à faire + Ajouter protection : Possible que si admin/superAdmin + pas nécéssaire a priori sauf si l'admin doit pouvoir le changer dans la verif
+router.put(`/updateUserInfo/:param`, (req, res) => userController.updateFields(req, res, user_model_1.UserModel, [`password`, `profile_pic`, `email`])); // Swagger à faire
+router.put(`/updateIsVerified/:param`, (req, res) => userController.updateIsVerified(req, res, user_model_1.UserModel)); // Swagger à faire + Ajouter protection : Possible que si admin/superAdmin
+router.put(`/updateIsActive/:param`, (req, res) => userController.updateIsActive(req, res, user_model_1.UserModel)); // Swagger à faire
+router.put(`/updateUsername/:param`, (req, res) => userController.updateUsername(req, res, user_model_1.UserModel)); // Swagger à faire + Ajouter protection : Possible que si admin/superAdmin + pas nécéssaire a priori sauf si l'admin doit pouvoir le changer dans la verif
 exports.default = router;

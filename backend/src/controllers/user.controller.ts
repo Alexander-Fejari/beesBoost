@@ -1,4 +1,5 @@
 import { Request, Response } from 'express';
+import { Model } from 'mongoose';
 import { UserModel, IUser } from '../models/user.model';
 import bcrypt from 'bcrypt';
 
@@ -13,8 +14,8 @@ class UserController {
     return await UserModel.findById(_id);
   }
 
-  protected async getUserObject(username_or_id: string) {
-    return (username_or_id.length < 24 ? await UserModel.findOne({ username: username_or_id }) : await UserModel.findById(username_or_id));
+  protected async getUserObject<T>(model: Model<T>, username_or_id: string) {
+    return (username_or_id.length < 24 ? await model.findOne({ username: username_or_id }) : await model.findById(username_or_id));
   }
 
   protected async getUserByUsername(req: Request, res: Response, username: string): Promise<void> {
@@ -49,14 +50,14 @@ class UserController {
     }
   }
 
-  protected async checkErrorUpdateField(req: Request, res: Response, param: string): Promise<boolean> {
+  protected async checkErrorUpdateField<T>(req: Request, res: Response, model: Model<T>, param: string): Promise<boolean> {
     try {
       if (param.length > 24) {
         res.status(404).json({ error: `Wrong username or id: ${param}`});
         return true;
       }
 
-      const user = await this.getUserObject(param);
+      const user = await this.getUserObject(model, param);
       if (!user) {
         res.status(404).json({ message: `User not found` });
         return true;
@@ -71,12 +72,12 @@ class UserController {
       }
   }
 
-  protected async updateField(req: Request, res: Response, fieldToUpdate: string): Promise<void> {
+  protected async updateField<T>(req: Request, res: Response, model: Model<T>, fieldToUpdate: string): Promise<void> {
     try {
       const param = req.params.param;
       const updateData = req.body;
 
-      if (await this.checkErrorUpdateField(req, res, param) == true) {
+      if (await this.checkErrorUpdateField(req, res, model, param) == true) {
         return ;
       }
 
@@ -194,12 +195,12 @@ class UserController {
   }
 
   // PUT
-  async updateFields(req: Request, res: Response, allowedFields: Array<string>): Promise<void> {
+  async updateFields<T>(req: Request, res: Response, model: Model<T>, allowedFields: Array<string>): Promise<void> {
     try {
       const param = req.params.param;
       const updateData = req.body;
     
-      if (await this.checkErrorUpdateField(req, res, param) == true) {
+      if (await this.checkErrorUpdateField(req, res, model, param) == true) {
         return ;
       }
 
@@ -219,7 +220,7 @@ class UserController {
         }
       } 
        // Mettre la logique du mailer plus tard
-      UserModel.updateOne(param.length < 24 ? { username: param } : { _id: param } , updateData);
+      model.updateOne(param.length < 24 ? { username: param } : { _id: param } , updateData);
       res.json({ message: `User's infos have been updated successfully` });
     }
     catch (error) {
@@ -228,16 +229,16 @@ class UserController {
     }
   }
   
-  async updateIsVerified(req: Request, res: Response): Promise<void> {
-    await this.updateField(req, res, `is_verified`);
+  async updateIsVerified<T>(req: Request, res: Response, model: Model<T>): Promise<void> {
+    await this.updateField(req, res, model,`is_verified`);
   }
 
-  async updateIsActive(req: Request, res: Response): Promise<void> {
-    await this.updateField(req, res, `is_active`);
+  async updateIsActive<T>(req: Request, res: Response, model: Model<T>): Promise<void> {
+    await this.updateField(req, res, model, `is_active`);
   }
 
-  async updateUsername(req: Request, res: Response): Promise<void> {
-    await this.updateField(req, res, `username`);
+  async updateUsername<T>(req: Request, res: Response, model: Model<T>): Promise<void> {
+    await this.updateField(req, res, model, `username`);
   }
 }
 
