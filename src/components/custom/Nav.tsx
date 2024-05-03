@@ -12,7 +12,7 @@ const Nav = ({puces, className}: NavProps) => {
     const {t} = useTranslation();
     return (
         <nav className={`${className} w-full h-1/2`}>
-            <ul className={'h-full flex flex-col justify-end items-center gap-y-8 font-bold lg:flex-row lg:items-center lg:justify-center lg:gap-x-16'}>
+            <ul className={'h-full flex flex-col justify-end items-center gap-y-8  lg:flex-row lg:items-center lg:justify-center lg:gap-x-8'}>
                 <li className={'flex items-center gap-x-1.5 group'}>
                     {puces === true &&
                         (
@@ -20,7 +20,7 @@ const Nav = ({puces, className}: NavProps) => {
                                      fillColor={'fill-transparent'}
                                      strokeWidth={15}
                                      strokeColor={'stroke-primary'}
-                                     size={'w-7 h-7'}
+                                     size={'w-5 h-5'}
                             />
                         )
                     }
@@ -35,7 +35,7 @@ const Nav = ({puces, className}: NavProps) => {
                                      fillColor={'fill-transparent'}
                                      strokeWidth={15}
                                      strokeColor={'stroke-primary'}
-                                     size={'w-7 h-7'}/>
+                                     size={'w-5 h-5'}/>
                         )
                     }
                     <NavLink to={'/'}>
@@ -49,7 +49,7 @@ const Nav = ({puces, className}: NavProps) => {
                                      fillColor={'fill-transparent'}
                                      strokeWidth={15}
                                      strokeColor={'stroke-primary'}
-                                     size={'w-7 h-7'}/>
+                                     size={'w-5 h-5'}/>
                         )
                     }
                     <NavLink to={'/faq'}>
@@ -63,7 +63,7 @@ const Nav = ({puces, className}: NavProps) => {
                                      fillColor={'fill-transparent'}
                                      strokeWidth={15}
                                      strokeColor={'stroke-primary'}
-                                     size={'w-7 h-7'}/>
+                                     size={'w-5 h-5'}/>
                         )
                     }
                     <NavLink to={'/contact'}>
@@ -79,7 +79,7 @@ const Nav = ({puces, className}: NavProps) => {
                                 fillColor={'fill-transparent'}
                                 strokeWidth={15}
                                 strokeColor={'stroke-primary'}
-                                size={'w-7 h-7'}/>
+                                size={'w-5 h-5'}/>
                         )
                     }
                     <NavLink to={'/blog'}>

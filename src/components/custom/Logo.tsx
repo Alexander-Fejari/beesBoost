@@ -10,10 +10,10 @@ const Logo = ({size, link}: LogoProps) => {
     let sizesClasses;
     switch (size) {
         case "xs":
-            sizesClasses = 'w-6 h-auto'
+            sizesClasses = 'w-28 h-auto'
             break
         case "l":
-            sizesClasses = 'w-12 h-auto'
+            sizesClasses = 'w-36 h-auto'
             break
     }
     return (

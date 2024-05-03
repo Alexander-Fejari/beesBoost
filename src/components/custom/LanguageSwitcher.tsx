@@ -27,10 +27,10 @@ const LanguageSwitcher: React.FC = () => {
         <div>
             <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                    <Button variant={'outlinePrimary'} size={'icon'} className={'uppercase'}>
-                        {currentLanguage === 'fr' && <img className={'h-[1.5rem] w-[1.5rem'} src={flagFR} alt="FR" />}
-                        {currentLanguage === 'en' && <img className={'h-[1.5rem] w-[1.5rem'} src={flagEN} alt="EN" />}
-                        {currentLanguage === 'nl' && <img className={'h-[1.5rem] w-[1.5rem'} src={flagNL} alt="NL" />}
+                    <Button variant={'default'} size={'icon'} className={'uppercase'}>
+                        {currentLanguage === 'fr' && <img className={'h-6 w-auto'} src={flagFR} alt="FR" />}
+                        {currentLanguage === 'en' && <img className={'h-6 w-auto'} src={flagEN} alt="EN" />}
+                        {currentLanguage === 'nl' && <img className={'h-6 w-auto'} src={flagNL} alt="NL" />}
 
                     </Button>
                 </DropdownMenuTrigger>
@@ -38,7 +38,7 @@ const LanguageSwitcher: React.FC = () => {
                     <DropdownMenuItem
                         onClick={() => changeLanguage('fr')}>
                         <img
-                            className={'h-[1.5rem] w-[1.5rem'}
+                            className={'h-6 w-auto'}
                             src={flagFR}
                             alt="FR"
                         />
@@ -46,7 +46,7 @@ const LanguageSwitcher: React.FC = () => {
                     <DropdownMenuItem
                         onClick={() => changeLanguage('en')}>
                         <img
-                            className={'h-[1.5rem] w-[1.5rem'}
+                            className={'h-6 w-auto'}
                             src={flagEN}
                             alt="EN"
                         />
@@ -54,7 +54,7 @@ const LanguageSwitcher: React.FC = () => {
                     <DropdownMenuItem
                         onClick={() => changeLanguage('nl')}>
                         <img
-                            className={'h-[1.5rem] w-[1.5rem'}
+                            className={'h-6 w-auto'}
                             src={flagNL}
                             alt="NL"
                         />
