@@ -27,7 +27,7 @@ const LanguageSwitcher: React.FC = () => {
         <div>
             <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                    <Button size={'icon'} className={'uppercase'}>
+                    <Button variant={'outlinePrimary'} size={'icon'} className={'uppercase'}>
                         {currentLanguage === 'fr' && <img className={'h-[1.5rem] w-[1.5rem'} src={flagFR} alt="FR" />}
                         {currentLanguage === 'en' && <img className={'h-[1.5rem] w-[1.5rem'} src={flagEN} alt="EN" />}
                         {currentLanguage === 'nl' && <img className={'h-[1.5rem] w-[1.5rem'} src={flagNL} alt="NL" />}

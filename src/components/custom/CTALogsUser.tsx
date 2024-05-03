@@ -25,7 +25,7 @@ const CTALogsUser = ({isLog}: CTALogsUserProps) => {
                 <section className='flex justify-center items-center gap-x-4'>
                     <Dialog>
                         <DialogTrigger asChild>
-                            <Button size={'lg'} variant={'outline'}>
+                            <Button size={'lg'} variant={'outlinePrimary'}>
                                 {t('ctaUser.ctaSignIn')}
                             </Button>
                         </DialogTrigger>
@@ -42,7 +42,7 @@ const CTALogsUser = ({isLog}: CTALogsUserProps) => {
                     </Dialog>
                     <Dialog>
                         <DialogTrigger asChild>
-                            <Button size={'lg'} variant={'default'}>
+                            <Button size={'lg'} variant={'black'}>
                                 {t('ctaUser.ctaLogIn')}
                             </Button>
                         </DialogTrigger>

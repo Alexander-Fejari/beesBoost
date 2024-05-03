@@ -6,11 +6,11 @@ import {Calendar} from "@/components/ui/calendar"
 const DesignSystem = () => {
     return (
         <div>
-        <h1>Design System</h1>
-        <Header />
-        <Footer />
-        <Sidebar />
-        <Calendar />
+            <Header/>
+            <Sidebar/>
+            <Calendar/>
+            <Footer/>
+
         </div>
     )
 }

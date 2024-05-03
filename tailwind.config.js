@@ -21,6 +21,9 @@ module.exports = {
                 poppins: ['Poppins', 'sans-serif'],
                 montserrat: ['Montserrat', 'sans-serif']
             },
+            strokeWidth: {
+                'bold': '8rem',
+            },
             colors: {
                 border: "hsl(var(--border))",
                 input: "hsl(var(--input))",
