@@ -3,7 +3,6 @@ import { Model } from 'mongoose';
 import bcrypt from 'bcrypt';
 
 class UserController {
-  
   // UTILS
   protected async findUserByUsername<T>(model: Model<T>, username: string) {
     return await model.findOne({ username });
@@ -218,7 +217,7 @@ class UserController {
         }
       } 
        // Mettre la logique du mailer plus tard
-      model.updateOne(param.length < 24 ? { username: param } : { _id: param } , updateData);
+      model.updateOne(param.length < 24 ? { username: param } : { _id: param } , { $set: updateData }, { upsert: true });
       res.json({ message: `User's infos have been updated successfully` });
     }
     catch (error) {

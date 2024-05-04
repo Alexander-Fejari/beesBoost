@@ -1,5 +1,6 @@
 import express, { Router } from 'express';
 import StudentController from '../controllers/student.controller';
+import { StudentModel } from '../models/student.model';
 
 const router: Router = express.Router();
 const studentController = new StudentController();
@@ -40,36 +41,7 @@ const studentController = new StudentController();
  *                 error:
  *                   type: string
  */
-router.post('/addStudent', (req, res) => studentController.addStudent(req, res));
-
-/**
- * @openapi
- * /student/getAllStudents:
- *   get:
- *     tags:
- *       - Student
- *     summary: Retrieves all students
- *     description: Returns a list of all students in the database.
- *     responses:
- *       200:
- *         description: An array of students.
- *         content:
- *           application/json:
- *             schema:
- *               type: array
- *               items:
- *                 $ref: '#/components/schemas/Student'
- *       500:
- *         description: Error retrieving students from the database.
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 error:
- *                   type: string
- */
-router.get('/getAllStudents', (req, res) => studentController.getAllStudents(req, res));
+router.post('/addStudent', (req, res) => studentController.addUser(req, res, StudentModel));
 
 /**
  * @openapi
@@ -112,7 +84,36 @@ router.get('/getAllStudents', (req, res) => studentController.getAllStudents(req
  *                 error:
  *                   type: string
  */
-router.get('/getStudent/:param', (req, res) => studentController.getStudent(req, res));
+router.get('/getStudent/:param', (req, res) => studentController.getUser(req, res, StudentModel));
+
+/**
+ * @openapi
+ * /student/getAllStudents:
+ *   get:
+ *     tags:
+ *       - Student
+ *     summary: Retrieves all students
+ *     description: Returns a list of all students in the database.
+ *     responses:
+ *       200:
+ *         description: An array of students.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Student'
+ *       500:
+ *         description: Error retrieving students from the database.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ */
+router.get('/getAllStudents', (req, res) => studentController.getAllUsers(req, res, StudentModel));
 
 /**
  * @openapi
@@ -161,58 +162,16 @@ router.get('/getStudent/:param', (req, res) => studentController.getStudent(req,
  *                 error:
  *                   type: string
  */
-router.delete('/deleteStudent', (req, res) => studentController.deleteStudent(req, res));
+router.delete('/deleteStudent', (req, res) => studentController.deleteUser(req, res, StudentModel));
 
-/**
- * @openapi
- * /student/updateStudent/{username}:
- *   put:
- *     tags:
- *       - Student
- *     summary: Updates a student's information
- *     description: Modifies the data of an existing student in the database based on the username provided.
- *     parameters:
- *       - in: path
- *         name: username
- *         required: true
- *         schema:
- *           type: string
- *         description: The username of the student to update.
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             $ref: '#/components/schemas/Student'
- *     responses:
- *       200:
- *         description: Student updated successfully.
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *       404:
- *         description: Student not found.
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *       500:
- *         description: Error updating the student in the database.
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 error:
- *                   type: string
- */
-router.put('/updateStudent/:username', (req, res) => studentController.updateStudent(req, res));
+router.put(`/updateStudentInfo/:param`, (req, res) => studentController.updateFields(req, res, StudentModel, ['password', 'profile_pic', 'email', 'name', 'firstname', 'school', 'occupation', 'location', 'contact_info', 'formation', 'experience', 'skills', 'certification', 'languages'])); // Swagger à faire
+
+router.put(`/updateStudentIsVerified/:param`, (req, res) => studentController.updateIsVerified(req, res, StudentModel));// Swagger à faire + Ajouter protection : Possible que si admin/superAdmin
+
+router.put(`/updateStudentIsActive/:param`, (req, res) => studentController.updateIsActive(req, res, StudentModel)); // Swagger à faire
+
+router.put(`/updateStudentIsConnected/:param`, (req, res) => studentController.updateIsConnected(req, res, StudentModel));// Swagger à faire + Ajouter protection : Possible que si admin/superAdmin
+
+router.put(`/updateStudentUsername/:param`, (req, res) => studentController.updateUsername(req, res, StudentModel));// Swagger à faire + Ajouter protection : Possible que si admin/superAdmin + pas nécéssaire a priori sauf si l'admin doit pouvoir le changer dans la verif
 
 export default router;
