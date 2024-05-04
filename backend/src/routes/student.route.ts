@@ -6,6 +6,44 @@ const studentController = new StudentController();
 
 /**
  * @openapi
+ * /student/addStudent:
+ *   post:
+ *     tags:
+ *       - Student
+ *     summary: Adds a new student
+ *     description: Creates a new student in the database with the provided data.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/Student'
+ *     responses:
+ *       201:
+ *         description: Student added successfully.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                 studentId:
+ *                   type: string
+ *       500:
+ *         description: Error adding the student to the database.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ */
+router.post('/addStudent', (req, res) => studentController.addStudent(req, res));
+
+/**
+ * @openapi
  * /student/getAllStudents:
  *   get:
  *     tags:
@@ -74,45 +112,7 @@ router.get('/getAllStudents', (req, res) => studentController.getAllStudents(req
  *                 error:
  *                   type: string
  */
-router.get('/getStudent/:username', (req, res) => studentController.getStudent(req, res));
-
-/**
- * @openapi
- * /student/addStudent:
- *   post:
- *     tags:
- *       - Student
- *     summary: Adds a new student
- *     description: Creates a new student in the database with the provided data.
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             $ref: '#/components/schemas/Student'
- *     responses:
- *       201:
- *         description: Student added successfully.
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                 studentId:
- *                   type: string
- *       500:
- *         description: Error adding the student to the database.
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 error:
- *                   type: string
- */
-router.post('/addStudent', (req, res) => studentController.addStudent(req, res));
+router.get('/getStudent/:param', (req, res) => studentController.getStudent(req, res));
 
 /**
  * @openapi

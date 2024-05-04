@@ -9,7 +9,8 @@ const userSchema = new mongoose_1.Schema({
     role: { type: String, required: true },
     email: { type: String, required: true },
     is_verified: { type: Boolean, required: true, default: true }, // A changer mais pour les tests ce sera nettement plus simple au début
-    is_active: { type: Boolean, required: true, default: true }
+    is_active: { type: Boolean, required: true, default: true },
+    is_connected: { type: Boolean, required: true, default: false }
 });
 const UserModel = (0, mongoose_1.model)('User', userSchema);
 exports.UserModel = UserModel;

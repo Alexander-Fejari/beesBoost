@@ -1,7 +1,8 @@
 import { Request, Response } from 'express';
 import { StudentModel, IStudent } from '../models/student.model';
+import UserController from './user.controller';
 
-class StudentController {
+class StudentController extends UserController {
   async addStudent(req: Request, res: Response): Promise<void> {
     try {
       const { username, profile_pic, role, email, name, firstname, school, occupation, location, contact_info, formation, experience, skills, certification, languages } = req.body as IStudent;

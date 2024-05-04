@@ -198,6 +198,9 @@ class UserController {
     async updateIsActive(req, res, model) {
         await this.updateField(req, res, model, `is_active`);
     }
+    async updateIsConnected(req, res, model) {
+        await this.updateField(req, res, model, `is_connected`);
+    }
     async updateUsername(req, res, model) {
         await this.updateField(req, res, model, `username`);
     }

@@ -108,7 +108,6 @@ class UserController {
     }
   }
 
-
   // POST
   async addUser<T>(req: Request, res: Response, Model: Model<T>): Promise<void> {
     try {
@@ -234,6 +233,10 @@ class UserController {
 
   async updateIsActive<T>(req: Request, res: Response, model: Model<T>): Promise<void> {
     await this.updateField(req, res, model, `is_active`);
+  }
+
+  async updateIsConnected<T>(req: Request, res: Response, model: Model<T>): Promise<void> {
+    await this.updateField(req, res, model,`is_connected`);
   }
 
   async updateUsername<T>(req: Request, res: Response, model: Model<T>): Promise<void> {

@@ -56,7 +56,7 @@ const userController = new UserController();
  *                 error:
  *                   type: string
  */
-router.post(`/addUser`, (req, res) => userController.addUser(req, res, UserModel));
+router.post(`/addUser`, (req, res) => userController.addUser(req, res, UserModel)); // Swagger à faire
 
 // GET
 
@@ -113,7 +113,7 @@ router.get(`/getUser/:param`, (req, res) => userController.getUser(req, res, Use
  *                 error:
  *                   type: string
  */
-router.delete(`/deleteUser`, (req, res) => userController.deleteUser(req, res, UserModel)); // Ajouter Protection : admin/superAdmin 
+router.delete(`/deleteUser`, (req, res) => userController.deleteUser(req, res, UserModel)); // Swagger à faire + Ajouter Protection : admin/superAdmin 
 
 // PUT
 
@@ -123,6 +123,8 @@ router.put(`/updateUserInfo/:param`, (req, res) => userController.updateFields(r
 router.put(`/updateIsVerified/:param`, (req, res) => userController.updateIsVerified(req, res, UserModel));// Swagger à faire + Ajouter protection : Possible que si admin/superAdmin
 
 router.put(`/updateIsActive/:param`, (req, res) => userController.updateIsActive(req, res, UserModel)); // Swagger à faire
+
+router.put(`/updateIsConnected/:param`, (req, res) => userController.updateIsConnected(req, res, UserModel));// Swagger à faire + Ajouter protection : Possible que si admin/superAdmin
 
 router.put(`/updateUsername/:param`, (req, res) => userController.updateUsername(req, res, UserModel));// Swagger à faire + Ajouter protection : Possible que si admin/superAdmin + pas nécéssaire a priori sauf si l'admin doit pouvoir le changer dans la verif
 
