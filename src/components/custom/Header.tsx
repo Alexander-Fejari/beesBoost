@@ -6,7 +6,10 @@ import Logo from "@/components/custom/Logo";
 import Nav from "@/components/custom/Nav";
 import BtnMenu from "@/components/custom/BtnMenu";
 
-const Header = () => {
+interface HeaderProps {
+    className?:string
+}
+const Header = ({className}: HeaderProps) => {
     const [isOpen, setIsOpen] = useState(false);
 
     const toggleMenu = () => {
@@ -14,7 +17,7 @@ const Header = () => {
     };
 
     return (
-        <header className="bg-background relative flex justify-between items-center lg:h-20">
+        <header className={`${className} bg-background relative flex justify-between items-center`}>
             <Logo link={true} size={'l'} />
             <BtnMenu className={'z-20 lg:hidden'} onClick={toggleMenu} isOpen={!isOpen} size={32} />
             <section className={`${isOpen ? 'bg-background h-dvh fixed top-0 left-0 z-10' : 'hidden h-auto lg:flex lg:items-center'}  w-full  lg:z-0 lg:static`}>

@@ -5,7 +5,7 @@ export function LegalSelector() {
     return (
 
         <Select defaultValue={'rgpd'}>
-            <SelectTrigger className="w-max bg-primary text-accent-foreground text-xs font-bold">
+            <SelectTrigger className="w-max bg-primary text-popover-foreground text-xs font-bold">
                 <SelectValue placeholder="Politique de confidentialité" />
             </SelectTrigger>
             <SelectContent>

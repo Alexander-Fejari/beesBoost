@@ -58,6 +58,16 @@ module.exports = {
                     DEFAULT: "hsl(var(--card))",
                     foreground: "hsl(var(--card-foreground))",
                 },
+                black: '#1A1423',
+                white: '#F0EFF4'
+            },
+            gridTemplateColumns: {
+                'desktop': '0.3fr 1.7fr',
+                'mobile': '0.9fr 1.1fr 1fr',
+            },
+            gridTemplateRows: {
+                'desktop': '0.3fr 1.2fr 0.5fr',
+                'mobile': 'repeat(2, 0.3fr) 2.9fr 0.5fr',
             },
             borderRadius: {
                 lg: "var(--radius)",
