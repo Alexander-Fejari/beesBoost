@@ -3,7 +3,7 @@ import { IUser } from './user.model';
 
 interface IWorker extends IUser {
   company?: string;
-  is_admin?: boolean;
+  is_company_admin?: boolean;
 }
 
 const workerSchema = new Schema<IWorker>({
@@ -24,7 +24,7 @@ const workerSchema = new Schema<IWorker>({
     address: { type: String }
   },
   company: { type: String }, // Dés que j'ai fait entreprise : Verifie si l'entreprise existe, si non la créer, et mettre ce worker en admin
-  is_admin: { type: Boolean, required: true, default: false },
+  is_company_admin: { type: Boolean, required: true, default: false },
 });
 
 const WorkerModel = model<IWorker>('Worker', workerSchema);
