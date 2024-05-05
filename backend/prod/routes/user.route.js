@@ -5,20 +5,23 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const user_controller_1 = __importDefault(require("../controllers/user.controller"));
-const user_model_1 = require("../models/user.model");
 const router = express_1.default.Router();
 const userController = new user_controller_1.default();
 // POST
-router.post(`/addUser`, (req, res) => userController.addUser(req, res, user_model_1.UserModel, `user`)); // Swagger à faire
+router.post(`/addUser`, (req, res) => userController.addUser(req, res)); // Swagger à faire
 // GET
-router.get(`/getAllUsers`, (req, res) => userController.getAllUsers(req, res, user_model_1.UserModel)); // Swagger à faire
-router.get(`/getUser/:param`, (req, res) => userController.getUser(req, res, user_model_1.UserModel)); // Swagger à faire
+router.get(`/getAllUsers`, (req, res) => userController.getAllUsers(req, res)); // Swagger à faire
+router.get(`/getUser/:param`, (req, res) => userController.getUser(req, res)); // Swagger à faire
+// router.get(`/getAllStudens`, (req, res) => userController.getAllStudens(req, res)); // Swagger à faire
+// router.get(`/getAllWorkers`, (req, res) => userController.getAllWorkers(req, res)); // Swagger à faire
 // DELETE
-router.delete(`/deleteUser`, (req, res) => userController.deleteUser(req, res, user_model_1.UserModel)); // Swagger à faire + Ajouter Protection : admin/superAdmin 
+router.delete(`/deleteUser`, (req, res) => userController.deleteUser(req, res)); // Swagger à faire + Ajouter Protection : admin/superAdmin 
 // PUT
-router.put(`/updateUserInfo/:param`, (req, res) => userController.updateFields(req, res, user_model_1.UserModel, [`password`, `profile_pic`, `email`, `lastname`, `firstname`, `occupation`, `location`, `contact_info`])); // Swagger à faire
-router.put(`/updateUserVerified/:param`, (req, res) => userController.updateField(req, res, user_model_1.UserModel, `is_verified`)); // Swagger à faire + Ajouter protection : Possible que si admin/superAdmin
-router.put(`/updateUserActive/:param`, (req, res) => userController.updateField(req, res, user_model_1.UserModel, `is_active`)); // Swagger à faire
-router.put(`/updateUserConnected/:param`, (req, res) => userController.updateField(req, res, user_model_1.UserModel, `is_connected`)); // Swagger à faire + Ajouter protection : Possible que si admin/superAdmin
-router.put(`/updateUserUsername/:param`, (req, res) => userController.updateField(req, res, user_model_1.UserModel, `username`)); // Swagger à faire + Ajouter protection : Possible que si admin/superAdmin + pas nécéssaire a priori sauf si l'admin doit pouvoir le changer dans la verif
+router.put(`/updateInfo/:param`, (req, res) => userController.updateFields(req, res, [`profile_pic`, `email`, `lastname`, `firstname`, `occupation`, `location`, `contact_info`, `student_details`, `worker_details`])); // Swagger à faire
+router.put(`/updateVerified/:param`, (req, res) => userController.updateField(req, res, `is_verified`)); // Swagger à faire + Ajouter protection : Possible que si admin/superAdmin
+router.put(`/updateActive/:param`, (req, res) => userController.updateField(req, res, `is_active`)); // Swagger à faire
+router.put(`/updateConnected/:param`, (req, res) => userController.updateField(req, res, `is_connected`)); // Swagger à faire + Ajouter protection : Possible que si admin/superAdmin
+router.put(`/updateUsername/:param`, (req, res) => userController.updateField(req, res, `username`)); // Swagger à faire + Ajouter protection : Possible que si admin/superAdmin + pas nécéssaire a priori sauf si l'admin doit pouvoir le changer dans la verif
+router.put(`/updatePassword/:param`, (req, res) => userController.updateField(req, res, `password`)); // Swagger à faire
+router.put(`/updateWorkerIsAdmin/:param`, (req, res) => userController.updateField(req, res, `worker_details.is_company_admin`)); // Swagger à faire
 exports.default = router;

@@ -8,9 +8,7 @@ const swagger_ui_express_1 = __importDefault(require("swagger-ui-express"));
 const swagger_config_1 = __importDefault(require("./config/swagger.config"));
 const dotenv_1 = __importDefault(require("dotenv"));
 const database_config_1 = require("./config/database.config");
-const user_route_1 = __importDefault(require("./routes/user/user.route"));
-const student_route_1 = __importDefault(require("./routes/user/student.route"));
-const worker_route_1 = __importDefault(require("./routes/user/worker.route"));
+const user_route_1 = __importDefault(require("./routes/user.route"));
 dotenv_1.default.config();
 // Initialize
 const app = (0, express_1.default)();
@@ -25,9 +23,7 @@ app.get('/', (req, res) => {
 // Routes
 // User
 app.use('/user', user_route_1.default);
-app.use('/student', student_route_1.default);
-app.use('/worker', worker_route_1.default);
-// Entreprise
+// Company
 // Connection database + Launching server
 (0, database_config_1.connectToDatabase)()
     .then(() => {
