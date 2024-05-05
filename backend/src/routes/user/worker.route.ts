@@ -20,7 +20,7 @@ router.get('/getWorker/:param', (req, res) => workerController.getUser(req, res,
 // DELETE
 
 
-router.delete('/deleteWorker', (req, res) => workerController.deleteUser(req, res, WorkerModel)); // Swagger à faire
+router.delete('/deleteWorker', (req, res) => workerController.deleteUser(req, res, WorkerModel)); // Swagger à fair
 
 // PUT
 
