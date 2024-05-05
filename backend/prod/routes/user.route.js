@@ -112,8 +112,8 @@ router.get(`/getUser/:param`, (req, res) => userController.getUser(req, res, use
 router.delete(`/deleteUser`, (req, res) => userController.deleteUser(req, res, user_model_1.UserModel)); // Swagger à faire + Ajouter Protection : admin/superAdmin 
 // PUT
 router.put(`/updateUserInfo/:param`, (req, res) => userController.updateFields(req, res, user_model_1.UserModel, [`password`, `profile_pic`, `email`])); // Swagger à faire
-router.put(`/updateUserIsVerified/:param`, (req, res) => userController.updateIsVerified(req, res, user_model_1.UserModel)); // Swagger à faire + Ajouter protection : Possible que si admin/superAdmin
-router.put(`/updateUserIsActive/:param`, (req, res) => userController.updateIsActive(req, res, user_model_1.UserModel)); // Swagger à faire
-router.put(`/updateUserIsConnected/:param`, (req, res) => userController.updateIsConnected(req, res, user_model_1.UserModel)); // Swagger à faire + Ajouter protection : Possible que si admin/superAdmin
-router.put(`/updateUserUsername/:param`, (req, res) => userController.updateUsername(req, res, user_model_1.UserModel)); // Swagger à faire + Ajouter protection : Possible que si admin/superAdmin + pas nécéssaire a priori sauf si l'admin doit pouvoir le changer dans la verif
+router.put(`/updateUserVerified/:param`, (req, res) => userController.updateField(req, res, user_model_1.UserModel, `is_verified`)); // Swagger à faire + Ajouter protection : Possible que si admin/superAdmin
+router.put(`/updateUserActive/:param`, (req, res) => userController.updateField(req, res, user_model_1.UserModel, `is_active`)); // Swagger à faire
+router.put(`/updateUserConnected/:param`, (req, res) => userController.updateField(req, res, user_model_1.UserModel, `is_connected`)); // Swagger à faire + Ajouter protection : Possible que si admin/superAdmin
+router.put(`/updateUserUsername/:param`, (req, res) => userController.updateField(req, res, user_model_1.UserModel, `username`)); // Swagger à faire + Ajouter protection : Possible que si admin/superAdmin + pas nécéssaire a priori sauf si l'admin doit pouvoir le changer dans la verif
 exports.default = router;

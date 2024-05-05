@@ -62,36 +62,6 @@ class UserController {
             return true;
         }
     }
-    async updateField(req, res, model, fieldToUpdate) {
-        try {
-            const param = req.params.param;
-            const updateData = req.body;
-            if (await this.checkErrorUpdateField(req, res, model, param) == true) {
-                return;
-            }
-            // Check if there is only one field to update
-            if (Object.keys(updateData).length !== 1) {
-                if (Object.keys(updateData).length === 0) {
-                    res.status(400).json({ error: `Empty request : Need ${fieldToUpdate}` });
-                    return;
-                }
-                res.status(400).json({ error: `Only one field (${fieldToUpdate}) can be updated at a time` });
-                return;
-            }
-            // Check if its the good field to update
-            if (!(fieldToUpdate in updateData)) {
-                res.status(400).json({ error: `Only the ${fieldToUpdate} can be updated` });
-                return;
-            }
-            await model.updateOne(param.length < 24 ? { username: param } : { _id: param }, updateData);
-            // Mettre la logique du mailer plus tard
-            res.json({ message: `User ${fieldToUpdate} updated successfully` });
-        }
-        catch (error) {
-            console.error(`Error updating user's ${fieldToUpdate}:`, error);
-            res.status(500).json({ error: `Error updating user` });
-        }
-    }
     // POST
     async addUser(req, res, Model) {
         try {
@@ -162,6 +132,36 @@ class UserController {
         }
     }
     // PUT
+    async updateField(req, res, model, fieldToUpdate) {
+        try {
+            const param = req.params.param;
+            const updateData = req.body;
+            if (await this.checkErrorUpdateField(req, res, model, param) == true) {
+                return;
+            }
+            // Check if there is only one field to update
+            if (Object.keys(updateData).length !== 1) {
+                if (Object.keys(updateData).length === 0) {
+                    res.status(400).json({ error: `Empty request : Need ${fieldToUpdate}` });
+                    return;
+                }
+                res.status(400).json({ error: `Only one field (${fieldToUpdate}) can be updated at a time` });
+                return;
+            }
+            // Check if its the good field to update
+            if (!(fieldToUpdate in updateData)) {
+                res.status(400).json({ error: `Only the ${fieldToUpdate} can be updated` });
+                return;
+            }
+            await model.updateOne(param.length < 24 ? { username: param } : { _id: param }, updateData);
+            // Mettre la logique du mailer plus tard
+            res.json({ message: `User ${fieldToUpdate} updated successfully` });
+        }
+        catch (error) {
+            console.error(`Error updating user's ${fieldToUpdate}:`, error);
+            res.status(500).json({ error: `Error updating user` });
+        }
+    }
     async updateFields(req, res, model, allowedFields) {
         try {
             const param = req.params.param;
@@ -191,18 +191,6 @@ class UserController {
             console.error(`Error updating user's infos:`, error);
             res.status(500).json({ error: `Error updating user` });
         }
-    }
-    async updateIsVerified(req, res, model) {
-        await this.updateField(req, res, model, `is_verified`);
-    }
-    async updateIsActive(req, res, model) {
-        await this.updateField(req, res, model, `is_active`);
-    }
-    async updateIsConnected(req, res, model) {
-        await this.updateField(req, res, model, `is_connected`);
-    }
-    async updateUsername(req, res, model) {
-        await this.updateField(req, res, model, `username`);
     }
 }
 exports.default = UserController;

@@ -166,12 +166,12 @@ router.delete('/deleteStudent', (req, res) => studentController.deleteUser(req, 
 
 router.put(`/updateStudentInfo/:param`, (req, res) => studentController.updateFields(req, res, StudentModel, ['password', 'profile_pic', 'email', 'name', 'firstname', 'school', 'occupation', 'location', 'contact_info', 'formation', 'experience', 'skills', 'certification', 'languages'])); // Swagger à faire
 
-router.put(`/updateStudentIsVerified/:param`, (req, res) => studentController.updateIsVerified(req, res, StudentModel));// Swagger à faire + Ajouter protection : Possible que si admin/superAdmin
+router.put(`/updateStudentVerified/:param`, (req, res) => studentController.updateField(req, res, StudentModel, `is_verified`));// Swagger à faire + Ajouter protection : Possible que si admin/superAdmin
 
-router.put(`/updateStudentIsActive/:param`, (req, res) => studentController.updateIsActive(req, res, StudentModel)); // Swagger à faire
+router.put(`/updateStudentActive/:param`, (req, res) => studentController.updateField(req, res, StudentModel, `is_active`)); // Swagger à faire
 
-router.put(`/updateStudentIsConnected/:param`, (req, res) => studentController.updateIsConnected(req, res, StudentModel));// Swagger à faire + Ajouter protection : Possible que si admin/superAdmin
+router.put(`/updateStudentConnected/:param`, (req, res) => studentController.updateField(req, res, StudentModel, `is_connected`));// Swagger à faire + Ajouter protection : Possible que si admin/superAdmin
 
-router.put(`/updateStudentUsername/:param`, (req, res) => studentController.updateUsername(req, res, StudentModel));// Swagger à faire + Ajouter protection : Possible que si admin/superAdmin + pas nécéssaire a priori sauf si l'admin doit pouvoir le changer dans la verif
+router.put(`/updateStudentUsername/:param`, (req, res) => studentController.updateField(req, res, StudentModel, `username`));// Swagger à faire + Ajouter protection : Possible que si admin/superAdmin + pas nécéssaire a priori sauf si l'admin doit pouvoir le changer dans la verif
 
 export default router;

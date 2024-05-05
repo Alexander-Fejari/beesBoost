@@ -120,12 +120,12 @@ router.delete(`/deleteUser`, (req, res) => userController.deleteUser(req, res, U
 
 router.put(`/updateUserInfo/:param`, (req, res) => userController.updateFields(req, res, UserModel, [`password`, `profile_pic`, `email`])); // Swagger à faire
 
-router.put(`/updateUserIsVerified/:param`, (req, res) => userController.updateIsVerified(req, res, UserModel));// Swagger à faire + Ajouter protection : Possible que si admin/superAdmin
+router.put(`/updateUserVerified/:param`, (req, res) => userController.updateField(req, res, UserModel, `is_verified`));// Swagger à faire + Ajouter protection : Possible que si admin/superAdmin
 
-router.put(`/updateUserIsActive/:param`, (req, res) => userController.updateIsActive(req, res, UserModel)); // Swagger à faire
+router.put(`/updateUserActive/:param`, (req, res) => userController.updateField(req, res, UserModel, `is_active`)); // Swagger à faire
 
-router.put(`/updateUserIsConnected/:param`, (req, res) => userController.updateIsConnected(req, res, UserModel));// Swagger à faire + Ajouter protection : Possible que si admin/superAdmin
+router.put(`/updateUserConnected/:param`, (req, res) => userController.updateField(req, res, UserModel, `is_connected`));// Swagger à faire + Ajouter protection : Possible que si admin/superAdmin
 
-router.put(`/updateUserUsername/:param`, (req, res) => userController.updateUsername(req, res, UserModel));// Swagger à faire + Ajouter protection : Possible que si admin/superAdmin + pas nécéssaire a priori sauf si l'admin doit pouvoir le changer dans la verif
+router.put(`/updateUserUsername/:param`, (req, res) => userController.updateField(req, res, UserModel, `username`));// Swagger à faire + Ajouter protection : Possible que si admin/superAdmin + pas nécéssaire a priori sauf si l'admin doit pouvoir le changer dans la verif
 
 export default router;
