@@ -263,28 +263,51 @@ class UserController {
     }
   }
 
-  // async updateWorkerIsAdmin(req: Request, res: Response): Promise<void> {
-  //   const param = req.params.param;
-  //   const updateData = req.body;
-    
-  //   if (await this.checkErrorUpdateField(req, res, param) == true) {
-  //     return ;
-  //   }
-  //   if (Object.keys(updateData).length !== 1) {
-  //     if (Object.keys(updateData).length === 0) {
-  //       res.status(400).json({ error: `Empty request : Need worker_details.is_admin` });
-  //       return ;
-  //     }
-  //     res.status(400).json({ error: `Only one field (worker_details.is_admin) can be updated at a time` });
-  //     return ;
-  //   }
+  async updateWorkerIsAdmin(req: Request, res: Response): Promise<void> {
+    try {
+      const param = req.params.param;
+      const changeAdminPerm = req.body.is_company_admin;
+  
+      const user = await this.getUserObject(req, res, param);
+      if (!user) {
+        res.status(404).json({ error: 'User not found' });
+        return ;
+      }
 
-  //   // Check if its the good field to update
-  //   if (!(`worker_details.is_admin` in updateData)) {
-  //     res.status(400).json({ error: `Only the worker_details.is_admin can be updated` });
-  //     return ;
-  //   }
-  // }
+      if (user.role !== 'worker' || !user.worker_details) {
+        res.status(400).json({ error: 'User is not a worker' });
+        return ;
+      }
+  
+      user.worker_details.is_company_admin = changeAdminPerm;
+      await user.save();
+  
+      res.json({ message: 'Worker admin status updated successfully' });
+    } catch (error) {
+      console.error('Error updating worker admin status:', error);
+      res.status(500).json({ error: 'Error updating worker admin status' });
+    }
+  }
+
+  async updateStudentDetails(req: Request, res: Response): Promise<void> {
+    try {
+      const param = req.params.param;
+      const updateData = req.body;
+  
+      const user = await this.getUserObject(req, res, param);
+      if (!user) {
+        res.status(404).json({ error: 'User not found' });
+        return ;
+      }
+  
+      // I need u here
+  
+      res.json({ message: 'Student details updated successfully' });
+    } catch (error) {
+      console.error('Error updating student details:', error);
+      res.status(500).json({ error: 'Error updating student details' });
+    }
+  }
 }
 
 export default UserController;

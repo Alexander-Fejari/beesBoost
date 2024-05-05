@@ -177,13 +177,8 @@ class UserController {
             }
             // Check if its the good field to update
             if (!(fieldToUpdate in updateData)) {
-                // if (fieldToUpdate == `worker_details.is_company_admin`) {
-                //   console.log(`yo`);
-                // }
-                // else {
                 res.status(400).json({ error: `Only the ${fieldToUpdate} can be updated` });
                 return;
-                // }
             }
             if (fieldToUpdate == `password`) {
                 const hashedPassword = await bcrypt_1.default.hash(updateData.password, 10);
@@ -228,6 +223,64 @@ class UserController {
         catch (error) {
             console.error(`Error updating user's infos:`, error);
             res.status(500).json({ error: `Error updating user` });
+        }
+    }
+    async updateWorkerIsAdmin(req, res) {
+        try {
+            const param = req.params.param;
+            const changeAdminPerm = req.body.is_company_admin;
+            const user = await this.getUserObject(req, res, param);
+            if (!user) {
+                res.status(404).json({ error: 'User not found' });
+                return;
+            }
+            if (user.role !== 'worker' || !user.worker_details) {
+                res.status(400).json({ error: 'User is not a worker' });
+                return;
+            }
+            user.worker_details.is_company_admin = changeAdminPerm;
+            await user.save();
+            res.json({ message: 'Worker admin status updated successfully' });
+        }
+        catch (error) {
+            console.error('Error updating worker admin status:', error);
+            res.status(500).json({ error: 'Error updating worker admin status' });
+        }
+    }
+    async updateStudentDetails(req, res) {
+        try {
+            const param = req.params.param;
+            const updateData = req.body;
+            const user = await this.getUserObject(req, res, param);
+            if (!user) {
+                res.status(404).json({ error: 'User not found' });
+                return;
+            }
+            // Récupérer les détails de l'étudiant existants de la base de données
+            const existingStudentDetails = user.student_details || {};
+            // Mettre à jour chaque champ de student_details avec les nouvelles valeurs fournies dans la requête
+            for (const field of Object.keys(updateData)) {
+                if (Array.isArray(updateData[field])) { // Vérifier si le champ est un tableau
+                    // Si le champ est un tableau, ajouter les nouvelles valeurs à la liste existante (s'il y en a)
+                    if (!existingStudentDetails[field]) {
+                        existingStudentDetails[field] = []; // Initialiser le champ s'il n'existe pas encore
+                    }
+                    existingStudentDetails[field] = existingStudentDetails[field].concat(updateData[field]); // Ajouter les nouvelles valeurs à la liste existante
+                }
+                else {
+                    // Si le champ n'est pas un tableau, mettre à jour la valeur existante avec la nouvelle valeur
+                    existingStudentDetails[field] = updateData[field];
+                }
+            }
+            // Mettre à jour user.student_details avec les détails de l'étudiant mis à jour
+            user.student_details = existingStudentDetails;
+            // Enregistrer les modifications dans la base de données
+            await user.save();
+            res.json({ message: 'Student details updated successfully' });
+        }
+        catch (error) {
+            console.error('Error updating student details:', error);
+            res.status(500).json({ error: 'Error updating student details' });
         }
     }
 }
