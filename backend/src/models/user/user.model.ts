@@ -9,6 +9,14 @@ interface IUser extends Document {
   is_verified: boolean;
   is_active: boolean;
   is_connected: boolean;
+  lastname?: string;
+  firstname?: string;
+  occupation?: string;
+  location?: string;
+  contact_info?: {
+      phone?: string;
+      address?: string;
+  };
 }
 
 const userSchema = new Schema<IUser>({
@@ -19,7 +27,15 @@ const userSchema = new Schema<IUser>({
   email: { type: String, required: true },
   is_verified: { type: Boolean, required: true, default: true }, // A changer mais pour les tests ce sera nettement plus simple au début
   is_active: { type: Boolean, required: true, default: true },
-  is_connected: { type: Boolean, required: true, default: false }
+  is_connected: { type: Boolean, required: true, default: false },
+  lastname: { type: String },
+  firstname: { type: String },
+  occupation: { type: String },
+  location: { type: String },
+  contact_info: {
+    phone: { type: String },
+    address: { type: String }
+  },
 });
 
 const UserModel = model<IUser>('User', userSchema);

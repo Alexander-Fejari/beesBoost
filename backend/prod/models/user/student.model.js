@@ -21,26 +21,31 @@ const studentSchema = new mongoose_1.Schema({
     },
     school: { type: String },
     formation: [{
-            degree: { type: String, required: true },
-            field: { type: String, required: true },
-            year: { type: Number, required: true }
+            degree: { type: String },
+            field: { type: String },
+            school: { type: String },
+            graduation_year: { type: Number }
         }],
     experience: [{
-            title: { type: String, required: true },
-            company: { type: String, required: true },
-            year: { type: Number, required: true }
+            title: { type: String },
+            company: { type: String },
+            location: { type: String },
+            start_date: { type: Date },
+            end_date: { type: Date },
+            description: { type: String }
         }],
     skills: [{
-            name: { type: String, required: true },
-            level: { type: String, required: true }
+            name: { type: String },
+            level: { type: String }
         }],
     certification: [{
-            name: { type: String, required: true },
-            year: { type: Number, required: true }
+            name: { type: String },
+            provider: { type: String },
+            date: { type: Date }
         }],
     languages: [{
-            name: { type: String, required: true },
-            level: { type: String, required: true }
+            name: { type: String },
+            level: { type: String }
         }],
 });
 const StudentModel = (0, mongoose_1.model)('Student', studentSchema);

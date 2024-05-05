@@ -4,15 +4,15 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
-const student_controller_1 = __importDefault(require("../controllers/student.controller"));
-const student_model_1 = require("../models/student.model");
+const student_controller_1 = __importDefault(require("../../controllers/user/student.controller"));
+const student_model_1 = require("../../models/user/student.model");
 const router = express_1.default.Router();
 const studentController = new student_controller_1.default();
 // POST
 router.post('/addStudent', (req, res) => studentController.addUser(req, res, student_model_1.StudentModel, `student`)); // Swagger à faire
 // GET
-router.get('/getStudent/:param', (req, res) => studentController.getUser(req, res, student_model_1.StudentModel)); // Swagger à faire
 router.get('/getAllStudents', (req, res) => studentController.getAllUsers(req, res, student_model_1.StudentModel)); // Swagger à faire
+router.get('/getStudent/:param', (req, res) => studentController.getUser(req, res, student_model_1.StudentModel)); // Swagger à faire
 // DELETE
 router.delete('/deleteStudent', (req, res) => studentController.deleteUser(req, res, student_model_1.StudentModel)); // Swagger à faire
 // PUT

@@ -71,9 +71,14 @@ class UserController {
   }
 
   // POST
-  async addUser<T>(req: Request, res: Response, Model: Model<T>): Promise<void> {
+  async addUser<T>(req: Request, res: Response, Model: Model<T>, typeOfProfile: string): Promise<void> {
     try {
-      const { username, password, profile_pic, role, email } = req.body;
+      const { username, password, profile_pic, role, email, lastname, firstname, occupation, location, contact_info } = req.body;
+
+      if (!username || !password || !role || !email) {
+        res.status(400).json({ error: 'Bad request: username, password, role, and email are required fields' });
+        return;
+      }
 
       const existingUser = await this.findUserByUsername(Model, username);
 
@@ -84,7 +89,24 @@ class UserController {
 
       const hashedPassword = await bcrypt.hash(password, 10);
 
-      const newUser = new Model({ username, password: hashedPassword, profile_pic, role, email });
+      const userData: any = { username, password: hashedPassword, profile_pic, role, email, lastname, firstname, occupation, location, contact_info };
+      
+      if (typeOfProfile === `student`) {
+        const { school, formation, experience, skills, certification, languages } = req.body;
+        userData.school = school;
+        userData.formation = formation;
+        userData.experience = experience;
+        userData.skills = skills;
+        userData.certification = certification;
+        userData.languages = languages;
+      }
+      else if (typeOfProfile === `worker`) {
+        const { entreprise, is_admin } = req.body;
+        userData.entreprise = entreprise;
+        userData.is_admin = is_admin;
+      }
+
+      const newUser = new Model(userData);
       await newUser.save();
 
       res.status(201).json({ message: `User added successfully`, userId: newUser._id });
@@ -101,10 +123,20 @@ class UserController {
       let query = {};
 
       if (req.query && Object.keys(req.query).length > 0) {
+        const validKeys = Object.keys(req.query).every(key => Object.keys(model.schema.obj).includes(key));
+        if (!validKeys) {
+          res.status(400).json({ error: 'Invalid query parameters' });
+          return;
+        }
         query = req.query;
       }
 
       const users = await model.find(query);
+
+      if (users.length === 0) {
+        res.status(404).json({ message: 'User not found matching those parameters' });
+        return;
+    }
       
       res.json(users);
     } 
@@ -138,11 +170,25 @@ class UserController {
   // DELETE
   async deleteUser<T>(req: Request, res: Response, model: Model<T>): Promise<void> {
     try {
-      const { username } = req.body;
-      const result = await model.deleteOne({ username });
+      const id = req.body.id;
+      const username = req.body.username;
+
+      if ((id && username) || (!id && !username)) {
+        res.status(400).json({ error: `Request must contain id OR username`});
+        return ;
+      }
+
+      if ((id && id.length != 24) || (username && username.length > 23)) {
+        res.status(400).json({ error: `id or username not in the good format`});
+        return ;
+      }
+
+      const query: any = id ? { _id: id } : { username: username };
+
+      const result = await model.deleteOne(query);
 
       if (result.deletedCount == 0) {
-        res.status(404).json({ message: `User not found` });
+        res.status(404).json({ error: `User not found` });
         return;
       }
 
@@ -180,11 +226,16 @@ class UserController {
         return ;
       }
 
-      await model.updateOne(param.length < 24 ? { username: param } : { _id: param } , updateData);
+      const result = await model.updateOne(param.length < 24 ? { username: param } : { _id: param } , updateData);
 
       // Mettre la logique du mailer plus tard
 
-      res.json({ message: `User ${fieldToUpdate} updated successfully` });
+      if (result.modifiedCount > 0) {
+        res.json({ message: `User ${fieldToUpdate} updated successfully` });
+      } 
+      else {
+        res.status(404).json({ error: `No changes have been made, same info as before has been given` });
+      }
     }
     catch(error) {
       console.error(`Error updating user's ${fieldToUpdate}:`, error);
@@ -217,30 +268,20 @@ class UserController {
         }
       } 
        // Mettre la logique du mailer plus tard
-      model.updateOne(param.length < 24 ? { username: param } : { _id: param } , { $set: updateData }, { upsert: true });
-      res.json({ message: `User's infos have been updated successfully` });
+      
+      const result = await model.updateOne(param.length < 24 ? { username: param } : { _id: param }, updateData);
+      if (result.modifiedCount > 0) {
+        res.json({ message: `User's infos have been updated successfully` });
+      } 
+      else {
+        res.status(404).json({ error: `No changes have been made, same infos as before have been given` });
+      }
     }
     catch (error) {
       console.error(`Error updating user's infos:`, error);
       res.status(500).json({ error: `Error updating user` });
     }
   }
-  
-  // async updateIsVerified<T>(req: Request, res: Response, model: Model<T>): Promise<void> {
-  //   await this.updateField(req, res, model,`is_verified`);
-  // }
-
-  // async updateIsActive<T>(req: Request, res: Response, model: Model<T>): Promise<void> {
-  //   await this.updateField(req, res, model, `is_active`);
-  // }
-
-  // async updateIsConnected<T>(req: Request, res: Response, model: Model<T>): Promise<void> {
-  //   await this.updateField(req, res, model,`is_connected`);
-  // }
-
-  // async updateUsername<T>(req: Request, res: Response, model: Model<T>): Promise<void> {
-  //   await this.updateField(req, res, model, `username`);
-  // }
 }
 
 export default UserController;

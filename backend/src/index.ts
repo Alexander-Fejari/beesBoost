@@ -4,8 +4,9 @@ import swaggerSpec from './config/swagger.config'
 import dotenv from 'dotenv';
 
 import { connectToDatabase, closeDatabase } from './config/database.config';
-import userRouter from './routes/user.route';
-import studentRouter from './routes/student.route';
+import userRouter from './routes/user/user.route';
+import studentRouter from './routes/user/student.route';
+import workerRouter from './routes/user/worker.route';
 
 dotenv.config();
 
@@ -24,8 +25,13 @@ app.get('/', (req: Request, res: Response) => {
 });
 
 // Routes
+
+// User
 app.use('/user', userRouter);
 app.use('/student', studentRouter);
+app.use('/worker', workerRouter);
+
+// Entreprise
 
 // Connection database + Launching server
 connectToDatabase()
