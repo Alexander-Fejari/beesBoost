@@ -8,7 +8,7 @@ const workerController = new WorkerController();
 // POST
 
 
-router.post('/addWorker', (req, res) => workerController.addUser(req, res, WorkerModel, `worker`)); // Swagger à faire
+router.post('/addWorker', (req, res) => workerController.addUser(req, res, WorkerModel)); // Swagger à faire
 
 // GET
 

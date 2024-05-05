@@ -71,7 +71,7 @@ class UserController {
   }
 
   // POST
-  async addUser<T>(req: Request, res: Response, Model: Model<T>, typeOfProfile: string): Promise<void> {
+  async addUser<T>(req: Request, res: Response, Model: Model<T>): Promise<void> {
     try {
       const { username, password, profile_pic, role, email, lastname, firstname, occupation, location, contact_info } = req.body;
 
@@ -91,7 +91,7 @@ class UserController {
 
       const userData: any = { username, password: hashedPassword, profile_pic, role, email, lastname, firstname, occupation, location, contact_info };
       
-      if (typeOfProfile === `student`) {
+      if (req.body.role === `student`) {
         const { school, formation, experience, skills, certification, languages } = req.body;
         userData.school = school;
         userData.formation = formation;
@@ -100,7 +100,7 @@ class UserController {
         userData.certification = certification;
         userData.languages = languages;
       }
-      else if (typeOfProfile === `worker`) {
+      else if (req.body.role === `worker`) {
         const { entreprise, is_admin } = req.body;
         userData.entreprise = entreprise;
         userData.is_admin = is_admin;

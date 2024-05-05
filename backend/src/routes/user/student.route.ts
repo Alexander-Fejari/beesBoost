@@ -8,7 +8,7 @@ const studentController = new StudentController();
 // POST
 
 
-router.post('/addStudent', (req, res) => studentController.addUser(req, res, StudentModel, `student`)); // Swagger à faire
+router.post('/addStudent', (req, res) => studentController.addUser(req, res, StudentModel)); // Swagger à faire
 
 // GET
 
