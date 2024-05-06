@@ -5,7 +5,6 @@ import dotenv from 'dotenv';
 
 import { connectToDatabase, closeDatabase } from './config/database.config';
 import userRouter from './routes/user.route';
-import authRouter from './routes/authRoutes';
 
 
 dotenv.config();
@@ -28,9 +27,6 @@ app.get('/', (req: Request, res: Response) => {
 
 // User
 app.use('/user', userRouter);
-
-// Auth
-app.use(`/auth`, authRouter);
 
 // Company
 
