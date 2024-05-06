@@ -8,7 +8,7 @@ interface LayoutProps {
 
 const Layout = ({children}: LayoutProps) => {
     return (
-        <section className={'h-dvh grid-cols-mobile grid-rows-mobile grid md:grid-cols-desktop md:grid-rows-desktop'}>
+        <section className={'h-dvh p-6 grid grid-cols-mobile grid-rows-mobile md:grid-cols-desktop md:grid-rows-desktop'}>
             <Header className="col-span-5 h-full" />
             <Sidebar className="row-span-3 row-start-2" />
             <main className="col-span-4 row-span-3 row-start-2 h-full overflow-y-auto">

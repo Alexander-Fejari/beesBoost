@@ -6,11 +6,6 @@ const DesignSystem = () => {
     return (
         <Layout>
             <Calendar/>
-            <Calendar/>
-            <Calendar/>
-            <Calendar/>
-            <Calendar/>
-            <Calendar/>
         </Layout>
     )
 }
