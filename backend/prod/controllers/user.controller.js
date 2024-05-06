@@ -46,6 +46,7 @@ class UserController {
         }
     }
     // POST
+    // AUTH
     async addUser(req, res) {
         try {
             const { username, password, profile_pic, role, email, lastname, firstname, occupation, location, contact_info } = req.body;
