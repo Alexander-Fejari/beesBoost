@@ -16,9 +16,9 @@ router.get(`/getAllUsers`, (req, res) => userController.getAllUsers(req, res)); 
 
 router.get(`/getUser/:param`, (req, res) => userController.getUser(req, res)); // Swagger à faire
 
-// router.get(`/getAllStudens`, (req, res) => userController.getAllStudens(req, res)); // Swagger à faire
+router.get(`/getAllStudents`, (req, res) => userController.getAllStudents(req, res, `student`)); // Swagger à faire
 
-// router.get(`/getAllWorkers`, (req, res) => userController.getAllWorkers(req, res)); // Swagger à faire
+//router.get(`/getAllWorkers`, (req, res) => userController.getAllSW(req, res, `worker`)); // Swagger à faire
 
 // DELETE
 
