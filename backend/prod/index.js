@@ -9,6 +9,7 @@ const swagger_config_1 = __importDefault(require("./config/swagger.config"));
 const dotenv_1 = __importDefault(require("dotenv"));
 const database_config_1 = require("./config/database.config");
 const user_route_1 = __importDefault(require("./routes/user.route"));
+const authRoutes_1 = __importDefault(require("./routes/authRoutes"));
 dotenv_1.default.config();
 // Initialize
 const app = (0, express_1.default)();
@@ -23,6 +24,8 @@ app.get('/', (req, res) => {
 // Routes
 // User
 app.use('/user', user_route_1.default);
+// Auth
+app.use(`/auth`, authRoutes_1.default);
 // Company
 // Connection database + Launching server
 (0, database_config_1.connectToDatabase)()

@@ -1,4 +1,5 @@
 import { Schema, model, Document } from 'mongoose';
+import bcrypt from 'bcrypt';
 
 interface IUser extends Document {
   username: string;
@@ -23,50 +24,50 @@ interface IUser extends Document {
   };
   student_details?: {
     school?: string;
-    formation?: {
+    formation: Array<{
       degree?: string;
       field?: string;
       school?: string;
       graduation_year?: number;
-    }[];
-    experience?: {
+    }>;
+    experience: Array<{
       title?: string;
       company?: string;
       location?: string;
       start_date?: Date;
       end_date?: Date;
       description?: string;
-    }[];
-    skills?: {
+    }>;
+    skills: Array<{
       name?: string;
       level?: string;
-    }[];
-    certification?: {
+    }>;
+    certification: Array<{
       name?: string;
       provider?: string;
       date?: Date;
-    }[];
-    languages?: {
+    }>;
+    languages: Array<{
       name?: string;
       level?: string;
-    }[];
-    game_info?: {
-      level?: string;
+    }>;
+    game_info: Array<{
+      level?: number;
       nb_jobs_done?: number;
       nb_jobs_atm?: number;
       title?: string;
-    }[];
+    }>;
   };
+  comparePassword: (candidatePassword: string) => Promise<boolean>;
 }
 
-
 const userSchema = new Schema({
-  username: { type: String, required: true },
+  username: { type: String, required: true, unique: true },
   password: { type: String, required: true },
   profile_pic: { type: String, required: true, default: `https://scontent.fcrl1-1.fna.fbcdn.net/v/t1.6435-9/107209573_3210813778982759_4891830877933540151_n.jpg?_nc_cat=109&ccb=1-7&_nc_sid=5f2048&_nc_ohc=GNNwt0wMw28Q7kNvgFRvakj&_nc_ht=scontent.fcrl1-1.fna&oh=00_AfDE5teHqwAc3S1qdVcqKQ6Z2Dk1ftFbHNqSTkGaPpACBg&oe=665E101A` },
   role: { type: String, required: true },
-  email: { type: String, required: true },
-  is_verified: { type: Boolean, required: true, default: true }, // A mettre en false, mais plus simple pour les tests
+  email: { type: String, required: true, unique: true },
+  is_verified: { type: Boolean, required: true, default: false }, // A mettre en false pour la production
   is_active: { type: Boolean, required: true, default: true },
   is_connected: { type: Boolean, required: true, default: false },
   lastname: { type: String },
@@ -119,6 +120,17 @@ const userSchema = new Schema({
   }
 });
 
+userSchema.pre<IUser>('save', async function(next) {
+  if (this.isModified('password') || this.isNew) {
+    const salt = await bcrypt.genSalt(10);
+    this.password = await bcrypt.hash(this.password, salt);
+  }
+  next();
+});
+
+userSchema.methods.comparePassword = async function(candidatePassword: string): Promise<boolean> {
+  return bcrypt.compare(candidatePassword, this.password);
+};
 
 const UserModel = model<IUser>('User', userSchema);
 

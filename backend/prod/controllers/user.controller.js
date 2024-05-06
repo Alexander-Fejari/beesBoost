@@ -5,6 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const bcrypt_1 = __importDefault(require("bcrypt"));
 const user_model_1 = require("../models/user.model");
+const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 class UserController {
     // UTILS
     async getUserObject(req, res, username_or_id) {
@@ -57,9 +58,14 @@ class UserController {
                 res.status(400).json({ error: `${role} isnt a good role (student, worker, admin or superAdmin)` });
                 return;
             }
-            const existingUser = await user_model_1.UserModel.findOne({ username: username });
-            if (existingUser) {
-                res.status(400).json({ error: `User already exists` });
+            const existingUserEmail = await user_model_1.UserModel.findOne({ email: email });
+            if (existingUserEmail) {
+                res.status(400).json({ error: `User already exists with this ${email}` });
+                return;
+            }
+            const existingUserUsername = await user_model_1.UserModel.findOne({ username: username });
+            if (existingUserUsername) {
+                res.status(400).json({ error: `User already exists with this ${username}` });
                 return;
             }
             const hashedPassword = await bcrypt_1.default.hash(password, 10);
@@ -93,6 +99,26 @@ class UserController {
         catch (error) {
             console.error(`Error adding user:`, error);
             res.status(500).json({ error: `Error adding user` });
+        }
+    }
+    async userLogin(req, res) {
+        try {
+            const { email, password } = req.body;
+            const user = await user_model_1.UserModel.findOne({ email });
+            if (!user) {
+                res.status(401).send({ message: 'Login failed : No user matches those credentials' });
+                return;
+            }
+            const isMatch = await user.comparePassword(password);
+            if (!isMatch) {
+                res.status(401).send({ message: 'Login failed : Bad password' });
+                return;
+            }
+            const token = jsonwebtoken_1.default.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '1d' });
+            res.status(200).send({ message: 'Login successful', token });
+        }
+        catch (error) {
+            res.status(500).send(error);
         }
     }
     // GET

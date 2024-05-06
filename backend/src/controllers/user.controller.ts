@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import bcrypt from 'bcrypt';
 import { UserModel } from '../models/user.model';
+import jwt from 'jsonwebtoken';
 
 class UserController {
   // UTILS
@@ -61,10 +62,17 @@ class UserController {
         return ;
       }
 
-      const existingUser = await UserModel.findOne({ username: username });
+      const existingUserEmail = await UserModel.findOne({ email: email });
 
-      if (existingUser) {
-        res.status(400).json({ error: `User already exists` });
+      if (existingUserEmail) {
+        res.status(400).json({ error: `User already exists with this ${ email }` });
+        return ;
+      }
+
+      const existingUserUsername = await UserModel.findOne({ username: username });
+
+      if (existingUserUsername) {
+        res.status(400).json({ error: `User already exists with this ${ username }` });
         return ;
       }
 
@@ -103,6 +111,29 @@ class UserController {
     catch (error) {
       console.error(`Error adding user:`, error);
       res.status(500).json({ error: `Error adding user` });
+    }
+  }
+
+  async userLogin(req: Request, res: Response): Promise<void> {
+    try {
+      const { email, password } = req.body;
+      const user = await UserModel.findOne({ email });
+      if (!user) {
+        res.status(401).send({ message: 'Login failed : No user matches those credentials' });
+        return;
+      }
+
+      const isMatch = await user.comparePassword(password);
+      if (!isMatch) {
+        res.status(401).send({ message: 'Login failed : Bad password' });
+        return ;
+      }
+
+      const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET!, { expiresIn: '1d' });
+      res.status(200).send({ message: 'Login successful', token });
+    } 
+    catch (error) {
+      res.status(500).send(error);
     }
   }
 

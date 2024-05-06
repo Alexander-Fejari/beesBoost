@@ -9,6 +9,8 @@ const router = express_1.default.Router();
 const userController = new user_controller_1.default();
 // POST
 router.post(`/addUser`, (req, res) => userController.addUser(req, res)); // Swagger à faire
+router.post('/signup', (req, res) => userController.addUser(req, res));
+router.post('/login', (req, res) => userController.userLogin(req, res));
 // GET
 router.get(`/getAllUsers`, (req, res) => userController.getAllUsers(req, res)); // Swagger à faire
 router.get(`/getUser/:param`, (req, res) => userController.getUser(req, res)); // Swagger à faire
