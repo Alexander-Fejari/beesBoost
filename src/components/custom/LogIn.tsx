@@ -12,9 +12,34 @@ const LogIn = () => {
     const { register, handleSubmit, formState } = useForm<LoginValues>({
         resolver: zodResolver(loginSchema),
     });
+    
+const onSubmit = async (values: LoginValues): Promise<void> => {
+        try {
+            const response = await fetch('http://localhost:5000/user/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(values)
+            });
+            
+            if (!response.ok) {
+                throw new Error('Échec de la connexion au serveur');
+            }
+            
+            console.log("Succès")
 
-    const onSubmit = (values: LoginValues) => {
-        console.log(values);
+            const data = await response.json();
+            if (data.token) {
+                localStorage.setItem('token', data.token);
+                // Redirection vers la page sécurisée
+                window.location.href = '/page-securisee';
+            } else {
+                console.log('Échec de la connexion: Token non reçu');
+            }
+        } catch (error) {
+            console.error('Erreur de connexion:', error);
+        }
     };
 
     return (
