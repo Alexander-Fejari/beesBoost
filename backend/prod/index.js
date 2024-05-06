@@ -6,6 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const swagger_ui_express_1 = __importDefault(require("swagger-ui-express"));
 const swagger_config_1 = __importDefault(require("./config/swagger.config"));
+const cors_1 = __importDefault(require("cors"));
 const dotenv_1 = __importDefault(require("dotenv"));
 const database_config_1 = require("./config/database.config");
 const user_route_1 = __importDefault(require("./routes/user.route"));
@@ -16,6 +17,10 @@ const port = process.env.PORT || 5000;
 app.use('/api-docs', swagger_ui_express_1.default.serve, swagger_ui_express_1.default.setup(swagger_config_1.default));
 // Middleware
 app.use(express_1.default.json());
+app.use((0, cors_1.default)({
+    origin: ["http://localhost:5000", "http://localhost:5173", "http://localhost:5174", "http://localhost:8000"],
+    credentials: true
+}));
 // Test route
 app.get('/', (req, res) => {
     res.send('Gucci');
