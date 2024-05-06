@@ -41,7 +41,7 @@ const Nav = ({puces, fontSize}: NavProps) => {
                 <li className={'flex items-center gap-x-1.5 group'}>
                     {puces === true &&
                         (
-                            <HiveSvg className={'transition ease-in-out delay-150  group-hover:fill-primary'}
+                            <HiveSvg className={'transition ease-in-out delay-150 group-hover:fill-primary'}
                                      fillColor={'fill-transparent'}
                                      strokeWidth={15}
                                      strokeColor={'stroke-primary'}

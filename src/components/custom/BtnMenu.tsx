@@ -28,9 +28,15 @@ const BtnMenu = ({isOpen, target, size, onClick, className}: BtnMenuProps) => {
 
     } else if (target === 'sidebar') {
         return (
-            <Button className={`${className} ${isOpen? 'flex items-center gap-x-1.5 leading-none' : ''}`} variant={'ghost'} onClick={onClick}>
-                <LuLayoutDashboard />
-                {isOpen && (
+            <Button
+                className={`${className} leading-none p-0 w-full`}
+                variant={'ultraGhost'}
+                onClick={onClick}
+            >
+                <LuLayoutDashboard
+                    className={'transition ease-in-out delay-150 hover:scale-125 hover:text-primary'}
+                />
+                {!isOpen && (
                     <p>{t('sidebar.dashboard')}</p>
                 )}
             </Button>

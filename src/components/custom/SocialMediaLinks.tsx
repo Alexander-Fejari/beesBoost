@@ -8,7 +8,8 @@ interface SocialMediaLinkProps {
 
 const SocialMediaLink = ({href, icon}: SocialMediaLinkProps) => {
     return (
-        <Link to={href} target="_blank" rel="noopener noreferrer">
+        <Link to={href} target="_blank" rel="noopener noreferrer"
+              className="transition ease-in-out delay-150 hover:scale-125 hover:text-primary">
             {icon}
         </Link>
     );
@@ -17,24 +18,19 @@ const SocialMediaLinks = () => {
     return (
         <section className={`flex justify-center gap-4`}>
             <SocialMediaLink href="https://www.facebook.com/beesboost"
-                             icon={<FaFacebook
-                                 className="transition-transform transform hover:scale-125 hover:text-primary"/>}
+                             icon={<FaFacebook/>}
             />
             <SocialMediaLink href="https://www.instagram.com/beesboost/"
-                             icon={<FaInstagram
-                                 className="transition-transform transform hover:scale-125 hover:text-primary"/>}
+                             icon={<FaInstagram/>}
             />
             <SocialMediaLink href="https://www.tiktok.com/@beesboost"
-                             icon={<FaTiktok
-                                 className="transition-transform transform hover:scale-125 hover:text-primary"/>}
+                             icon={<FaTiktok/>}
             />
             <SocialMediaLink href="https://www.linkedin.com/company/bees-boost/"
-                             icon={<FaLinkedinIn
-                                 className="transition-transform transform hover:scale-125 hover:text-primary"/>}
+                             icon={<FaLinkedinIn/>}
             />
             <SocialMediaLink href="https://www.youtube.com/@beesboost"
-                             icon={<FaYoutube
-                                 className="transition-transform transform hover:scale-125 hover:text-primary"/>}
+                             icon={<FaYoutube/>}
             />
         </section>
     );

@@ -2,7 +2,7 @@ import {useState} from "react";
 import {useTranslation} from "react-i18next";
 import {Separator} from "@/components/ui/separator.tsx";
 import BtnMenu from "@/components/custom/BtnMenu.tsx";
-
+import {LuUser2} from "react-icons/lu";
 
 
 interface NewSideProps {
@@ -20,12 +20,17 @@ const Sidebar = ({className}: NewSideProps) => {
     return (
         <aside className={`${className}`}>
             <nav>
-                <Separator />
-                <BtnMenu onClick={toggleSidebar} isOpen={!isToggle} target={'sidebar'} />
-                <Separator />
-                <ul className={' leading-none'}>
-                    <li>
-                        {t('sidebar.user')}
+                <Separator/>
+                <BtnMenu target={'sidebar'} onClick={toggleSidebar} isOpen={!isToggle}/>
+                <Separator/>
+                <ul className={`${isToggle ? 'h-full flex flex-col ' : 'hidden md:flex-col'} `}>
+                    <li className={'flex items-center gap-x-1.5'}>
+                        <LuUser2/>
+                        {isToggle && (
+                            <p>
+                                {t('sidebar.user')}
+                            </p>
+                        )}
                     </li>
                 </ul>
             </nav>
