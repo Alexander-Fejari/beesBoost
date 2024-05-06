@@ -42,6 +42,6 @@ router.put(`/updatePassword/:param`, (req, res) => userController.updateField(re
 
 router.put(`/updateWorkerIsAdmin/:param`, (req, res) => userController.updateWorkerIsAdmin(req, res));// Swagger à faire
 
-router.put(`/updateStudentDetails/:param`, (req, res) => userController.updateStudentDetails(req, res));
+router.put(`/updateStudentDetails/:param`, (req, res) => userController.updateStudentDetails(req, res)); // Swagger à faire
 
 export default router;
