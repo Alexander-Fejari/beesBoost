@@ -10,11 +10,11 @@ const Layout = ({children}: LayoutProps) => {
     return (
         <section className={'h-dvh p-6 grid grid-cols-mobile grid-rows-mobile md:grid-cols-desktop md:grid-rows-desktop'}>
             <Header className="col-span-5 h-full" />
-            <Sidebar className="w-full row-span-3 row-start-2" />
-            <main className="col-span-4 row-span-3 row-start-2 h-full overflow-y-auto">
+            <Sidebar className="w-full col-span-5 row-start-2 md:row-span-3 md:row-start-2" />
+            <main className="col-span-4 row-span-3 row-start-3 h-full overflow-y-auto">
                 {children}
             </main>
-            <Footer className="col-span-5 row-start-5" />
+            <Footer className="h-max col-span-5 md:row-start-5" />
         </section>
     )
 }

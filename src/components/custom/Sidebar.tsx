@@ -18,7 +18,7 @@ const Sidebar = ({className}: NewSideProps) => {
     };
 
     return (
-        <aside className={`${className}`}>
+        <aside className={`${className} w-full`}>
             <nav>
                 <Separator/>
                 <BtnMenu target={'sidebar'} onClick={toggleSidebar} isOpen={!isToggle}/>

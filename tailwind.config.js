@@ -67,7 +67,7 @@ module.exports = {
             },
             gridTemplateRows: {
                 'desktop': '0.1fr auto 1fr',
-                'mobile': 'repeat(2, 0.3fr) 2.9fr 0.5fr',
+                'mobile': 'repeat(2, 0.3fr) 2.9fr auto',
             },
             borderRadius: {
                 lg: "var(--radius)",
