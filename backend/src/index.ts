@@ -1,6 +1,7 @@
 import express, { Request, Response } from 'express';
 import swaggerUi from 'swagger-ui-express';
 import swaggerSpec from './config/swagger.config'
+import cors from 'cors';
 import dotenv from 'dotenv';
 
 import { connectToDatabase, closeDatabase } from './config/database.config';
@@ -17,6 +18,12 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 // Middleware
 app.use(express.json());
+
+app.use(cors({
+  origin: ["http://localhost:5000", "http://localhost:5173", "http://localhost:5174", "http://localhost:8000"],
+  
+    credentials: true
+  }));
 
 // Test route
 app.get('/', (req: Request, res: Response) => {

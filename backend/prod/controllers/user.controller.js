@@ -111,6 +111,7 @@ class UserController {
                 return;
             }
             const isMatch = await user.comparePassword(password);
+            console.log(user.comparePassword(password));
             if (!isMatch) {
                 res.status(401).send({ message: 'Login failed : Bad password' });
                 return;
