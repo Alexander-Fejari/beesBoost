@@ -48,6 +48,9 @@ class UserController {
   }
 
   // POST
+
+  // AUTH
+  
   async addUser(req: Request, res: Response): Promise<void> {
     try {
       const { username, password, profile_pic, role, email, lastname, firstname, occupation, location, contact_info } = req.body;
@@ -250,9 +253,7 @@ class UserController {
     }
 }
   
-
-
-  // async getAllSW(req: Request, res: Response, studentOrWorker: string): Promise<void> {
+ // async getAllSW(req: Request, res: Response, studentOrWorker: string): Promise<void> {
   //   try {
   //     let query: any = { role: studentOrWorker };
 
