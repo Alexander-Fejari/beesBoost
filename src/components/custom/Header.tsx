@@ -19,7 +19,7 @@ const Header = ({className}: HeaderProps) => {
     return (
         <header className={`${className} bg-background relative flex justify-between items-center`}>
             <Logo link={true} size={'l'} />
-            <BtnMenu className={'z-20 lg:hidden'} onClick={toggleMenu} isOpen={!isOpen} size={32} />
+            <BtnMenu target={'header'} className={'z-20 lg:hidden'} onClick={toggleMenu} isOpen={!isOpen} size={32} />
             <section className={`${isOpen ? 'bg-background h-dvh fixed top-0 left-0 z-10' : 'hidden h-auto lg:flex lg:items-center'}  w-full  lg:z-0 lg:static`}>
                 <Nav />
                 <section className="h-1/2 flex flex-col justify-center items-center gap-y-4 lg:flex-row lg:items-center lg:gap-x-4">
