@@ -1,5 +1,8 @@
 import {NavLink} from "react-router-dom";
-import logo from "@/assets/logo.png";
+import logoBlack from "@/assets/logoBlack.png";
+import logoOrange from "@/assets/logoOrange.png";
+import {useTheme} from "@/components/theme-provider"
+
 
 interface LogoProps {
     size: 'xs' | 'sm' | 'l',
@@ -7,6 +10,9 @@ interface LogoProps {
 }
 
 const Logo = ({size, link}: LogoProps) => {
+    const {theme} = useTheme()
+    const logoSrc = theme === 'dark'? logoOrange : logoBlack;
+
     let sizesClasses;
     switch (size) {
         case "xs":
@@ -19,11 +25,11 @@ const Logo = ({size, link}: LogoProps) => {
     return (
         <>
             {!link && (
-                <img className={`${sizesClasses}`} src={logo} alt={'logo Bees Boost'}/>
+                <img className={`${sizesClasses}`} src={logoSrc} alt={'logo Bees Boost'}/>
             )}
             {link && (
                 <NavLink to={'/'}>
-                    <img className={`${sizesClasses}`} src={logo} alt={'logo Bees Boost'}/>
+                    <img className={`${sizesClasses}`} src={logoSrc} alt={'logo Bees Boost'}/>
                 </NavLink>
             )}
         </>
