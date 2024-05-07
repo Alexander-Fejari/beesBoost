@@ -14,7 +14,7 @@ router.post('/login', (req, res) => userController.userLogin(req, res));
 // GET
 router.get(`/getAllUsers`, (req, res) => userController.getAllUsers(req, res)); // Swagger à faire
 router.get(`/getUser/:param`, (req, res) => userController.getUser(req, res)); // Swagger à faire
-router.get(`/getAllStudents`, (req, res) => userController.getAllStudents(req, res, `student`)); // Swagger à faire
+router.get(`/getAllStudents`, (req, res) => userController.getAllStudents(req, res)); // Swagger à faire
 //router.get(`/getAllWorkers`, (req, res) => userController.getAllSW(req, res, `worker`)); // Swagger à faire
 // DELETE
 router.delete(`/deleteUser`, (req, res) => userController.deleteUser(req, res)); // Swagger à faire + Ajouter Protection : admin/superAdmin 

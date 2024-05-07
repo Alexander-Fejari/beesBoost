@@ -20,7 +20,7 @@ router.get(`/getAllUsers`, (req, res) => userController.getAllUsers(req, res)); 
 
 router.get(`/getUser/:param`, (req, res) => userController.getUser(req, res)); // Swagger à faire
 
-router.get(`/getAllStudents`, (req, res) => userController.getAllStudents(req, res, `student`)); // Swagger à faire
+router.get(`/getAllStudents`, (req, res) => userController.getAllStudents(req, res)); // Swagger à faire
 
 //router.get(`/getAllWorkers`, (req, res) => userController.getAllSW(req, res, `worker`)); // Swagger à faire
 
