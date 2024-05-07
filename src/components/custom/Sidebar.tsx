@@ -19,10 +19,12 @@ const Sidebar = ({className}: NewSideProps) => {
 
     return (
         <aside className={`${className} w-full`}>
-            <nav>
+            <section className="flex flex-col">
                 <Separator/>
                 <BtnMenu target={'sidebar'} onClick={toggleSidebar} isOpen={!isToggle}/>
                 <Separator/>
+            </section>
+            <nav>
                 <ul className={`${isToggle ? 'h-full flex flex-col ' : 'hidden md:flex-col'} `}>
                     <li className={'flex items-center gap-x-1.5'}>
                         <LuUser2/>

@@ -29,7 +29,7 @@ const BtnMenu = ({isOpen, target, size, onClick, className}: BtnMenuProps) => {
     } else if (target === 'sidebar') {
         return (
             <Button
-                className={`${className} leading-none p-0 w-full`}
+                className={`${className} justify-center gap-x-1.5 md:justify-start leading-none p-0`}
                 variant={'ultraGhost'}
                 onClick={onClick}
             >
