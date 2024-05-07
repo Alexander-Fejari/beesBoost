@@ -68,14 +68,14 @@ class UserController {
       const existingUserEmail = await UserModel.findOne({ email: email });
 
       if (existingUserEmail) {
-        res.status(400).json({ error: `User already exists with this ${ email }` });
+        res.status(400).json({ error: `User already exists with this email : ${ email }` });
         return ;
       }
 
       const existingUserUsername = await UserModel.findOne({ username: username });
 
       if (existingUserUsername) {
-        res.status(400).json({ error: `User already exists with this ${ username }` });
+        res.status(400).json({ error: `User already exists with this username : ${ username }` });
         return ;
       }
 
@@ -128,7 +128,6 @@ class UserController {
 
       const isMatch = await user.comparePassword(password);
 
-      console.log(user.comparePassword(password));
       if (!isMatch) {
         res.status(401).send({ message: 'Login failed : Bad password' });
         return ;
@@ -290,6 +289,7 @@ class UserController {
   // }
 
   // DELETE
+  
   async deleteUser(req: Request, res: Response): Promise<void> {
     try {
       const id = req.body.id;

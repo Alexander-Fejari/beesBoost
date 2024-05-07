@@ -61,12 +61,12 @@ class UserController {
             }
             const existingUserEmail = await user_model_1.UserModel.findOne({ email: email });
             if (existingUserEmail) {
-                res.status(400).json({ error: `User already exists with this ${email}` });
+                res.status(400).json({ error: `User already exists with this email : ${email}` });
                 return;
             }
             const existingUserUsername = await user_model_1.UserModel.findOne({ username: username });
             if (existingUserUsername) {
-                res.status(400).json({ error: `User already exists with this ${username}` });
+                res.status(400).json({ error: `User already exists with this username : ${username}` });
                 return;
             }
             const hashedPassword = await bcrypt_1.default.hash(password, 10);
@@ -111,7 +111,10 @@ class UserController {
                 return;
             }
             const isMatch = await user.comparePassword(password);
-            console.log(user.comparePassword(password));
+            console.log(`password: ${password}`);
+            console.log(`hashed_password right now: `, await bcrypt_1.default.hash(password, 10));
+            console.log(`hashed password db: `, user.password);
+            console.log(`isMatch: ${isMatch}`);
             if (!isMatch) {
                 res.status(401).send({ message: 'Login failed : Bad password' });
                 return;
