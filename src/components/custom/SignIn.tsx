@@ -13,8 +13,31 @@ const SignIn = () => {
         resolver: zodResolver(formSchema),
     });
 
-    const onSubmit = (values: FormValues) => {
-        console.log(values);
+    const onSubmit = async (values: FormValues) => {
+        try {
+            const response = await fetch('http://localhost:5000/user/signup', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(values)
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to register');
+            }
+
+            const data = await response.json();
+            if (data.message) {
+                console.log(data.message); // Suppose the server sends back a success message.
+                // Here you might want to redirect the user to a login page or a dashboard
+                window.location.href = '/login'; // Redirect to login after registration
+            } else {
+                console.log('Registration failed: No success message received');
+            }
+        } catch (error) {
+            console.error('Registration error:', error);
+        }
     };
 
     const onReset = () => {
@@ -23,6 +46,18 @@ const SignIn = () => {
 
     return (
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
+            <section className="flex flex-col items-start space-y-2">
+                <Label htmlFor={'role'}>{t('signIn.role')}</Label>
+                <select
+                    id="role"
+                    {...register("role")}
+                    className="input-class" // Remplacez "input-class" par votre classe de style pour les inputs
+                >
+                    <option value="worker">{t('signIn.worker')}</option>
+                    <option value="student">{t('signIn.student')}</option>
+                </select>
+                {formState.errors.role && <p className="error-message">{formState.errors.role.message}</p>}
+            </section>
             <section className="flex flex-col items-start space-y-2">
                 <Label htmlFor={'lastname'}>{t('signIn.lastname')}</Label>
                 <Input
@@ -55,13 +90,13 @@ const SignIn = () => {
                 />
             </section>
             <section className="flex flex-col  items-start space-y-2">
-                <Label htmlFor={'pseudo'}>{t('signIn.pseudo')}</Label>
+                <Label htmlFor={'username'}>{t('signIn.username')}</Label>
                 <Input
-                    id={'pseudo'}
+                    id={'username'}
                     type="text"
-                    placeholder="pseudo"
-                    {...register("pseudo")}
-                    error={formState.errors.pseudo?.message}
+                    placeholder="username"
+                    {...register("username")}
+                    error={formState.errors.username?.message}
                 />
             </section>
             <section className="flex flex-col items-start space-y-2">

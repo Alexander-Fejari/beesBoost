@@ -10,6 +10,7 @@ import Home from '@/pages/home/Home.tsx';
 import Faq from '@/pages/FAQ/Faq.tsx';
 import Contact from '@/pages/contact/Contact.tsx';
 import Blog from '@/pages/blog/Blog.tsx';
+import Dashboard from '@/pages/dashboard/Dashboard.tsx'
 import './App.css'
 
 
@@ -22,6 +23,7 @@ const router = createBrowserRouter(
           <Route path="faq" element={<Faq />} />
           <Route path="contact" element={<Contact />} />
           <Route path="blog" element={<Blog />} />
+          <Route path="dashboard" element={<Dashboard />} />
         </Route>
     )
 );

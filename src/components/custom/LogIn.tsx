@@ -33,7 +33,7 @@ const onSubmit = async (values: LoginValues): Promise<void> => {
             if (data.token) {
                 localStorage.setItem('token', data.token);
                 // Redirection vers la page sécurisée
-                window.location.href = '/page-securisee';
+                window.location.href = '/dashboard';
             } else {
                 console.log('Échec de la connexion: Token non reçu');
             }
