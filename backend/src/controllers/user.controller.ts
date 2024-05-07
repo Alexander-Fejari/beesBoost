@@ -136,7 +136,7 @@ class UserController {
       const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET!, { expiresIn: '1d' });
       await UserModel.updateOne({ _id: user._id }, { $set: { is_connected: true } });
       
-      res.status(200).send({ message: 'Login successful', token });
+      res.status(200).send({ message: 'Login successful', token, username: user.username });
 
       setTimeout(async () => {
         await UserModel.updateOne({ _id: user._id }, { $set: { is_connected: false } });
