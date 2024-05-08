@@ -29,12 +29,13 @@ const BtnMenu = ({isOpen, target, size, onClick, className}: BtnMenuProps) => {
     } else if (target === 'sidebar') {
         return (
             <Button
-                className={`${className} justify-center gap-x-1.5 md:justify-start leading-none p-0`}
+                className={`${className} w-full justify-center gap-x-1.5 group md:gap-x-2 md:justify-start leading-none p-0 group`}
                 variant={'ultraGhost'}
                 onClick={onClick}
+                size={"lg"}
             >
                 <LuLayoutDashboard
-                    className={'transition ease-in-out delay-150 hover:scale-125 hover:text-primary'}
+                    className={'transition ease-in-out delay-150 group-hover:scale-125 group-hover:rotate-90 group-hover:text-primary'}
                 />
                 {!isOpen && (
                     <p>{t('sidebar.dashboard')}</p>

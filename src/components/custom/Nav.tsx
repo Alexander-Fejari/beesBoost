@@ -34,7 +34,7 @@ const Nav = ({puces, fontSize}: NavProps) => {
                             />
                         )
                     }
-                    <NavLink className={`${fontSizes}`} to={'https://beesboost.com/fr/page-daccueil/'} target="_blank" rel="noopener noreferrer">
+                    <NavLink className={`transition ease-in-out delay-150 ${fontSizes} ${puces ? 'md:group-hover:text-background-foreground':'md:group-hover:text-primary' }`} to={'https://beesboost.com/fr/page-daccueil/'} target="_blank" rel="noopener noreferrer">
                         {t('navbar.beesBoost')}
                     </NavLink>
                 </li>
@@ -48,7 +48,7 @@ const Nav = ({puces, fontSize}: NavProps) => {
                                      size={'w-4 h-4'}/>
                         )
                     }
-                    <NavLink className={`${fontSizes}`} to={'/'}>
+                    <NavLink className={`transition ease-in-out delay-150 ${fontSizes} ${puces ? 'md:group-hover:text-background-foreground':'md:group-hover:text-primary' }`} to={'/'}>
                         {t('navbar.home')}
                     </NavLink>
                 </li>
@@ -62,7 +62,7 @@ const Nav = ({puces, fontSize}: NavProps) => {
                                      size={'w-4 h-4'}/>
                         )
                     }
-                    <NavLink className={`${fontSizes}`} to={'/faq'}>
+                    <NavLink className={`transition ease-in-out delay-150 ${fontSizes} ${puces ? 'md:group-hover:text-background-foreground':'md:group-hover:text-primary' }`} to={'/faq'}>
                         {t('navbar.FAQ')}
                     </NavLink>
                 </li>
@@ -76,7 +76,7 @@ const Nav = ({puces, fontSize}: NavProps) => {
                                      size={'w-4 h-4'}/>
                         )
                     }
-                    <NavLink className={`${fontSizes}`} to={'/contact'}>
+                    <NavLink className={`transition ease-in-out delay-150 ${fontSizes} ${puces ? 'md:group-hover:text-background-foreground':'md:group-hover:text-primary' }`} to={'/contact'}>
                         {t('navbar.contact')}
                     </NavLink>
 
@@ -92,7 +92,7 @@ const Nav = ({puces, fontSize}: NavProps) => {
                                 size={'w-4 h-4'}/>
                         )
                     }
-                    <NavLink className={`${fontSizes}`} to={'/blog'}>
+                    <NavLink className={`transition ease-in-out delay-150 ${fontSizes} ${puces ? 'md:group-hover:text-background-foreground':'md:group-hover:text-primary' }`} to={'/blog'}>
                         {t('navbar.blog')}
                     </NavLink>
                 </li>

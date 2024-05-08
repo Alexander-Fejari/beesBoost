@@ -62,7 +62,7 @@
         @apply text-foreground font-montserrat font-bold;
     }
 
-    li, a {
+    li > a {
         @apply uppercase
     }
 }
