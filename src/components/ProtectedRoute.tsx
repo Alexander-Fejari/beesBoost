@@ -11,7 +11,7 @@ const ProtectedRoute: React.FC<{ children: JSX.Element }> = ({ children }) => {
   }, [checkJWT]);
 
   if (!isAuthenticated) {
-    return <Navigate to="/dashboard" state={{ from: location }} replace />;
+    return <Navigate to="/" state={{ from: location }} replace />;
   }
 
   return children;
