@@ -21,6 +21,7 @@ interface CTALogsUserProps {
 const CTALogsUser = ({ isLog: initialIsLog }: CTALogsUserProps) => {
     const { t } = useTranslation();
     const [isLog, setIsLog] = useState<boolean>(!!initialIsLog);
+    const username = localStorage.getItem('username')
 
     useEffect(() => {
         const token = localStorage.getItem('token');
@@ -73,7 +74,7 @@ const CTALogsUser = ({ isLog: initialIsLog }: CTALogsUserProps) => {
                         <AvatarImage src="https://github.com/shadcn.png" />
                         <AvatarFallback>JL007</AvatarFallback>
                     </Avatar>
-                    <h3>{t('ctaUser.ctaGreetingUser')} {'user.username'}</h3>
+                    <h3>{t('ctaUser.ctaGreetingUser')} {username}</h3>
                 </section>
             )}
         </>
