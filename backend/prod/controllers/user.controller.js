@@ -120,7 +120,7 @@ class UserController {
             res.status(200).send({ message: 'Login successful', token, username: user.username });
             setTimeout(async () => {
                 await user_model_1.UserModel.updateOne({ _id: user._id }, { $set: { is_connected: false } });
-            }, 60 * 60 * 1000); // 60 minutes
+            }, 60 * 60 * 1000); // 60 minute(s)
         }
         catch (error) {
             res.status(500).send(error);
