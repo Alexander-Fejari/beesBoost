@@ -73,7 +73,7 @@ const CTALogsUser = ({ isLog: initialIsLog }: CTALogsUserProps) => {
                         <AvatarImage src="https://github.com/shadcn.png" />
                         <AvatarFallback>JL007</AvatarFallback>
                     </Avatar>
-                    <h3>{t('ctaUser.ctaGreetingUser')} {'user.name'}</h3>
+                    <h3>{t('ctaUser.ctaGreetingUser')} {'user.username'}</h3>
                 </section>
             )}
         </>

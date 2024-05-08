@@ -15,7 +15,7 @@ const LogIn = () => {
     
 const onSubmit = async (values: LoginValues): Promise<void> => {
         try {
-            const response = await fetch('http://localhost:5000/user/login', {
+            const response = await fetch('http://localhost:5000/user/signIn', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
