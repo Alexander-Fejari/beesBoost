@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import {
     Dialog,
     DialogContent,
@@ -12,20 +13,27 @@ import {Avatar, AvatarFallback, AvatarImage} from "@/components/ui/avatar";
 import SignIn from "@/components/custom/SignIn.tsx";
 import LogIn from "@/components/custom/LogIn.tsx";
 
-interface CTALogsUserProps {
-    isLog?: boolean
 
+interface CTALogsUserProps {
+    isLog?: boolean; 
 }
 
-const CTALogsUser = ({isLog}: CTALogsUserProps) => {
-    const {t} = useTranslation()
+const CTALogsUser = ({ isLog: initialIsLog }: CTALogsUserProps) => {
+    const { t } = useTranslation();
+    const [isLog, setIsLog] = useState<boolean>(!!initialIsLog);
+
+    useEffect(() => {
+        const token = localStorage.getItem('token');
+        setIsLog(!!token);  
+    }, []); 
+
     return (
         <>
-            {isLog === false && (
+            {!isLog && (
                 <section className='flex justify-center items-center gap-x-4'>
                     <Dialog>
                         <DialogTrigger asChild>
-                            <Button size={'lg'} variant={'outline'}>
+                            <Button size={'lg'} variant={'black'}>
                                 {t('ctaUser.ctaSignIn')}
                             </Button>
                         </DialogTrigger>
@@ -42,7 +50,7 @@ const CTALogsUser = ({isLog}: CTALogsUserProps) => {
                     </Dialog>
                     <Dialog>
                         <DialogTrigger asChild>
-                            <Button size={'lg'} variant={'default'}>
+                            <Button size={'lg'} variant={'primary'}>
                                 {t('ctaUser.ctaLogIn')}
                             </Button>
                         </DialogTrigger>
@@ -59,18 +67,17 @@ const CTALogsUser = ({isLog}: CTALogsUserProps) => {
                     </Dialog>
                 </section>
             )}
-            {isLog === true && (
+            {isLog && (
                 <section className='flex items-center gap-x-4'>
                     <Avatar>
                         <AvatarImage src="https://github.com/shadcn.png" />
                         <AvatarFallback>JL007</AvatarFallback>
                     </Avatar>
-                    <h3>{t('ctaUser.ctaGreetingUser')} {'user.name'}</h3>
+                    <h3>{t('ctaUser.ctaGreetingUser')} {'user.username'}</h3>
                 </section>
             )}
         </>
-    )
-}
+    );
+};
 
-
-export default CTALogsUser
+export default CTALogsUser;

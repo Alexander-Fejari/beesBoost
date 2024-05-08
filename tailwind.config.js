@@ -21,6 +21,9 @@ module.exports = {
                 poppins: ['Poppins', 'sans-serif'],
                 montserrat: ['Montserrat', 'sans-serif']
             },
+            strokeWidth: {
+                'bold': '8rem',
+            },
             colors: {
                 border: "hsl(var(--border))",
                 input: "hsl(var(--input))",
@@ -55,6 +58,16 @@ module.exports = {
                     DEFAULT: "hsl(var(--card))",
                     foreground: "hsl(var(--card-foreground))",
                 },
+                black: '#1A1423',
+                white: '#F0EFF4'
+            },
+            gridTemplateColumns: {
+                'desktop': '0.3fr 1.7fr',
+                'mobile': '0.9fr 1.1fr 1fr',
+            },
+            gridTemplateRows: {
+                'desktop': '0.1fr auto 1fr',
+                'mobile': 'repeat(2, 0.3fr) 2.9fr auto',
             },
             borderRadius: {
                 lg: "var(--radius)",

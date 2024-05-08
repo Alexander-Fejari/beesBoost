@@ -4,11 +4,11 @@ export function LegalSelector() {
 
     return (
 
-        <Select>
-            <SelectTrigger className="w-auto border-none text-xs">
+        <Select defaultValue={'rgpd'}>
+            <SelectTrigger className="w-max bg-primary text-popover-foreground text-xs font-bold">
                 <SelectValue placeholder="Politique de confidentialité" />
             </SelectTrigger>
-            <SelectContent className="text-xs">
+            <SelectContent>
                 <SelectItem value="rgpd">Politique de confidentialité</SelectItem>
                 <SelectItem value="legal">Mentions Légales</SelectItem>
             </SelectContent>

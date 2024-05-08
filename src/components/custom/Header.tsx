@@ -6,7 +6,10 @@ import Logo from "@/components/custom/Logo";
 import Nav from "@/components/custom/Nav";
 import BtnMenu from "@/components/custom/BtnMenu";
 
-const Header = () => {
+interface HeaderProps {
+    className?:string
+}
+const Header = ({className}: HeaderProps) => {
     const [isOpen, setIsOpen] = useState(false);
 
     const toggleMenu = () => {
@@ -14,11 +17,11 @@ const Header = () => {
     };
 
     return (
-        <header className="bg-card relative flex justify-between items-center lg:h-20">
-            <Logo link={true} size={'sm'} />
-            <BtnMenu className={'z-20 lg:hidden'} onClick={toggleMenu} isOpen={!isOpen} size={32} />
-            <section className={`${isOpen ? 'h-full' : 'hidden h-auto lg:flex lg:items-center'} bg-card w-full fixed top-0 left-0 z-10 lg:z-0 lg:static transform transition-transform duration-1000 ease-in-out`}>
-                <Nav className={'h-1/2'} />
+        <header className={`${className} bg-background relative flex justify-between items-center`}>
+            <Logo link={true} size={'l'} />
+            <BtnMenu target={'header'} className={'z-20 lg:hidden'} onClick={toggleMenu} isOpen={!isOpen} size={32} />
+            <section className={`${isOpen ? 'bg-background h-dvh fixed top-0 left-0 z-10' : 'hidden h-auto lg:flex lg:items-center'}  w-full  lg:z-0 lg:static`}>
+                <Nav />
                 <section className="h-1/2 flex flex-col justify-center items-center gap-y-4 lg:flex-row lg:items-center lg:gap-x-4">
                     <section className="flex items-center gap-x-4">
                         <LanguageSwitcher/>
