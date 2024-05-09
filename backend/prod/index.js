@@ -15,9 +15,9 @@ dotenv_1.default.config();
 // Initialize
 const app = (0, express_1.default)();
 const port = process.env.PORT || 5000;
-app.use('/api-docs', swagger_ui_express_1.default.serve, swagger_ui_express_1.default.setup(swagger_config_1.default));
 // Middleware
-app.use(express_1.default.json());
+app.use(express_1.default.json()); // Creates the app 
+app.use('/api-docs', swagger_ui_express_1.default.serve, swagger_ui_express_1.default.setup(swagger_config_1.default)); // Swagger
 app.use((0, cors_1.default)({
     origin: ["http://localhost:5000", "http://localhost:5173", "http://localhost:5174", "http://localhost:8000", "http://127.0.0.1:5000"],
     credentials: true
@@ -40,7 +40,7 @@ app.use('/user', user_route_1.default); // User
     console.error('Error connecting to MongoDB :', err);
 });
 // Closing database when server is closed
-process.on('SIGINT', async () => {
+process.on(('SIGINT' || 'SIGTERM'), async () => {
     await (0, database_config_1.closeDatabase)();
     process.exit(0);
 });

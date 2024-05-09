@@ -14,10 +14,9 @@ dotenv.config();
 const app = express();
 const port = process.env.PORT || 5000;
 
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
-
 // Middleware
-app.use(express.json());
+app.use(express.json()); // Creates the app 
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec)); // Swagger
 
 app.use(cors({
   origin: ["http://localhost:5000", "http://localhost:5173", "http://localhost:5174", "http://localhost:8000", "http://127.0.0.1:5000"],
@@ -46,7 +45,7 @@ connectToDatabase()
   });
 
 // Closing database when server is closed
-process.on('SIGINT', async () => {
+process.on(('SIGINT' || 'SIGTERM'), async () => {
   await closeDatabase();
   process.exit(0);
 });
