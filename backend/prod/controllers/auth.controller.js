@@ -9,7 +9,9 @@ const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 class AuthController {
     async addUser(req, res) {
         try {
-            const { username, password, profile_pic, role, email, lastname, firstname, occupation, location, contact_info } = req.body;
+            const { username, password, profile_pic, role, lastname, firstname, occupation, location, contact_info } = req.body;
+            let { email } = req.body;
+            email = email.toLowerCase();
             if (!username || !password || !role || !email) {
                 res.status(400).json({ error: `Bad request: username, password, role, and email are required fields` });
                 return;
@@ -64,8 +66,16 @@ class AuthController {
     }
     async userLogin(req, res) {
         try {
-            const { email, password } = req.body;
-            const user = await user_model_1.UserModel.findOne({ email });
+            const { username, password } = req.body;
+            let { email } = req.body;
+            let user;
+            if (email) {
+                email = email.toLowerCase();
+                user = await user_model_1.UserModel.findOne({ email: email });
+            }
+            else if (username) {
+                user = await user_model_1.UserModel.findOne({ username: username });
+            }
             if (!user) {
                 res.status(401).json({ message: `Login failed : No user matches those credentials` });
                 return;
@@ -99,7 +109,8 @@ class AuthController {
             }, 60 * 60 * 1000); // 60 minute(s)
         }
         catch (error) {
-            res.status(500).send(error);
+            console.error('Login error:', error);
+            res.status(500).json({ error: `Internal server error` });
         }
     }
     async renewToken(req, res) {

@@ -76,12 +76,18 @@ class AuthController {
 
   async userLogin(req: Request, res: Response): Promise<void> {
     try {
-      const { password } = req.body;
+      const { username, password } = req.body;
       let { email } = req.body;
       
-      email = email.toLowerCase();
-      
-      const user = await UserModel.findOne({ email });
+      let user;
+
+      if (email) {
+        email = email.toLowerCase();
+        user = await UserModel.findOne({ email: email });
+      } 
+      else if (username) {
+        user = await UserModel.findOne({ username: username });
+      }
       if (!user) {
         res.status(401).json({ message: `Login failed : No user matches those credentials` });
         return;
@@ -127,7 +133,8 @@ class AuthController {
       }, 60 * 60 * 1000); // 60 minute(s)
     } 
     catch (error) {
-      res.status(500).send(error);
+      console.error('Login error:', error);
+      res.status(500).json({ error: `Internal server error` });
     }
   }
 
