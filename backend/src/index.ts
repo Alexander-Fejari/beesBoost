@@ -16,13 +16,13 @@ const port = process.env.PORT || 5000;
 
 // Middleware
 app.use(express.json()); // Creates the app 
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec)); // Swagger
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec)); // Swagger - Documents the app
 
 app.use(cors({
   origin: ["http://localhost:5000", "http://localhost:5173", "http://localhost:5174", "http://localhost:8000", "http://127.0.0.1:5000"],
   
     credentials: true
-  }));
+  })); // cors - Protects the connection with the front
 
 // Test route
 app.get('/', (req: Request, res: Response) => {
