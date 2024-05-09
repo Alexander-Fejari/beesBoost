@@ -10,6 +10,7 @@ const cors_1 = __importDefault(require("cors"));
 const dotenv_1 = __importDefault(require("dotenv"));
 const database_config_1 = require("./config/database.config");
 const user_route_1 = __importDefault(require("./routes/user.route"));
+const auth_route_1 = __importDefault(require("./routes/auth.route"));
 dotenv_1.default.config();
 // Initialize
 const app = (0, express_1.default)();
@@ -18,7 +19,7 @@ app.use('/api-docs', swagger_ui_express_1.default.serve, swagger_ui_express_1.de
 // Middleware
 app.use(express_1.default.json());
 app.use((0, cors_1.default)({
-    origin: ["http://localhost:5000", "http://localhost:5173", "http://localhost:5174", "http://localhost:8000"],
+    origin: ["http://localhost:5000", "http://localhost:5173", "http://localhost:5174", "http://localhost:8000", "http://127.0.0.1:5000"],
     credentials: true
 }));
 // Test route
@@ -26,9 +27,8 @@ app.get('/', (req, res) => {
     res.send('Gucci');
 });
 // Routes
-// User
-app.use('/user', user_route_1.default);
-// Company
+app.use(`/auth`, auth_route_1.default); // Authentification
+app.use('/user', user_route_1.default); // User
 // Connection database + Launching server
 (0, database_config_1.connectToDatabase)()
     .then(() => {

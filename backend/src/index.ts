@@ -6,6 +6,7 @@ import dotenv from 'dotenv';
 
 import { connectToDatabase, closeDatabase } from './config/database.config';
 import userRouter from './routes/user.route';
+import authRouter from './routes/auth.route';
 
 dotenv.config();
 
@@ -30,11 +31,8 @@ app.get('/', (req: Request, res: Response) => {
 });
 
 // Routes
-
-// User
-app.use('/user', userRouter);
-
-// Company
+app.use(`/auth`, authRouter); // Authentification
+app.use('/user', userRouter); // User
 
 // Connection database + Launching server
 connectToDatabase()

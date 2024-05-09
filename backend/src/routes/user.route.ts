@@ -9,10 +9,6 @@ const userController = new UserController();
 
 //router.post(`/addUser`, (req, res) => userController.addUser(req, res)); 
 
-router.post('/signUp', (req, res) => userController.addUser(req, res)); // Swagger à faire
-
-router.post('/signIn', (req, res) => userController.userLogin(req, res)); // Swagger à faire
-
 // GET
 
 

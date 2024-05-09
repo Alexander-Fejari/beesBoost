@@ -5,7 +5,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const bcrypt_1 = __importDefault(require("bcrypt"));
 const user_model_1 = require("../models/user.model");
-const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 class UserController {
     // UTILS
     async getUserObject(req, res, username_or_id) {
@@ -46,86 +45,6 @@ class UserController {
         }
     }
     // POST
-    // Authentification
-    async addUser(req, res) {
-        try {
-            const { username, password, profile_pic, role, email, lastname, firstname, occupation, location, contact_info } = req.body;
-            if (!username || !password || !role || !email) {
-                res.status(400).json({ error: 'Bad request: username, password, role, and email are required fields' });
-                return;
-            }
-            const roles = [`student`, `worker`, `admin`, `superAdmin`];
-            if (!roles.includes(role)) {
-                res.status(400).json({ error: `${role} isnt a good role (student, worker, admin or superAdmin)` });
-                return;
-            }
-            const existingUserEmail = await user_model_1.UserModel.findOne({ email: email });
-            if (existingUserEmail) {
-                res.status(400).json({ error: `User already exists with this email : ${email}` });
-                return;
-            }
-            const existingUserUsername = await user_model_1.UserModel.findOne({ username: username });
-            if (existingUserUsername) {
-                res.status(400).json({ error: `User already exists with this username : ${username}` });
-                return;
-            }
-            const hashedPassword = await bcrypt_1.default.hash(password, 10);
-            const userData = { username, password: hashedPassword, profile_pic, role, email, lastname, firstname, occupation, location, contact_info };
-            if (req.body.role === `student`) {
-                userData.student_details = {};
-                const { student_details } = req.body;
-                if (student_details) {
-                    userData.student_details.school = student_details.school;
-                    userData.student_details.formation = student_details.formation;
-                    userData.student_details.experience = student_details.experience;
-                    userData.student_details.skills = student_details.skills;
-                    userData.student_details.certification = student_details.certification;
-                    userData.student_details.languages = student_details.languages;
-                    userData.student_details.game_info = student_details.game_info;
-                }
-            }
-            else if (req.body.role === `worker`) {
-                userData.worker_details = {};
-                const { worker_details } = req.body;
-                if (worker_details) {
-                    userData.worker_details.company = worker_details.company;
-                    userData.worker_details.is_company_admin = worker_details.is_company_admin;
-                }
-                // Ajouter logique pour mettre admin si premier à créer la société quand company sera fait, peut aussi être fait ailleurs (dans la fonction qui vérifie par exemple)
-            }
-            const newUser = new user_model_1.UserModel(userData);
-            await newUser.save();
-            res.status(201).json({ message: `User added successfully`, userId: newUser._id });
-        }
-        catch (error) {
-            console.error(`Error adding user:`, error);
-            res.status(500).json({ error: `Error adding user` });
-        }
-    }
-    async userLogin(req, res) {
-        try {
-            const { email, password } = req.body;
-            const user = await user_model_1.UserModel.findOne({ email });
-            if (!user) {
-                res.status(401).send({ message: 'Login failed : No user matches those credentials' });
-                return;
-            }
-            const isMatch = await user.comparePassword(password);
-            if (!isMatch) {
-                res.status(401).send({ message: 'Login failed : Bad password' });
-                return;
-            }
-            const token = jsonwebtoken_1.default.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '1d' });
-            await user_model_1.UserModel.updateOne({ _id: user._id }, { $set: { is_connected: true } });
-            res.status(200).send({ message: 'Login successful', token, username: user.username });
-            setTimeout(async () => {
-                await user_model_1.UserModel.updateOne({ _id: user._id }, { $set: { is_connected: false } });
-            }, 60 * 60 * 1000); // 60 minute(s)
-        }
-        catch (error) {
-            res.status(500).send(error);
-        }
-    }
     // GET
     async getAllUsers(req, res) {
         try {
