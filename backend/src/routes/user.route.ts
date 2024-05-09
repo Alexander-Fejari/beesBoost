@@ -13,7 +13,7 @@ const userController = new UserController();
 // GET
 
 
-router.get(`/getAllUsers`, authenticateToken, authorizeRoles(`admin`), (req, res) => userController.getAllUsers(req, res)); // Swagger à faire
+router.get(`/getAllUsers`, /*authenticateToken, authorizeRoles(`admin`),*/ (req, res) => userController.getAllUsers(req, res)); // Swagger à faire
 
 router.get(`/getUser/:param`, (req, res) => userController.getUser(req, res)); // Swagger à faire
 
