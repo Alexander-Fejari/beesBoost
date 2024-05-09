@@ -11,7 +11,7 @@ class AuthController {
         try {
             const { username, password, profile_pic, role, email, lastname, firstname, occupation, location, contact_info } = req.body;
             if (!username || !password || !role || !email) {
-                res.status(400).json({ error: 'Bad request: username, password, role, and email are required fields' });
+                res.status(400).json({ error: `Bad request: username, password, role, and email are required fields` });
                 return;
             }
             const roles = [`student`, `worker`, `admin`, `superAdmin`];
@@ -67,12 +67,12 @@ class AuthController {
             const { email, password } = req.body;
             const user = await user_model_1.UserModel.findOne({ email });
             if (!user) {
-                res.status(401).send({ message: 'Login failed : No user matches those credentials' });
+                res.status(401).json({ message: `Login failed : No user matches those credentials` });
                 return;
             }
             const isMatch = await user.comparePassword(password);
             if (!isMatch) {
-                res.status(401).send({ message: 'Login failed : Bad password' });
+                res.status(401).json({ message: `Login failed : Bad password` });
                 return;
             }
             // We create the identification token for the user
@@ -91,7 +91,7 @@ class AuthController {
                     refresh_token: refreshToken
                 }
             });
-            res.status(200).send({ message: 'Login successful', accessToken, refreshToken });
+            res.status(200).json({ message: `Login successful`, accessToken, refreshToken });
             // Set a timer to change the value of the is_connected variable to false after one hour
             setTimeout(async () => {
                 await user_model_1.UserModel.updateOne({ _id: user._id }, { $set: { is_connected: false }
