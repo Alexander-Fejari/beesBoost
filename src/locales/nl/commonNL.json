@@ -29,14 +29,17 @@
         "lastname": "Achternaam:",
         "firstname": "Voornaam:",
         "email": "Email: ",
-        "pseudo": "Pseudo:",
         "password": "Wachtwoord",
         "reset": "Annuleren",
-        "submit": "Indienen"
+        "submit": "Indienen",
+        "username": "Pseudo:",
+        "worker": "Medwerker",
+        "student": "Student",
+        "role" : "Rol:"
     },
     "logIn": {
         "email": "Email:",
         "password": "Wachtwoord",
-        "connect": "Connexion"
+        "connect": "Login"
     }
 }

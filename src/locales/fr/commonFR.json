@@ -26,17 +26,20 @@
 
   "ctaUser": {
     "ctaSignIn": "S'inscrire",
-    "ctaLogIn": "Connection",
+    "ctaLogIn": "Connexion",
     "ctaGreetingUser": "Bienvenue"
   },
   "signIn": {
     "lastname": "Nom:",
     "firstname": "Prénom:",
     "email": "E-mail: ",
-    "pseudo": "Pseudo:",
     "password": "Mot de passe:",
     "reset": "Annuler",
-    "submit": "Envoyer"
+    "submit": "Envoyer",
+    "username": "Pseudo:",
+    "worker": "Employé",
+    "student": "Etudiant",
+    "role" : "Rôle:"
   },
   "logIn": {
     "email": "E-mail:",

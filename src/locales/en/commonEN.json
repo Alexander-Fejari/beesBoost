@@ -29,14 +29,17 @@
         "lastname": "Lastname:",
         "firstname": "Firstname:",
         "email": "E-mail: ",
-        "pseudo": "Pseudo:",
         "password": "Password:",
         "reset": "Cancel",
-        "submit": "Submit"
+        "submit": "Submit",
+        "username": "Username:",
+        "worker": "Employee",
+        "student": "Student",
+        "role" : "Role:"
     },
     "logIn": {
         "email": "Email:",
         "password": "Password:",
-        "connect": "Connexion"
+        "connect": "Login"
     }
 }

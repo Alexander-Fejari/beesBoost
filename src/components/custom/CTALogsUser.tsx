@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import {
     Dialog,
     DialogContent,
@@ -12,16 +13,24 @@ import {Avatar, AvatarFallback, AvatarImage} from "@/components/ui/avatar";
 import SignIn from "@/components/custom/SignIn.tsx";
 import LogIn from "@/components/custom/LogIn.tsx";
 
-interface CTALogsUserProps {
-    isLog?: boolean
 
+interface CTALogsUserProps {
+    isLog?: boolean; 
 }
 
-const CTALogsUser = ({isLog}: CTALogsUserProps) => {
-    const {t} = useTranslation()
+const CTALogsUser = ({ isLog: initialIsLog }: CTALogsUserProps) => {
+    const { t } = useTranslation();
+    const [isLog, setIsLog] = useState<boolean>(!!initialIsLog);
+    const username = localStorage.getItem('username');
+
+    useEffect(() => {
+        const token = localStorage.getItem('token');
+        setIsLog(!!token);  
+    }, []); 
+
     return (
         <>
-            {isLog === false && (
+            {!isLog && (
                 <section className='flex justify-center items-center gap-x-4'>
                     <Dialog>
                         <DialogTrigger asChild>
@@ -59,18 +68,17 @@ const CTALogsUser = ({isLog}: CTALogsUserProps) => {
                     </Dialog>
                 </section>
             )}
-            {isLog === true && (
+            {isLog && (
                 <section className='flex items-center gap-x-4'>
                     <Avatar>
                         <AvatarImage src="https://github.com/shadcn.png" />
                         <AvatarFallback>JL007</AvatarFallback>
                     </Avatar>
-                    <h3>{t('ctaUser.ctaGreetingUser')} {'user.name'}</h3>
+                    <h3>{t('ctaUser.ctaGreetingUser')} {username}</h3>
                 </section>
             )}
         </>
-    )
-}
+    );
+};
 
-
-export default CTALogsUser
+export default CTALogsUser;
