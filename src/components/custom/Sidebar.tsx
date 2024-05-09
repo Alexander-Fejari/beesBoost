@@ -108,9 +108,7 @@ const Sidebar = ({className}: NewSideProps) => {
                     </li>
                 </ul>
             </nav>
-
         </aside>
     )
 }
-
 export default Sidebar
