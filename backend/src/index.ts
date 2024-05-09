@@ -7,7 +7,6 @@ import dotenv from 'dotenv';
 import { connectToDatabase, closeDatabase } from './config/database.config';
 import userRouter from './routes/user.route';
 
-
 dotenv.config();
 
 // Initialize
@@ -20,7 +19,7 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 app.use(express.json());
 
 app.use(cors({
-  origin: ["http://localhost:5000", "http://localhost:5173", "http://localhost:5174", "http://localhost:8000"],
+  origin: ["http://localhost:5000", "http://localhost:5173", "http://localhost:5174", "http://localhost:8000", "http://127.0.0.1:5000"],
   
     credentials: true
   }));
