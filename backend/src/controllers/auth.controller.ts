@@ -6,12 +6,16 @@ import jwt from 'jsonwebtoken';
 class AuthController {
   async addUser(req: Request, res: Response): Promise<void> {
     try {
-      const { username, password, profile_pic, role, email, lastname, firstname, occupation, location, contact_info } = req.body;
+      const { username, password, profile_pic, role, lastname, firstname, occupation, location, contact_info } = req.body;
+      let { email } = req.body;
+      
+      email = email.toLowerCase();
 
       if (!username || !password || !role || !email) {
         res.status(400).json({ error: `Bad request: username, password, role, and email are required fields` });
         return;
       }
+
       const roles = [`student`, `worker`, `admin`, `superAdmin`];
       if (!roles.includes(role)) {
         res.status(400).json({ error: `${role} isnt a good role (student, worker, admin or superAdmin)` });
@@ -72,7 +76,11 @@ class AuthController {
 
   async userLogin(req: Request, res: Response): Promise<void> {
     try {
-      const { email, password } = req.body;
+      const { password } = req.body;
+      let { email } = req.body;
+      
+      email = email.toLowerCase();
+      
       const user = await UserModel.findOne({ email });
       if (!user) {
         res.status(401).json({ message: `Login failed : No user matches those credentials` });

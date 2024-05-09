@@ -8,7 +8,7 @@
     },
     "include": [
       "src/**/*.ts",
-      "src/config/types.d.ts"
+      "src/config/types.d.config.ts"
     ]
   }
   

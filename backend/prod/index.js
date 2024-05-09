@@ -17,11 +17,11 @@ const app = (0, express_1.default)();
 const port = process.env.PORT || 5000;
 // Middleware
 app.use(express_1.default.json()); // Creates the app 
-app.use('/api-docs', swagger_ui_express_1.default.serve, swagger_ui_express_1.default.setup(swagger_config_1.default)); // Swagger
+app.use('/api-docs', swagger_ui_express_1.default.serve, swagger_ui_express_1.default.setup(swagger_config_1.default)); // Swagger - Documents the app
 app.use((0, cors_1.default)({
     origin: ["http://localhost:5000", "http://localhost:5173", "http://localhost:5174", "http://localhost:8000", "http://127.0.0.1:5000"],
     credentials: true
-}));
+})); // cors - Protects the connection with the front
 // Test route
 app.get('/', (req, res) => {
     res.send('Gucci');
