@@ -15,7 +15,7 @@ function authenticateToken(req: Request, res: Response, next: NextFunction): voi
     return res.status(403).json({ error: `Unauthorized access: Invalid token`});
   }
 
-  if (typeof decoded === 'object' && decoded !== null && 'id' in decoded && 'username' in decoded && 'role' in decoded) {
+  if (typeof decoded === `object` && decoded !== null && `id` in decoded && `username` in decoded && `role` in decoded) {
     req.user = {
       id: decoded.id as string,
       username: decoded.username as string,
@@ -23,7 +23,7 @@ function authenticateToken(req: Request, res: Response, next: NextFunction): voi
     };
   }
   else {
-    res.status(403).json({ error: 'Invalid token structure' });
+    res.status(403).json({ error: `Invalid token structure` });
   }
   next();
   });
@@ -35,7 +35,7 @@ function authorizeRoles(...allowedRoles: string[]) {
       next();
     } 
     else {
-      res.status(403).send('Access denied. You do not have permission to access this resource.');
+      res.status(403).json(`Access denied. You do not have permission to access this resource.`);
     }
   };
 }

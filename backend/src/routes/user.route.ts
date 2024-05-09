@@ -1,5 +1,6 @@
 import express, { Router } from 'express';
 import UserController from '../controllers/user.controller';
+import { authenticateToken, authorizeRoles } from '../middlewares/auth.middleware'
 
 const router: Router = express.Router();
 const userController = new UserController();
@@ -12,7 +13,7 @@ const userController = new UserController();
 // GET
 
 
-router.get(`/getAllUsers`, (req, res) => userController.getAllUsers(req, res)); // Swagger à faire
+router.get(`/getAllUsers`, authenticateToken, authorizeRoles(`admin`), (req, res) => userController.getAllUsers(req, res)); // Swagger à faire
 
 router.get(`/getUser/:param`, (req, res) => userController.getUser(req, res)); // Swagger à faire
 

@@ -5,12 +5,13 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const user_controller_1 = __importDefault(require("../controllers/user.controller"));
+const auth_middleware_1 = require("../middlewares/auth.middleware");
 const router = express_1.default.Router();
 const userController = new user_controller_1.default();
 // POST
 //router.post(`/addUser`, (req, res) => userController.addUser(req, res)); 
 // GET
-router.get(`/getAllUsers`, (req, res) => userController.getAllUsers(req, res)); // Swagger à faire
+router.get(`/getAllUsers`, auth_middleware_1.authenticateToken, (0, auth_middleware_1.authorizeRoles)(`admin`), (req, res) => userController.getAllUsers(req, res)); // Swagger à faire
 router.get(`/getUser/:param`, (req, res) => userController.getUser(req, res)); // Swagger à faire
 router.get(`/getAllStudents`, (req, res) => userController.getAllStudents(req, res)); // Swagger à faire
 //router.get(`/getAllWorkers`, (req, res) => userController.getAllSW(req, res, `worker`)); // Swagger à faire
