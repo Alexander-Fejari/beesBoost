@@ -3,6 +3,7 @@ import Nav from "@/components/custom/Nav.tsx";
 import Logo from "@/components/custom/Logo.tsx";
 import LanguageSwitcher from "@/components/custom/LanguageSwitcher.tsx";
 import SocialMediaLinks from "@/components/custom/SocialMediaLinks";
+import {Separator} from "@/components/ui/separator"
 
 
 interface FooterProps {
@@ -11,7 +12,8 @@ interface FooterProps {
 
 const Footer = ({className}:FooterProps) => {
     return (
-        <footer className={`${className} before:rounded-full before:border-t-4 before:border-primary before:w-full before:md:w-10/12 flex flex-col items-center gap-y-4`}>
+        <footer className={`${className} flex flex-col items-center gap-y-4`}>
+            <Separator />
             <section className={'flex flex-col justify-center items-center gap-y-4'}>
                 <Logo link={true} size={'l'}/>
                 <Nav puces={true} fontSize={"xs"}/>

@@ -22,7 +22,7 @@ const Nav = ({puces, fontSize}: NavProps) => {
 
     return (
         <nav className={'w-full h-1/2'}>
-            <ul className={'h-full flex flex-col justify-end items-center gap-y-8 lg:flex-row lg:items-center lg:justify-center lg:gap-x-8'}>
+            <ul className={`h-full flex justify-end items-center ${puces ? 'flex-row justify-center gap-x-2 gap-y-4 flex-wrap' : 'flex-col  gap-y-8'} lg:flex-row lg:items-center lg:justify-center lg:gap-x-8`}>
                 <li className={'flex items-center gap-x-1.5 group'}>
                     {puces === true &&
                         (
