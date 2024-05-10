@@ -71,7 +71,7 @@ const CTALogsUser = ({ isLog: initialIsLog }: CTALogsUserProps) => {
             {isLog && (
                 <section className='flex items-center gap-x-4'>
                     <Avatar>
-                        <AvatarImage src="https://github.com/shadcn.png" />
+                        <AvatarImage className="alveolus" src="https://github.com/shadcn.png" />
                         <AvatarFallback>JL007</AvatarFallback>
                     </Avatar>
                     <h3>{t('ctaUser.ctaGreetingUser')} {username}</h3>

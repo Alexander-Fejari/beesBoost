@@ -2,15 +2,14 @@ import React from 'react';
 import Header from "@/components/custom/Header";
 import Footer from "@/components/custom/Footer";
 import Sidebar from "@/components/custom/Sidebar";
-import { useAuth } from "@/context/AuthContext"; // Assurez-vous que le chemin d'importation est correct
+import { useAuth } from "@/context/AuthContext"; 
 
 interface LayoutProps {
     children?: React.ReactNode;
 }
 
 const Layout = ({ children }: LayoutProps) => {
-    const { isAuthenticated } = useAuth(); // Utilisation du contexte d'authentification
-
+    const { isAuthenticated } = useAuth(); 
     return (
         <section className={'h-dvh p-6 grid grid-cols-mobile grid-rows-mobile md:grid-cols-desktop md:grid-rows-desktop'}>
             <Header className="col-span-5 h-full" />
