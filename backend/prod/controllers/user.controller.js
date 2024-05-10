@@ -5,7 +5,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const bcrypt_1 = __importDefault(require("bcrypt"));
 const user_model_1 = require("../models/user.model");
-const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 class UserController {
     // UTILS
     async getUserObject(req, res, username_or_id) {

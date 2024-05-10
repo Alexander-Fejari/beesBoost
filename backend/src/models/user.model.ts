@@ -10,10 +10,13 @@ interface IUser extends Document {
   is_verified: boolean;
   is_active: boolean;
   is_connected: boolean;
+  refresh_token: string;
   lastname?: string;
   firstname?: string;
   occupation?: string;
   location?: string;
+  registration_date?: Date;
+  deletion_date?: Date;
   contact_info?: {
     phone?: string;
     address?: string;
@@ -70,10 +73,13 @@ const userSchema = new Schema({
   is_verified: { type: Boolean, required: true, default: false }, // A mettre en false pour la production
   is_active: { type: Boolean, required: true, default: true },
   is_connected: { type: Boolean, required: true, default: false },
+  refresh_token: { type: String, default: `` },
   lastname: { type: String },
   firstname: { type: String },
   occupation: { type: String },
   location: { type: String },
+  registration_date: { type: Date, default: Date.now },
+  deletion_date: { type: Date },
   contact_info: {
     phone: { type: String },
     address: { type: String }
@@ -119,14 +125,6 @@ const userSchema = new Schema({
     }],
   }
 });
-
-// userSchema.pre<IUser>('save', async function(next) {
-//   if (this.isModified('password') || this.isNew) {
-//     const salt = await bcrypt.genSalt(10);
-//     this.password = await bcrypt.hash(this.password, salt);
-//   }
-//   next();
-// });
 
 userSchema.methods.comparePassword = async function(candidatePassword: string): Promise<boolean> {
   return bcrypt.compare(candidatePassword, this.password);

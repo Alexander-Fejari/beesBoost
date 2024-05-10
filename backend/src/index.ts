@@ -6,7 +6,7 @@ import dotenv from 'dotenv';
 
 import { connectToDatabase, closeDatabase } from './config/database.config';
 import userRouter from './routes/user.route';
-
+import authRouter from './routes/auth.route';
 
 dotenv.config();
 
@@ -14,16 +14,15 @@ dotenv.config();
 const app = express();
 const port = process.env.PORT || 5000;
 
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
-
 // Middleware
-app.use(express.json());
+app.use(express.json()); // Creates the app 
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec)); // Swagger - Documents the app
 
 app.use(cors({
-  origin: ["http://localhost:5000", "http://localhost:5173", "http://localhost:5174", "http://localhost:8000"],
+  origin: ["http://localhost:5000", "http://localhost:5173", "http://localhost:5174", "http://localhost:8000", "http://127.0.0.1:5000"],
   
     credentials: true
-  }));
+  })); // cors - Protects the connection with the front
 
 // Test route
 app.get('/', (req: Request, res: Response) => {
@@ -31,11 +30,8 @@ app.get('/', (req: Request, res: Response) => {
 });
 
 // Routes
-
-// User
-app.use('/user', userRouter);
-
-// Company
+app.use(`/auth`, authRouter); // Authentification
+app.use('/user', userRouter); // User
 
 // Connection database + Launching server
 connectToDatabase()
@@ -49,7 +45,7 @@ connectToDatabase()
   });
 
 // Closing database when server is closed
-process.on('SIGINT', async () => {
+process.on(('SIGINT' || 'SIGTERM'), async () => {
   await closeDatabase();
   process.exit(0);
 });
