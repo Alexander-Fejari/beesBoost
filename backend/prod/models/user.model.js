@@ -24,7 +24,11 @@ const userSchema = new mongoose_1.Schema({
     deletion_date: { type: Date },
     contact_info: {
         phone: { type: String },
-        address: { type: String }
+        street: { type: String },
+        street_number: { type: String },
+        city: { type: String },
+        country: { type: String },
+        postal_code: { type: Number },
     },
     worker_details: {
         company: { type: String },

@@ -4,6 +4,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const user_model_1 = require("../models/user.model");
+const user_controller_1 = __importDefault(require("./user.controller"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 class AuthController {
     async userLogin(req, res) {
@@ -95,6 +96,44 @@ class AuthController {
                 res.status(404).send({ error: 'Failed to decode refresh token' });
             }
         });
+    }
+    async logOut(req, res) {
+        try {
+            // const { refreshToken } = req.body;
+            // if (!refreshToken) {
+            //   res.status(400).json({ error: "No refresh token provided" });
+            //   return;
+            // }
+            // const result = await UserModel.updateOne(
+            //   { refresh_token: refreshToken },
+            //   { $set: { refresh_token: '', is_connected: false } }
+            // );
+            // if (result.modifiedCount === 0) {
+            //   res.status(404).json({ error: "Refresh token not found" });
+            //   return;
+            // }
+            const { param } = req.params;
+            if (!param) {
+                res.status(400).json({ error: `User id/username is required for logout` });
+                return;
+            }
+            const userController = new user_controller_1.default();
+            const user = await userController.getUserObject(req, res, param);
+            if (!user) {
+                res.status(404).json({ error: `User not found` });
+                return;
+            }
+            const result = await user_model_1.UserModel.updateOne({ _id: user._id }, { $set: { is_connected: false } });
+            if (result.modifiedCount === 0) {
+                res.status(404).json({ error: `User not found` });
+                return;
+            }
+            res.status(200).json({ message: `Logout successful` });
+        }
+        catch (error) {
+            console.error(`Logout error:`, error);
+            res.status(500).json({ error: `Internal server error` });
+        }
     }
 }
 exports.default = AuthController;

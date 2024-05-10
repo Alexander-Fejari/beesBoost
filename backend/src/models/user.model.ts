@@ -10,7 +10,7 @@ interface IUser extends Document {
   is_verified: boolean;
   is_active: boolean;
   is_connected: boolean;
-  refresh_token: string;
+  refresh_token?: string;
   lastname?: string;
   firstname?: string;
   occupation?: string;
@@ -19,7 +19,11 @@ interface IUser extends Document {
   deletion_date?: Date;
   contact_info?: {
     phone?: string;
-    address?: string;
+    street?: string;
+    street_number?: number;
+    city?: string;
+    postal_code?: number;
+    country?: string;
   };
   worker_details?: {
     company?: string;
@@ -82,7 +86,11 @@ const userSchema = new Schema({
   deletion_date: { type: Date },
   contact_info: {
     phone: { type: String },
-    address: { type: String }
+    street: { type: String },
+    street_number: { type: String },
+    city: { type: String },
+    country: { type: String },
+    postal_code: { type: Number },
   },
   worker_details: {
     company: { type: String },

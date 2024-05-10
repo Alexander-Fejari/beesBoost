@@ -61,12 +61,12 @@ class UserController {
             }
             const existingUserEmail = await user_model_1.UserModel.findOne({ email: email });
             if (existingUserEmail) {
-                res.status(400).json({ error: `User already exists with this email : ${email}` });
+                res.status(409).json({ error: `User already exists with this email : ${email}` });
                 return;
             }
             const existingUserUsername = await user_model_1.UserModel.findOne({ username: username });
             if (existingUserUsername) {
-                res.status(400).json({ error: `User already exists with this username : ${username}` });
+                res.status(409).json({ error: `User already exists with this username : ${username}` });
                 return;
             }
             const hashedPassword = await bcrypt_1.default.hash(password, 10);
@@ -157,89 +157,6 @@ class UserController {
             res.status(500).json({ error: `Error retrieving students` });
         }
     }
-    //   async getAllSWV2(req: Request, res: Response, studentOrWorker: string): Promise<void> {
-    //     try {
-    //         let query: any = { role: studentOrWorker };  // Start with a role-based query.
-    //         // Handle query parameters with flexibility for nested fields
-    //         if (req.query && Object.keys(req.query).length > 0) {
-    //             query = Object.entries(req.query).reduce((acc: any, [key, value]: [string, any]) => {
-    //                 const nestedFields = ['school', 'skills', 'certification', 'languages', 'experience', 'formation'];
-    //                 if (nestedFields.some(field => key.startsWith(field))) {
-    //                     // Directly apply nested structure in query
-    //                     acc[`student_details.${key}`] = value;
-    //                 } else if (key in UserModel.schema.obj || (UserModel.schema.obj.student_details && Object.keys(UserModel.schema.obj.student_details as object).includes(key))) {
-    //                     // Apply directly if it's a recognized field in the schema or in student_details
-    //                     acc[`student_details.${key}`] = value;
-    //                 } else {
-    //                     res.status(400).json({ error: `Invalid query parameter: ${key}` });
-    //                     return acc; // Return accumulated query so far to exit
-    //                 }
-    //                 return acc;
-    //             }, query);
-    //         }
-    //         const users = await UserModel.find(query);
-    //         if (users.length === 0) {
-    //             res.status(404).json({ message: 'No students found matching those parameters' });
-    //             return;
-    //         }
-    //         // Flatten the student details into the root of the user object and handle renaming to avoid clashes
-    //         const students = users.map(user => {
-    //             const student: any = user.toObject();
-    //             // Function to rename and merge specific fields to avoid naming conflicts
-    //             const renameAndMerge = (field: string, prefix: string): void => {
-    //                 if (student.student_details && student.student_details[field]) {
-    //                     student[prefix + '_' + field] = student.student_details[field];
-    //                     delete student.student_details[field];
-    //                 }
-    //             };
-    //             // Execute renaming for each necessary field
-    //             renameAndMerge('school', 'student');
-    //             renameAndMerge('skills', 'student');
-    //             renameAndMerge('certification', 'student_cert');
-    //             renameAndMerge('languages', 'student_lang');
-    //             renameAndMerge('experience', 'student_exp');
-    //             renameAndMerge('formation', 'student_form');
-    //             // Remove the now-empty student_details if it's completely emptied
-    //             if (student.student_details && Object.keys(student.student_details).length === 0) {
-    //                 delete student.student_details;
-    //             }
-    //             return student;
-    //         });
-    //         res.json(students);
-    //     } catch (error) {
-    //         console.error(`Error retrieving students:`, error);
-    //         res.status(500).json({ error: `Error retrieving students` });
-    //     }
-    // }
-    // async getAllSW(req: Request, res: Response, studentOrWorker: string): Promise<void> {
-    //   try {
-    //     let query: any = { role: studentOrWorker };
-    //     if (req.query && Object.keys(req.query).length > 0) {
-    //       for (const key of Object.keys(req.query)) {
-    //         if (
-    //           Object.keys(UserModel.schema.obj.student_details).includes(key) ||
-    //           key === 'school'
-    //         ) {
-    //           query[key] = req.query[key];
-    //         } 
-    //         else {
-    //           res.status(400).json({ error: `Invalid query parameter: ${key}` });
-    //           return;
-    //         }
-    //       }
-    //     }
-    //     const students = await UserModel.find(query);
-    //     if (students.length === 0) {
-    //         res.status(404).json({ message: 'No students found matching those parameters' });
-    //         return;
-    //     }
-    //     res.json(students);
-    //   } 
-    //   catch (error) {
-    //     console.error(`Error retrieving students:`, error);
-    //     res.status(500).json({ error: `Error retrieving students` });
-    //   }
-    // }
     // DELETE
     async deleteUser(req, res) {
         try {

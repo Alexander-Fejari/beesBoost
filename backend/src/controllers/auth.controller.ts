@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import bcrypt from 'bcrypt';
 import { UserModel } from '../models/user.model';
+import UserController from './user.controller';
 import jwt from 'jsonwebtoken';
 
 class AuthController {
@@ -113,6 +114,55 @@ class AuthController {
         res.status(404).send({ error: 'Failed to decode refresh token' });
       }
     });
+  }
+
+  async logOut(req: Request, res: Response): Promise<void> {
+    try {
+      // const { refreshToken } = req.body;
+      // if (!refreshToken) {
+      //   res.status(400).json({ error: "No refresh token provided" });
+      //   return;
+      // }
+
+      // const result = await UserModel.updateOne(
+      //   { refresh_token: refreshToken },
+      //   { $set: { refresh_token: '', is_connected: false } }
+      // );
+
+      // if (result.modifiedCount === 0) {
+      //   res.status(404).json({ error: "Refresh token not found" });
+      //   return;
+      // }
+      const { param } = req.params;
+      if (!param) {
+        res.status(400).json({ error: `User id/username is required for logout` });
+        return ;
+      }
+
+      const userController = new UserController();
+      const user = await userController.getUserObject(req, res, param);
+
+      if (!user) {
+        res.status(404).json({ error: `User not found` });
+        return ;
+      }
+
+      const result = await UserModel.updateOne(
+        { _id: user._id },
+        { $set: { is_connected: false } }
+      );
+
+      if (result.modifiedCount === 0) {
+        res.status(404).json({ error: `User not found` });
+        return ;
+      }
+
+      res.status(200).json({ message: `Logout successful` });
+    } 
+    catch (error) {
+      console.error(`Logout error:`, error);
+      res.status(500).json({ error: `Internal server error` });
+    }
   }
 }
 
