@@ -40,28 +40,36 @@ class AuthController {
 
       const userData: any = { username, password: hashedPassword, profile_pic, role, email, lastname, firstname, occupation, location, contact_info };
      
-      if (req.body.role === `student`) {
+      if (role === `student`) {
         userData.student_details = {};
-        const { student_details } = req.body;
-        if (student_details) {
-          userData.student_details.school = student_details.school;
-          userData.student_details.formation = student_details.formation;
-          userData.student_details.experience = student_details.experience;
-          userData.student_details.skills = student_details.skills;
-          userData.student_details.certification = student_details.certification;
-          userData.student_details.languages = student_details.languages;
-          userData.student_details.game_info = student_details.game_info; 
-        }
-      }
-      else if (req.body.role === `worker`) {
+        userData.student_details = { ...req.body.student_details };
+      } 
+      else if (role === `worker`) {
         userData.worker_details = {};
-        const { worker_details } = req.body;
-        if (worker_details) {
-          userData.worker_details.company = worker_details.company;
-          userData.worker_details.is_company_admin = worker_details.is_company_admin;
-        } 
-        // Ajouter logique pour mettre admin si premier à créer la société quand company sera fait, peut aussi être fait ailleurs (dans la fonction qui vérifie par exemple)
+        userData.worker_details = { ...req.body.worker_details };
       }
+      // if (req.body.role === `student`) {
+      //   userData.student_details = {};
+      //   const { student_details } = req.body;
+      //   if (student_details) {
+      //     userData.student_details.school = student_details.school;
+      //     userData.student_details.formation = student_details.formation;
+      //     userData.student_details.experience = student_details.experience;
+      //     userData.student_details.skills = student_details.skills;
+      //     userData.student_details.certification = student_details.certification;
+      //     userData.student_details.languages = student_details.languages;
+      //     userData.student_details.game_info = student_details.game_info; 
+      //   }
+      // }
+      // else if (req.body.role === `worker`) {
+      //   userData.worker_details = {};
+      //   const { worker_details } = req.body;
+      //   if (worker_details) {
+      //     userData.worker_details.company = worker_details.company;
+      //     userData.worker_details.is_company_admin = worker_details.is_company_admin;
+      //   } 
+      //   // Ajouter logique pour mettre admin si premier à créer la société quand company sera fait, peut aussi être fait ailleurs (dans la fonction qui vérifie par exemple)
+      // }
 
       const newUser = new UserModel(userData);
       await newUser.save();

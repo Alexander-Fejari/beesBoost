@@ -15,11 +15,13 @@ const userSchema = new mongoose_1.Schema({
     is_verified: { type: Boolean, required: true, default: false }, // A mettre en false pour la production
     is_active: { type: Boolean, required: true, default: true },
     is_connected: { type: Boolean, required: true, default: false },
-    refresh_token: { type: String, required: true, default: `` },
+    refresh_token: { type: String, default: `` },
     lastname: { type: String },
     firstname: { type: String },
     occupation: { type: String },
     location: { type: String },
+    registration_date: { type: Date, default: Date.now },
+    deletion_date: { type: Date },
     contact_info: {
         phone: { type: String },
         address: { type: String }
