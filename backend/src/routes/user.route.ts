@@ -8,7 +8,7 @@ const userController = new UserController();
 // POST
 
 
-//router.post(`/addUser`, (req, res) => userController.addUser(req, res)); 
+router.post(`/signUp`, (req, res) => userController.addUser(req, res)); // Swagger à faire
 
 // GET
 
@@ -20,6 +20,8 @@ router.get(`/getUser/:param`, (req, res) => userController.getUser(req, res)); /
 router.get(`/getAllStudents`, (req, res) => userController.getAllStudents(req, res)); // Swagger à faire
 
 //router.get(`/getAllWorkers`, (req, res) => userController.getAllSW(req, res, `worker`)); // Swagger à faire
+
+router.get(`/getLastRegisteredStudents`, (req, res) => userController.getLastStudents(req, res, 5)); // Swagger à faire
 
 // DELETE
 

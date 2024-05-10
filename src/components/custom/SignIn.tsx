@@ -14,7 +14,7 @@ const SignIn = () => {
 
     const onSubmit = async (values: FormValues) => {
         try {
-            const response = await fetch('http://localhost:5000/auth/signUp', {
+            const response = await fetch('http://localhost:5000/user/signUp', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

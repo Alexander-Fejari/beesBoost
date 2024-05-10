@@ -67,6 +67,7 @@ const userSchema = new mongoose_1.Schema({
             }],
     }
 });
+userSchema.index({ registered_date: -1 });
 userSchema.methods.comparePassword = async function (candidatePassword) {
     return bcrypt_1.default.compare(candidatePassword, this.password);
 };

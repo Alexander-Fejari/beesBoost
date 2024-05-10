@@ -4,84 +4,6 @@ import { UserModel } from '../models/user.model';
 import jwt from 'jsonwebtoken';
 
 class AuthController {
-  async addUser(req: Request, res: Response): Promise<void> {
-    try {
-      const { username, password, profile_pic, role, lastname, firstname, occupation, location, contact_info } = req.body;
-      let { email } = req.body;
-      
-      email = email.toLowerCase();
-
-      if (!username || !password || !role || !email) {
-        res.status(400).json({ error: `Bad request: username, password, role, and email are required fields` });
-        return;
-      }
-
-      const roles = [`student`, `worker`, `admin`, `superAdmin`];
-      if (!roles.includes(role)) {
-        res.status(400).json({ error: `${role} isnt a good role (student, worker, admin or superAdmin)` });
-        return ;
-      }
-
-      const existingUserEmail = await UserModel.findOne({ email: email });
-
-      if (existingUserEmail) {
-        res.status(400).json({ error: `User already exists with this email : ${ email }` });
-        return ;
-      }
-
-      const existingUserUsername = await UserModel.findOne({ username: username });
-
-      if (existingUserUsername) {
-        res.status(400).json({ error: `User already exists with this username : ${ username }` });
-        return ;
-      }
-
-      const hashedPassword = await bcrypt.hash(password, 10);
-
-      const userData: any = { username, password: hashedPassword, profile_pic, role, email, lastname, firstname, occupation, location, contact_info };
-     
-      if (role === `student`) {
-        userData.student_details = {};
-        userData.student_details = { ...req.body.student_details };
-      } 
-      else if (role === `worker`) {
-        userData.worker_details = {};
-        userData.worker_details = { ...req.body.worker_details };
-      }
-      // if (req.body.role === `student`) {
-      //   userData.student_details = {};
-      //   const { student_details } = req.body;
-      //   if (student_details) {
-      //     userData.student_details.school = student_details.school;
-      //     userData.student_details.formation = student_details.formation;
-      //     userData.student_details.experience = student_details.experience;
-      //     userData.student_details.skills = student_details.skills;
-      //     userData.student_details.certification = student_details.certification;
-      //     userData.student_details.languages = student_details.languages;
-      //     userData.student_details.game_info = student_details.game_info; 
-      //   }
-      // }
-      // else if (req.body.role === `worker`) {
-      //   userData.worker_details = {};
-      //   const { worker_details } = req.body;
-      //   if (worker_details) {
-      //     userData.worker_details.company = worker_details.company;
-      //     userData.worker_details.is_company_admin = worker_details.is_company_admin;
-      //   } 
-      //   // Ajouter logique pour mettre admin si premier à créer la société quand company sera fait, peut aussi être fait ailleurs (dans la fonction qui vérifie par exemple)
-      // }
-
-      const newUser = new UserModel(userData);
-      await newUser.save();
-
-      res.status(201).json({ message: `User added successfully`, userId: newUser._id });
-    }
-    catch (error) {
-      console.error(`Error adding user:`, error);
-      res.status(500).json({ error: `Error adding user` });
-    }
-  }
-
   async userLogin(req: Request, res: Response): Promise<void> {
     try {
       const { username, password } = req.body;
@@ -97,8 +19,13 @@ class AuthController {
         user = await UserModel.findOne({ username: username });
       }
       if (!user) {
-        res.status(401).json({ message: `Login failed : No user matches those credentials` });
+        res.status(401).json({ error: `Login failed : No user matches those credentials` });
         return;
+      }
+
+      if (user.is_active == false) {
+        res.status(401).json({ error: `This account isnt active`});
+        return ;
       }
 
       const isMatch = await user.comparePassword(password);
@@ -130,7 +57,7 @@ class AuthController {
         }
       );
       
-      res.status(200).json({ message: `Login successful`, accessToken, refreshToken });
+      res.status(200).json({ message: `Login successful`, accessToken/*, refreshToken*/ });
 
      // Set a timer to change the value of the is_connected variable to false after one hour
       setTimeout(async () => {

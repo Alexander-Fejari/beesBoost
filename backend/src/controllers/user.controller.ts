@@ -47,7 +47,61 @@ class UserController {
   }
 
   // POST
+  async addUser(req: Request, res: Response): Promise<void> {
+    try {
+      const { username, password, profile_pic, role, lastname, firstname, occupation, location, contact_info } = req.body;
+      let { email } = req.body;
+      
+      email = email.toLowerCase();
 
+      if (!username || !password || !role || !email) {
+        res.status(400).json({ error: `Bad request: username, password, role, and email are required fields` });
+        return;
+      }
+
+      const roles = [`student`, `worker`, `admin`, `superAdmin`];
+      if (!roles.includes(role)) {
+        res.status(400).json({ error: `${role} isnt a good role (student, worker, admin or superAdmin)` });
+        return ;
+      }
+
+      const existingUserEmail = await UserModel.findOne({ email: email });
+
+      if (existingUserEmail) {
+        res.status(400).json({ error: `User already exists with this email : ${ email }` });
+        return ;
+      }
+
+      const existingUserUsername = await UserModel.findOne({ username: username });
+
+      if (existingUserUsername) {
+        res.status(400).json({ error: `User already exists with this username : ${ username }` });
+        return ;
+      }
+
+      const hashedPassword = await bcrypt.hash(password, 10);
+
+      const userData: any = { username, password: hashedPassword, profile_pic, role, email, lastname, firstname, occupation, location, contact_info };
+     
+      if (role === `student`) {
+        userData.student_details = {};
+        userData.student_details = { ...req.body.student_details };
+      } 
+      else if (role === `worker`) {
+        userData.worker_details = {};
+        userData.worker_details = { ...req.body.worker_details };
+      }
+
+      const newUser = new UserModel(userData);
+      await newUser.save();
+
+      res.status(201).json({ message: `User added successfully`, userId: newUser._id });
+    }
+    catch (error) {
+      console.error(`Error adding user:`, error);
+      res.status(500).json({ error: `Error adding user` });
+    }
+  }
 
   // GET
   async getAllUsers(req: Request, res: Response): Promise<void> {
@@ -112,6 +166,19 @@ class UserController {
     }
     catch (error) {
       console.error(`Error retrieving students:`, error);
+      res.status(500).json({ error: `Error retrieving students` });
+    }
+  }
+
+  async getLastStudents(req: Request, res: Response, number: number) {
+    try {
+      const students = await UserModel.find({ role: 'student' })
+                                      .sort({ registered_date: 1 })
+                                      .limit(number);
+      res.status(200).json(students);
+    }
+    catch (error) {
+      console.error(`Error retrieving ${number} lasts registered students`, error);
       res.status(500).json({ error: `Error retrieving students` });
     }
   }
@@ -277,6 +344,17 @@ class UserController {
         const hashedPassword = await bcrypt.hash(updateData.password, 10);
       
         updateData.password = hashedPassword;
+      }
+
+      if (fieldToUpdate == `is_active`) {
+        if (updateData.is_active === false) {
+          updateData.is_active = false;
+          updateData.deletion_date = Date.now();
+        }
+        else {
+          updateData.is_active = true;
+          updateData.deletion_date = null;
+        }
       }
 
       const result = await UserModel.updateOne(param.length < 24 ? { username: param } : { _id: param } , updateData);
