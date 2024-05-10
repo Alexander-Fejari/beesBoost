@@ -183,7 +183,7 @@ class UserController {
     }
   }
 
-  //   async getAllSWV2(req: Request, res: Response, studentOrWorker: string): Promise<void> {
+  //async getAllSWV2(req: Request, res: Response, studentOrWorker: string): Promise<void> {
 //     try {
 //         let query: any = { role: studentOrWorker };  // Start with a role-based query.
 
