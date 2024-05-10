@@ -45,6 +45,49 @@ class UserController {
         }
     }
     // POST
+    async addUser(req, res) {
+        try {
+            const { username, password, profile_pic, role, lastname, firstname, occupation, location, contact_info } = req.body;
+            let { email } = req.body;
+            email = email.toLowerCase();
+            if (!username || !password || !role || !email) {
+                res.status(400).json({ error: `Bad request: username, password, role, and email are required fields` });
+                return;
+            }
+            const roles = [`student`, `worker`, `admin`, `superAdmin`];
+            if (!roles.includes(role)) {
+                res.status(400).json({ error: `${role} isnt a good role (student, worker, admin or superAdmin)` });
+                return;
+            }
+            const existingUserEmail = await user_model_1.UserModel.findOne({ email: email });
+            if (existingUserEmail) {
+                res.status(400).json({ error: `User already exists with this email : ${email}` });
+                return;
+            }
+            const existingUserUsername = await user_model_1.UserModel.findOne({ username: username });
+            if (existingUserUsername) {
+                res.status(400).json({ error: `User already exists with this username : ${username}` });
+                return;
+            }
+            const hashedPassword = await bcrypt_1.default.hash(password, 10);
+            const userData = { username, password: hashedPassword, profile_pic, role, email, lastname, firstname, occupation, location, contact_info };
+            if (role === `student`) {
+                userData.student_details = {};
+                userData.student_details = { ...req.body.student_details };
+            }
+            else if (role === `worker`) {
+                userData.worker_details = {};
+                userData.worker_details = { ...req.body.worker_details };
+            }
+            const newUser = new user_model_1.UserModel(userData);
+            await newUser.save();
+            res.status(201).json({ message: `User added successfully`, userId: newUser._id });
+        }
+        catch (error) {
+            console.error(`Error adding user:`, error);
+            res.status(500).json({ error: `Error adding user` });
+        }
+    }
     // GET
     async getAllUsers(req, res) {
         try {
@@ -99,6 +142,18 @@ class UserController {
         }
         catch (error) {
             console.error(`Error retrieving students:`, error);
+            res.status(500).json({ error: `Error retrieving students` });
+        }
+    }
+    async getLastStudents(req, res, number) {
+        try {
+            const students = await user_model_1.UserModel.find({ role: 'student' })
+                .sort({ registered_date: 1 })
+                .limit(number);
+            res.status(200).json(students);
+        }
+        catch (error) {
+            console.error(`Error retrieving ${number} lasts registered students`, error);
             res.status(500).json({ error: `Error retrieving students` });
         }
     }
@@ -236,6 +291,16 @@ class UserController {
             if (fieldToUpdate == `password`) {
                 const hashedPassword = await bcrypt_1.default.hash(updateData.password, 10);
                 updateData.password = hashedPassword;
+            }
+            if (fieldToUpdate == `is_active`) {
+                if (updateData.is_active === false) {
+                    updateData.is_active = false;
+                    updateData.deletion_date = Date.now();
+                }
+                else {
+                    updateData.is_active = true;
+                    updateData.deletion_date = null;
+                }
             }
             const result = await user_model_1.UserModel.updateOne(param.length < 24 ? { username: param } : { _id: param }, updateData);
             // Mettre la logique du mailer plus tard

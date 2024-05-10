@@ -126,6 +126,8 @@ const userSchema = new Schema({
   }
 });
 
+userSchema.index({ registered_date: -1 });
+
 userSchema.methods.comparePassword = async function(candidatePassword: string): Promise<boolean> {
   return bcrypt.compare(candidatePassword, this.password);
 };

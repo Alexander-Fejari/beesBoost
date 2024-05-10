@@ -7,7 +7,6 @@ const express_1 = __importDefault(require("express"));
 const auth_controller_1 = __importDefault(require("../controllers/auth.controller"));
 const router = express_1.default.Router();
 const authController = new auth_controller_1.default();
-router.post(`/signUp`, (req, res) => authController.addUser(req, res)); // Swagger à faire
 router.post(`/signIn`, (req, res) => authController.userLogin(req, res)); // Swagger à faire
 router.post(`/renewToken`, (req, res) => authController.renewToken(req, res)); // Swagger à faire
 exports.default = router;
