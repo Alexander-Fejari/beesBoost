@@ -35,6 +35,7 @@ const StudentHive = ({ className, numHives = 3 }: StudentProps) => {
                  strokeWidth={10}
                  strokeColor={'stroke-primary'}
                  size={'w-35 h-35'}
+                
         >
             <img src={user.photoUrl} alt={`User ${index}`} className="w-full h-full" />
         </HiveSVG>
