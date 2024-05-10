@@ -1,7 +1,6 @@
 import { Request, Response } from 'express';
 import bcrypt from 'bcrypt';
 import { UserModel } from '../models/user.model';
-import jwt from 'jsonwebtoken';
 
 class UserController {
   // UTILS
@@ -48,17 +47,18 @@ class UserController {
   }
 
   // POST
-
-  // Authentification
-  
   async addUser(req: Request, res: Response): Promise<void> {
     try {
-      const { username, password, profile_pic, role, email, lastname, firstname, occupation, location, contact_info } = req.body;
+      const { username, password, profile_pic, role, lastname, firstname, occupation, location, contact_info } = req.body;
+      let { email } = req.body;
+      
+      email = email.toLowerCase();
 
       if (!username || !password || !role || !email) {
-        res.status(400).json({ error: 'Bad request: username, password, role, and email are required fields' });
+        res.status(400).json({ error: `Bad request: username, password, role, and email are required fields` });
         return;
       }
+
       const roles = [`student`, `worker`, `admin`, `superAdmin`];
       if (!roles.includes(role)) {
         res.status(400).json({ error: `${role} isnt a good role (student, worker, admin or superAdmin)` });
@@ -83,27 +83,13 @@ class UserController {
 
       const userData: any = { username, password: hashedPassword, profile_pic, role, email, lastname, firstname, occupation, location, contact_info };
      
-      if (req.body.role === `student`) {
+      if (role === `student`) {
         userData.student_details = {};
-        const { student_details } = req.body;
-        if (student_details) {
-        userData.student_details.school = student_details.school;
-        userData.student_details.formation = student_details.formation;
-        userData.student_details.experience = student_details.experience;
-        userData.student_details.skills = student_details.skills;
-        userData.student_details.certification = student_details.certification;
-        userData.student_details.languages = student_details.languages;
-        userData.student_details.game_info = student_details.game_info; 
-        }
-      }
-      else if (req.body.role === `worker`) {
+        userData.student_details = { ...req.body.student_details };
+      } 
+      else if (role === `worker`) {
         userData.worker_details = {};
-        const { worker_details } = req.body;
-        if (worker_details) {
-          userData.worker_details.company = worker_details.company;
-          userData.worker_details.is_company_admin = worker_details.is_company_admin;
-        } 
-        // Ajouter logique pour mettre admin si premier à créer la société quand company sera fait, peut aussi être fait ailleurs (dans la fonction qui vérifie par exemple)
+        userData.worker_details = { ...req.body.worker_details };
       }
 
       const newUser = new UserModel(userData);
@@ -114,36 +100,6 @@ class UserController {
     catch (error) {
       console.error(`Error adding user:`, error);
       res.status(500).json({ error: `Error adding user` });
-    }
-  }
-
-  async userLogin(req: Request, res: Response): Promise<void> {
-    try {
-      const { email, password } = req.body;
-      const user = await UserModel.findOne({ email });
-      if (!user) {
-        res.status(401).send({ message: 'Login failed : No user matches those credentials' });
-        return;
-      }
-
-      const isMatch = await user.comparePassword(password);
-
-      if (!isMatch) {
-        res.status(401).send({ message: 'Login failed : Bad password' });
-        return ;
-      }
-
-      const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET!, { expiresIn: '1d' });
-      await UserModel.updateOne({ _id: user._id }, { $set: { is_connected: true } });
-      
-      res.status(200).send({ message: 'Login successful', token, username: user.username });
-
-      setTimeout(async () => {
-        await UserModel.updateOne({ _id: user._id }, { $set: { is_connected: false } });
-      }, 60 * 60 * 1000); // 60 minute(s)
-    } 
-    catch (error) {
-      res.status(500).send(error);
     }
   }
 
@@ -210,6 +166,19 @@ class UserController {
     }
     catch (error) {
       console.error(`Error retrieving students:`, error);
+      res.status(500).json({ error: `Error retrieving students` });
+    }
+  }
+
+  async getLastStudents(req: Request, res: Response, number: number) {
+    try {
+      const students = await UserModel.find({ role: 'student' })
+                                      .sort({ registered_date: 1 })
+                                      .limit(number);
+      res.status(200).json(students);
+    }
+    catch (error) {
+      console.error(`Error retrieving ${number} lasts registered students`, error);
       res.status(500).json({ error: `Error retrieving students` });
     }
   }
@@ -375,6 +344,17 @@ class UserController {
         const hashedPassword = await bcrypt.hash(updateData.password, 10);
       
         updateData.password = hashedPassword;
+      }
+
+      if (fieldToUpdate == `is_active`) {
+        if (updateData.is_active === false) {
+          updateData.is_active = false;
+          updateData.deletion_date = Date.now();
+        }
+        else {
+          updateData.is_active = true;
+          updateData.deletion_date = null;
+        }
       }
 
       const result = await UserModel.updateOne(param.length < 24 ? { username: param } : { _id: param } , updateData);

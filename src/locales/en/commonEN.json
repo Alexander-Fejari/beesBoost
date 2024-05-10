@@ -41,5 +41,13 @@
         "email": "Email:",
         "password": "Password:",
         "connect": "Login"
+    },
+    "WelcomePage": {
+        "StudentButton": "Find a job",
+        "EmployerButton": "Become a partner",
+        "Title": "Your next website",
+        "SubTitle": "Attract more customers with effective communication!"
     }
+    
+
 }

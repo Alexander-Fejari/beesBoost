@@ -15,7 +15,7 @@ const LogIn = () => {
     
 const onSubmit = async (values: LoginValues): Promise<void> => {
         try {
-            const response = await fetch('http://localhost:5000/user/signIn', {
+            const response = await fetch('http://localhost:5000/auth/signIn', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -30,8 +30,8 @@ const onSubmit = async (values: LoginValues): Promise<void> => {
             console.log("Succès")
 
             const data = await response.json();
-            if (data.token) {
-                localStorage.setItem('token', data.token);
+            if (data.accessToken) {
+                localStorage.setItem('token', data.accessToken);
                 localStorage.setItem('username', data.username);
 
                 window.location.href = '/dashboard';

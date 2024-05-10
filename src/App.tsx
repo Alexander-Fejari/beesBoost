@@ -23,11 +23,7 @@ const router = createBrowserRouter(
       <Route path="faq" element={<Faq />} />
       <Route path="contact" element={<Contact />} />
       <Route path="blog" element={<Blog />} />
-      <Route path="dashboard" element={
-        <ProtectedRoute>
-          <Dashboard />
-        </ProtectedRoute>
-      } />
+      <Route path="dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
     </Route>
   )
 );

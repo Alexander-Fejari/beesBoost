@@ -15,10 +15,13 @@ const userSchema = new mongoose_1.Schema({
     is_verified: { type: Boolean, required: true, default: false }, // A mettre en false pour la production
     is_active: { type: Boolean, required: true, default: true },
     is_connected: { type: Boolean, required: true, default: false },
+    refresh_token: { type: String, default: `` },
     lastname: { type: String },
     firstname: { type: String },
     occupation: { type: String },
     location: { type: String },
+    registration_date: { type: Date, default: Date.now },
+    deletion_date: { type: Date },
     contact_info: {
         phone: { type: String },
         address: { type: String }
@@ -64,13 +67,7 @@ const userSchema = new mongoose_1.Schema({
             }],
     }
 });
-// userSchema.pre<IUser>('save', async function(next) {
-//   if (this.isModified('password') || this.isNew) {
-//     const salt = await bcrypt.genSalt(10);
-//     this.password = await bcrypt.hash(this.password, salt);
-//   }
-//   next();
-// });
+userSchema.index({ registered_date: -1 });
 userSchema.methods.comparePassword = async function (candidatePassword) {
     return bcrypt_1.default.compare(candidatePassword, this.password);
 };

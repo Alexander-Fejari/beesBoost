@@ -45,5 +45,11 @@
     "email": "E-mail:",
     "password": "Mot de passe:",
     "connect": "Connexion"
+  },
+  "WelcomePage": {
+    "StudentButton": "Trouver un job",
+    "EmployerButton": "Devenir partenaire",
+    "Title": "Votre prochain site internet", 
+    "SubTitle": "Attirez plus de clients grâce à une communication efficace !"
   }
 }

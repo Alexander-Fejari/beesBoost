@@ -8,14 +8,13 @@ import { useTranslation } from 'react-i18next';
 
 const SignIn = () => {
     const { t } = useTranslation();
-
     const { register, handleSubmit, formState, reset } = useForm<FormValues>({
         resolver: zodResolver(formSchema),
     });
 
     const onSubmit = async (values: FormValues) => {
         try {
-            const response = await fetch('http://localhost:5000/user/signup', {
+            const response = await fetch('http://localhost:5000/user/signUp', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -29,9 +28,8 @@ const SignIn = () => {
 
             const data = await response.json();
             if (data.message) {
-                console.log(data.message); // Suppose the server sends back a success message.
-                // Here you might want to redirect the user to a login page or a dashboard
-                window.location.href = '/login'; // Redirect to login after registration
+                console.log(data.message); 
+                window.location.href = '/'; 
             } else {
                 console.log('Registration failed: No success message received');
             }
@@ -51,7 +49,7 @@ const SignIn = () => {
                 <select
                     id="role"
                     {...register("role")}
-                    className="input-class" // Remplacez "input-class" par votre classe de style pour les inputs
+                    
                 >
                     <option value="worker">{t('signIn.worker')}</option>
                     <option value="student">{t('signIn.student')}</option>

@@ -41,5 +41,12 @@
         "email": "Email:",
         "password": "Wachtwoord",
         "connect": "Login"
+    },
+    "WelcomePage": {
+        "StudentButton": "Vind een baan",
+        "EmployerButton": "Word partner",
+        "Title": "Uw volgende website",
+        "SubTitle": "Trek meer klanten aan met effectieve communicatie!"
     }
+    
 }

@@ -1,11 +1,11 @@
-import Header from "@/components/custom/Header"
-import Footer from "@/components/custom/Footer"
-import Sidebar from "@/components/custom/Sidebar.tsx";
+import React from 'react';
+import Header from "@/components/custom/Header";
+import Footer from "@/components/custom/Footer";
+import Sidebar from "@/components/custom/Sidebar";
 import { useAuth } from "@/context/AuthContext"; 
 
-
 interface LayoutProps {
-    children?: React.ReactNode
+    children?: React.ReactNode;
 }
 
 const Layout = ({children}: LayoutProps) => {
@@ -19,7 +19,7 @@ const Layout = ({children}: LayoutProps) => {
             </main>
             <Footer className="col-span-5 md:row-start-5" />
         </section>
-    )
-}
+    );
+};
 
-export default Layout
+export default Layout;

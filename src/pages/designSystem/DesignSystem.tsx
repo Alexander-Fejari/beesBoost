@@ -1,11 +1,14 @@
 import Layout from "@/components/Layout";
-import {Calendar} from "@/components/ui/calendar";
+
+import Welcome from "@/components/custom/Welcome"
 
 
 const DesignSystem = () => {
     return (
         <Layout>
-            <Calendar/>
+
+            <Welcome/>
+            
         </Layout>
     )
 }
