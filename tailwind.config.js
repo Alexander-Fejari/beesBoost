@@ -62,12 +62,12 @@ module.exports = {
                 white: '#F0EFF4'
             },
             gridTemplateColumns: {
-                'desktop': '0.3fr 1.7fr',
-                'mobile': '0.9fr 1.1fr 1fr',
+                lg: 'minmax(200px, 0.3fr) minmax(300px, 1.7fr)',
             },
+
             gridTemplateRows: {
-                'desktop': '0.1fr auto 1fr',
-                'mobile': 'repeat(2, 0.3fr) 2.9fr auto',
+                lg: 'minmax(100px, 0.1fr) auto minmax(300px, 1fr)',
+                sm: 'minmax(100px, 0.3fr) auto minmax(200px, auto) auto',
             },
             borderRadius: {
                 lg: "var(--radius)",

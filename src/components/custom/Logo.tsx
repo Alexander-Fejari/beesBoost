@@ -1,33 +1,42 @@
-import {NavLink} from "react-router-dom";
-import logo from "@/assets/logo.png";
+import { NavLink } from "react-router-dom";
+import logoBlack from "@/assets/logoBlack.png";
+import logoOrange from "@/assets/logoOrange.png";
+import { useTheme } from "@/components/theme-provider";
 
 interface LogoProps {
-    size: 'xs' | 'sm' | 'l',
-    link: boolean
+    size: 'xs' | 'l';
+    link: boolean;
 }
 
-const Logo = ({size, link}: LogoProps) => {
-    let sizesClasses;
-    switch (size) {
-        case "xs":
-            sizesClasses = 'w-28 h-auto'
-            break
-        case "l":
-            sizesClasses = 'w-36 h-auto'
-            break
+const Logo = ({ size, link }: LogoProps) => {
+    const { theme } = useTheme();
+
+    let logoSrc;
+    if (theme === "system") {
+        const systemTheme = window.matchMedia("(prefers-color-scheme: dark)").matches
+            ? "dark"
+            : "light";
+        logoSrc = systemTheme === "dark"? logoOrange : logoBlack;
+    } else {
+        logoSrc = theme === "dark"? logoOrange : logoBlack;
     }
+
+    const sizesClasses = {
+        xs: 'w-28 h-auto',
+        l: 'w-36 h-auto',
+    }[size];
+
     return (
         <>
-            {!link && (
-                <img className={`${sizesClasses}`} src={logo} alt={'logo Bees Boost'}/>
-            )}
-            {link && (
+            {link? (
                 <NavLink to={'/'}>
-                    <img className={`${sizesClasses}`} src={logo} alt={'logo Bees Boost'}/>
+                    <img className={sizesClasses} src={logoSrc} alt={'logo Bees Boost'} />
                 </NavLink>
+            ) : (
+                <img className={sizesClasses} src={logoSrc} alt={'logo Bees Boost'} />
             )}
         </>
-    )
-}
+    );
+};
 
-export default Logo
+export default Logo;
