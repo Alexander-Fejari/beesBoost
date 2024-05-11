@@ -67,7 +67,7 @@ module.exports = {
 
             gridTemplateRows: {
                 lg: 'minmax(100px, 0.1fr) auto minmax(300px, 1fr)',
-                sm: 'minmax(100px, 0.3fr) auto minmax(200px, auto) auto',
+                sm: 'minmax(100px, 0.3fr) auto minmax(300px, auto) auto',
             },
             borderRadius: {
                 lg: "var(--radius)",
