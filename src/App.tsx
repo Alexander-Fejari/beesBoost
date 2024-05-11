@@ -14,6 +14,7 @@ import Blog from '@/pages/blog/Blog.tsx';
 import Dashboard from '@/pages/dashboard/Dashboard.tsx';
 import ProtectedRoute from './components/ProtectedRoute';
 
+
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/">

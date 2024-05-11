@@ -15,7 +15,7 @@ const LogIn = () => {
     
 const onSubmit = async (values: LoginValues): Promise<void> => {
         try {
-            const response = await fetch('http://localhost:5000/auth/signIn', {
+            const response = await fetch(`${import.meta.env.VITE_APP_API_URL}/auth/signIn`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

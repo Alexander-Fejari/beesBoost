@@ -14,7 +14,7 @@ const SignIn = () => {
 
     const onSubmit = async (values: FormValues) => {
         try {
-            const response = await fetch('http://localhost:5000/user/signUp', {
+            const response = await fetch(`${import.meta.env.VITE_APP_API_URL}/user/signUp`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
