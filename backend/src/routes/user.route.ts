@@ -7,16 +7,15 @@ const userController = new UserController();
 
 // POST
 
-
 router.post(`/signUp`, (req, res) => userController.addUser(req, res));
-// GET
 
+// GET
 
 router.get(`/getAllUsers`, /*authenticateToken,*/ (req, res) => userController.getAllUsers(req, res));
 
 router.get(`/getUser/:param`, /*authenticateToken,*/ (req, res) => userController.getUser(req, res));
 
-router.get(`/getAllStudents`, /*authenticateToken,*/ (req, res) => userController.getAllStudents(req, res)); // Swagger à faire
+router.get(`/getAllStudents`, /*authenticateToken,*/ (req, res) => userController.getAllStudents(req, res)); // Pas finie + Swagger à faire
 
 //router.get(`/getAllWorkers`, (req, res) => userController.getAllSW(req, res, `worker`)); // Swagger à faire
 
@@ -24,11 +23,9 @@ router.get(`/getLastRegisteredStudents`, /*authenticateToken,*/ (req, res) => us
 
 // DELETE
 
-
 router.delete(`/deleteUser`, /*authenticateToken, authorizeRoles(`superAdmin`),*/ (req, res) => userController.deleteUser(req, res));
 
 // PUT
-
 
 router.put(`/updateInfo/:param`, /*authenticateToken,*/ (req, res) => userController.updateFields(req, res, [`profile_pic`, `lastname`, `firstname`, `occupation`, `location`, `contact_info`]));
 
@@ -42,8 +39,10 @@ router.put(`/updateUsername/:param`, /*authenticateToken, authorizeRoles(`admin`
 
 router.put(`/updatePassword/:param`, /*authenticateToken,*/ (req, res) => userController.updateField(req, res, `password`));
 
-router.put(`/updateWorkerIsAdmin/:param`, /*authenticateToken,*/ (req, res) => userController.updateWorkerIsAdmin(req, res));// Swagger à faire
+router.put(`updateEmail/:param`, /*authenticateToken, */ (req, res) => userController.updateField(req, res, `email`)); // Swagger à faire
 
-router.put(`/updateStudentDetails/:param`, /*authenticateToken,*/ (req, res) => userController.updateStudentDetails(req, res)); // Swagger à faire
+router.put(`/updateWorkerIsAdmin/:param`, /*authenticateToken,*/ (req, res) => userController.updateWorkerIsAdmin(req, res));// Pas finie + Swagger à faire
+
+router.put(`/updateStudentDetails/:param`, /*authenticateToken,*/ (req, res) => userController.updateStudentDetails(req, res)); // Pas finie + Swagger à faire
 
 export default router;

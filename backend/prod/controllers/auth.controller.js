@@ -24,7 +24,7 @@ class AuthController {
                 return;
             }
             if (user.is_active == false) {
-                res.status(401).json({ error: `This account isnt active` });
+                res.status(403).json({ error: `This account isnt active` });
                 return;
             }
             const isMatch = await user.comparePassword(password);

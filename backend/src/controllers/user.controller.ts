@@ -28,11 +28,11 @@ class UserController {
         return true;
       }
 
-      if (req.body.worker_details && user.role == `student`) {
+      if ((req.body.is_company_admin || req.body.company) && user.role == `student`) {
         res.status(404).json({ error: `Cant update worker_details on student profile` });
         return true;
       }
-      else if (req.body.student_details && user.role == `worker`) {
+      else if (req.body. && user.role == `worker`) {
         res.status(404).json({ error: `Cant update student_details on worker profile` });
         return true;
       }
@@ -317,42 +317,41 @@ class UserController {
   
       const user = await this.getUserObject(req, res, param);
       if (!user) {
-        res.status(404).json({ error: 'User not found' });
+        res.status(404).json({ error: `User not found` });
         return ;
       }
 
-      if (user.role !== 'worker' || !user.worker_details) {
-        res.status(400).json({ error: 'User is not a worker' });
+      if (user.role !== `worker` || !user.worker_details) {
+        res.status(400).json({ error: `User is not a worker` });
         return ;
       }
   
       user.worker_details.is_company_admin = changeAdminPerm;
       await user.save();
   
-      res.json({ message: 'Worker admin status updated successfully' });
+      res.json({ message: `Worker admin status updated successfully` });
     } catch (error) {
-      console.error('Error updating worker admin status:', error);
-      res.status(500).json({ error: 'Error updating worker admin status' });
+      console.error(`Error updating worker admin status: ${error}`);
+      res.status(500).json({ error: `Error updating worker admin status` });
     }
   }
 
-  async updateStudentDetails(req: Request, res: Response): Promise<void> {
+  async updateDetail(req: Request, res: Response, fieldToUpdate: string, SorW: string): Promise<void> {
     try {
       const param = req.params.param;
-      //const updateData = req.body;
+      const updateData = req.body;
   
-      const user = await this.getUserObject(req, res, param);
-      if (!user) {
-        res.status(404).json({ error: 'User not found' });
+      if (await this.checkErrorUpdateField(req, res, param) == true) {
         return ;
       }
-  
+      
+
       // I need u here
   
-      res.json({ message: 'Student details updated successfully' });
+      res.json({ message: `Student details updated successfully` });
     } catch (error) {
-      console.error('Error updating student details:', error);
-      res.status(500).json({ error: 'Error updating student details' });
+      console.error(`Error updating student details: ${error}`);
+      res.status(500).json({ error: `Error updating student details` });
     }
   }
 }
