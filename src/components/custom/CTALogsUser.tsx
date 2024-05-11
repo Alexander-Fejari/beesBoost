@@ -9,9 +9,9 @@ import {
 } from "@/components/ui/dialog"
 import {Button} from "@/components/ui/button"
 import {useTranslation} from "react-i18next";
-import {Avatar, AvatarFallback, AvatarImage} from "@/components/ui/avatar";
 import SignIn from "@/components/custom/SignIn.tsx";
 import LogIn from "@/components/custom/LogIn.tsx";
+import LogOut from "@/components/custom/logOut.tsx";
 
 
 interface CTALogsUserProps {
@@ -70,10 +70,7 @@ const CTALogsUser = ({ isLog: initialIsLog }: CTALogsUserProps) => {
             )}
             {isLog && (
                 <section className='flex items-center gap-x-4'>
-                    <Avatar>
-                        <AvatarImage className="alveolus" src="https://github.com/shadcn.png" />
-                        <AvatarFallback>JL007</AvatarFallback>
-                    </Avatar>
+                    <LogOut />
                     <h3>{t('ctaUser.ctaGreetingUser')} {username}</h3>
                 </section>
             )}
