@@ -17,7 +17,7 @@ class UserController {
             res.status(500).json({ error: `Error retrieving user` });
         }
     }
-    async checkErrorUpdateField(req, res, param) {
+    async checkErrorUpdateField(req, res, param, NorD) {
         try {
             if (param.length > 24) {
                 res.status(404).json({ error: `Wrong username or id: ${param}` });
@@ -28,14 +28,17 @@ class UserController {
                 res.status(404).json({ error: `User not found` });
                 return true;
             }
-            if (req.body.worker_details && user.role == `student`) {
-                res.status(404).json({ error: `Cant update worker_details on student profile` });
-                return true;
-            }
-            else if (req.body.student_details && user.role == `worker`) {
-                res.status(404).json({ error: `Cant update student_details on worker profile` });
-                return true;
-            }
+            // if (NorD == `D`) {
+            //   if ((req.body.is_company_admin || req.body.company) && user.role == `student`) {
+            //     res.status(404).json({ error: `Cant update worker_details on student profile` });
+            //     return true;
+            //   }
+            //   else if (req.body.string && user.role == `worker`) {
+            //     res.status(404).json({ error: `Cant update student_details on worker profile` });
+            //     return true;
+            //   }
+            //   if (req)
+            // }
             return false;
         }
         catch (error) {
@@ -188,7 +191,7 @@ class UserController {
         try {
             const param = req.params.param;
             const updateData = req.body;
-            if (await this.checkErrorUpdateField(req, res, param) == true) {
+            if (await this.checkErrorUpdateField(req, res, param, `N`) == true) {
                 return;
             }
             // Check if there is only one field to update
@@ -208,6 +211,7 @@ class UserController {
             if (fieldToUpdate == `password`) {
                 const hashedPassword = await bcrypt_1.default.hash(updateData.password, 10);
                 updateData.password = hashedPassword;
+                // Mettre logique mailer
             }
             if (fieldToUpdate == `is_active`) {
                 if (updateData.is_active === false) {
@@ -233,21 +237,28 @@ class UserController {
             res.status(500).json({ error: `Error updating user` });
         }
     }
-    async updateFields(req, res, allowedFields) {
+    async updateFields(req, res) {
         try {
             const param = req.params.param;
             const updateData = req.body;
-            if (await this.checkErrorUpdateField(req, res, param) == true) {
+            const allowedFields = [
+                `profile_pic`, `lastname`, `firstname`, `occupation`, `location`,
+                `contact_info.phone`, `contact_info.street`, `contact_info.street_number`,
+                `contact_info.city`, `contact_info.country`, `contact_info.postal_code`
+            ];
+            if (await this.checkErrorUpdateField(req, res, param, 'N') === true) {
                 return;
             }
+            const updateObject = {};
             for (const field of Object.keys(updateData)) {
                 if (!allowedFields.includes(field)) {
-                    res.status(400).json({ error: `Invalid field in the body, only this can be updated ${allowedFields}` });
+                    res.status(400).json({ error: `Invalid field in the body, only this can be updated: ${allowedFields.join(', ')}` });
                     return;
                 }
+                updateObject[field] = updateData[field];
             }
-            // Mettre la logique du mailer plus tard
-            const result = await user_model_1.UserModel.updateOne(param.length < 24 ? { username: param } : { _id: param }, updateData);
+            const userToUpdate = { [param.length < 24 ? `username` : `_id`]: param };
+            const result = await user_model_1.UserModel.updateOne(userToUpdate, { $set: updateObject });
             if (result.modifiedCount > 0) {
                 res.json({ message: `User's infos have been updated successfully` });
             }
@@ -266,37 +277,75 @@ class UserController {
             const changeAdminPerm = req.body.is_company_admin;
             const user = await this.getUserObject(req, res, param);
             if (!user) {
-                res.status(404).json({ error: 'User not found' });
+                res.status(404).json({ error: `User not found` });
                 return;
             }
-            if (user.role !== 'worker' || !user.worker_details) {
-                res.status(400).json({ error: 'User is not a worker' });
+            if (user.role !== `worker` || !user.worker_details) {
+                res.status(400).json({ error: `User is not a worker` });
                 return;
             }
             user.worker_details.is_company_admin = changeAdminPerm;
             await user.save();
-            res.json({ message: 'Worker admin status updated successfully' });
+            res.json({ message: `Worker admin status updated successfully` });
         }
         catch (error) {
-            console.error('Error updating worker admin status:', error);
-            res.status(500).json({ error: 'Error updating worker admin status' });
+            console.error(`Error updating worker admin status: ${error}`);
+            res.status(500).json({ error: `Error updating worker admin status` });
         }
     }
-    async updateStudentDetails(req, res) {
+    async updateStudentDetail(req, res, detailKey) {
         try {
             const param = req.params.param;
-            //const updateData = req.body;
-            const user = await this.getUserObject(req, res, param);
-            if (!user) {
-                res.status(404).json({ error: 'User not found' });
-                return;
+            const updateData = req.body;
+            const { action, index, value } = updateData;
+            let updateObject = {};
+            switch (action) {
+                case 'add':
+                    updateObject = { $push: { [`student_details.${detailKey}`]: value } };
+                    break;
+                case 'remove':
+                    updateObject = { $pull: { [`student_details.${detailKey}`]: { id: value.id } } }; // Supposons que chaque élément a un 'id'
+                    break;
+                case 'update':
+                    updateObject = { $set: { [`student_details.${detailKey}.${index}`]: value } };
+                    break;
+                default:
+                    res.status(400).json({ error: `Invalid action specified` });
+                    return;
             }
-            // I need u here
-            res.json({ message: 'Student details updated successfully' });
+            const result = await user_model_1.UserModel.updateOne({ _id: param }, updateObject);
+            if (result.modifiedCount > 0) {
+                res.json({ message: `${detailKey} details updated successfully` });
+            }
+            else {
+                res.status(404).json({ error: `No changes made or user not found` });
+            }
         }
         catch (error) {
-            console.error('Error updating student details:', error);
-            res.status(500).json({ error: 'Error updating student details' });
+            console.error(`Error updating ${detailKey} details:`, error);
+            res.status(500).json({ error: `Internal server error` });
+        }
+    }
+    async updateWorkerDetail(req, res, detailKey) {
+        try {
+            const userId = req.params.userId; // Assurez-vous que le paramètre d'URL est correctement nommé
+            const updateData = req.body;
+            // Vérifier que la donnée pour la mise à jour est présente
+            if (updateData[detailKey] === undefined) {
+                res.status(400).json({ error: `Missing data for ${detailKey}` });
+                return;
+            }
+            const result = await user_model_1.UserModel.updateOne({ _id: userId }, { $set: { [detailKey]: updateData[detailKey] } });
+            if (result.modifiedCount > 0) {
+                res.json({ message: `${detailKey} updated successfully` });
+            }
+            else {
+                res.status(404).json({ error: `No changes made or worker not found` });
+            }
+        }
+        catch (error) {
+            console.error(`Error updating worker's ${detailKey}:`, error);
+            res.status(500).json({ error: `Internal server error` });
         }
     }
 }

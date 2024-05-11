@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import bcrypt from 'bcrypt';
-import { UserModel } from '../models/user.model';
+import { UserModel, ISDetails, IWDetails } from '../models/user.model';
 
 class UserController {
   // UTILS
@@ -15,7 +15,7 @@ class UserController {
     }
   }
 
-  protected async checkErrorUpdateField(req: Request, res: Response, param: string): Promise<boolean> {
+  protected async checkErrorUpdateField(req: Request, res: Response, param: string, NorD: string): Promise<boolean> {
     try {
       if (param.length > 24) {
         res.status(404).json({ error: `Wrong username or id: ${param}`});
@@ -28,14 +28,17 @@ class UserController {
         return true;
       }
 
-      if ((req.body.is_company_admin || req.body.company) && user.role == `student`) {
-        res.status(404).json({ error: `Cant update worker_details on student profile` });
-        return true;
-      }
-      else if (req.body. && user.role == `worker`) {
-        res.status(404).json({ error: `Cant update student_details on worker profile` });
-        return true;
-      }
+      // if (NorD == `D`) {
+      //   if ((req.body.is_company_admin || req.body.company) && user.role == `student`) {
+      //     res.status(404).json({ error: `Cant update worker_details on student profile` });
+      //     return true;
+      //   }
+      //   else if (req.body.string && user.role == `worker`) {
+      //     res.status(404).json({ error: `Cant update student_details on worker profile` });
+      //     return true;
+      //   }
+      //   if (req)
+      // }
 
       return false;
     }
@@ -225,7 +228,7 @@ class UserController {
       const param = req.params.param;
       const updateData = req.body;
 
-      if (await this.checkErrorUpdateField(req, res, param) == true) {
+      if (await this.checkErrorUpdateField(req, res, param, `N`) == true) {
         return ;
       }
 
@@ -249,6 +252,7 @@ class UserController {
         const hashedPassword = await bcrypt.hash(updateData.password, 10);
       
         updateData.password = hashedPassword;
+        // Mettre logique mailer
       }
 
       if (fieldToUpdate == `is_active`) {
@@ -279,31 +283,40 @@ class UserController {
     }
   }
 
-  async updateFields(req: Request, res: Response, allowedFields: Array<string>): Promise<void> {
+  async updateFields(req: Request, res: Response): Promise<void> {
     try {
       const param = req.params.param;
       const updateData = req.body;
     
-      if (await this.checkErrorUpdateField(req, res, param) == true) {
+      const allowedFields: string[] = [
+        `profile_pic`, `lastname`, `firstname`, `occupation`, `location`, 
+        `contact_info.phone`, `contact_info.street`, `contact_info.street_number`, 
+        `contact_info.city`, `contact_info.country`, `contact_info.postal_code`
+      ];
+
+      if (await this.checkErrorUpdateField(req, res, param, 'N') === true) {
         return ;
       }
 
+      const updateObject: { [key: string]: any } = {};
       for (const field of Object.keys(updateData)) {
         if (!allowedFields.includes(field)) {
-          res.status(400).json({ error: `Invalid field in the body, only this can be updated ${allowedFields}`});
+          res.status(400).json({ error: `Invalid field in the body, only this can be updated: ${allowedFields.join(', ')}` });
           return ;
         }
-      } 
-       // Mettre la logique du mailer plus tard
+        updateObject[field] = updateData[field];
+      }
       
-      const result = await UserModel.updateOne(param.length < 24 ? { username: param } : { _id: param }, updateData);
+      const userToUpdate = { [param.length < 24 ? `username` : `_id`]: param };
+      
+      const result = await UserModel.updateOne(userToUpdate, { $set: updateObject });
       if (result.modifiedCount > 0) {
         res.json({ message: `User's infos have been updated successfully` });
       } 
       else {
         res.status(404).json({ error: `No changes have been made, same infos as before have been given` });
       }
-    }
+    } 
     catch (error) {
       console.error(`Error updating user's infos:`, error);
       res.status(500).json({ error: `Error updating user` });
@@ -336,22 +349,69 @@ class UserController {
     }
   }
 
-  async updateDetail(req: Request, res: Response, fieldToUpdate: string, SorW: string): Promise<void> {
+  async updateStudentDetail<T extends keyof ISDetails>(req: Request, res: Response, detailKey: T): Promise<void> {
     try {
-      const param = req.params.param;
-      const updateData = req.body;
-  
-      if (await this.checkErrorUpdateField(req, res, param) == true) {
-        return ;
-      }
-      
+        const param = req.params.param;
+        const updateData: ISDetails[T] = req.body; 
+        const { action, index, value } = updateData as any;
 
-      // I need u here
-  
-      res.json({ message: `Student details updated successfully` });
+        let updateObject = {};
+        switch (action) {
+            case 'add':
+                updateObject = { $push: { [`student_details.${detailKey}`]: value } };
+                break;
+            case 'remove':
+                updateObject = { $pull: { [`student_details.${detailKey}`]: { id: value.id } } }; // Supposons que chaque élément a un 'id'
+                break;
+            case 'update':
+                updateObject = { $set: { [`student_details.${detailKey}.${index}`]: value } };
+                break;
+            default:
+                res.status(400).json({ error: `Invalid action specified` });
+                return;
+        }
+
+        const result = await UserModel.updateOne(
+            { _id: param },
+            updateObject
+        );
+
+        if (result.modifiedCount > 0) {
+            res.json({ message: `${detailKey} details updated successfully` });
+        } else {
+            res.status(404).json({ error: `No changes made or user not found` });
+        }
+    } 
+    catch (error) {
+        console.error(`Error updating ${detailKey} details:`, error);
+        res.status(500).json({ error: `Internal server error` });
+    }
+  }
+
+  async updateWorkerDetail(req: Request, res: Response, detailKey: keyof IWDetails): Promise<void> {
+    try {
+      const userId = req.params.userId; // Assurez-vous que le paramètre d'URL est correctement nommé
+      const updateData: Pick<IWDetails, typeof detailKey> = req.body;
+
+      // Vérifier que la donnée pour la mise à jour est présente
+      if (updateData[detailKey] === undefined) {
+        res.status(400).json({ error: `Missing data for ${detailKey}` });
+        return;
+      }
+
+      const result = await UserModel.updateOne(
+        { _id: userId },
+        { $set: { [detailKey]: updateData[detailKey] } }
+      );
+
+      if (result.modifiedCount > 0) {
+        res.json({ message: `${detailKey} updated successfully` });
+      } else {
+        res.status(404).json({ error: `No changes made or worker not found` });
+      }
     } catch (error) {
-      console.error(`Error updating student details: ${error}`);
-      res.status(500).json({ error: `Error updating student details` });
+      console.error(`Error updating worker's ${detailKey}:`, error);
+      res.status(500).json({ error: `Internal server error` });
     }
   }
 }

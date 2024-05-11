@@ -1,6 +1,71 @@
 import { Schema, model, Document } from 'mongoose';
 import bcrypt from 'bcrypt';
 
+interface IContactInfo {
+    phone?: string;
+    street?: string;
+    street_number?: number;
+    city?: string;
+    postal_code?: number;
+    country?: string;
+}
+
+interface IWDetails {
+  company?: string;
+  is_company_admin?: boolean;
+}
+
+interface IFormation {
+  degree?: string;
+  field?: string;
+  school?: string;
+  graduation_year?: number;
+}
+
+interface IExperience {
+  title?: string;
+  company?: string;
+  location?: string;
+  start_date?: Date;
+  end_date?: Date;
+  description?: string;
+}
+
+interface ISkills {
+  name?: string;
+  level?: string;
+}
+
+interface ICertification {
+  name?: string;
+  provider?: string;
+  date?: Date;
+}
+
+
+interface ILanguages {
+  name?: string;
+  level?: string;
+}
+
+interface IGameInfo {
+  level?: number;
+  nb_jobs_done?: number;
+  nb_jobs_atm?: number;
+  title?: string;
+}
+
+interface ISDetails {
+  school?: string;
+  formation?: Array<IFormation>;
+  experience?: Array<IExperience>;
+  skills?: Array<ISkills>;
+  certification?: Array<ICertification>;
+  languages?: Array<ILanguages>;
+  game_info?: Array<IGameInfo>;
+}
+
+
 interface IUser extends Document {
   username: string;
   password: string;
@@ -17,54 +82,9 @@ interface IUser extends Document {
   location?: string;
   registration_date?: Date;
   deletion_date?: Date;
-  contact_info?: {
-    phone?: string;
-    street?: string;
-    street_number?: number;
-    city?: string;
-    postal_code?: number;
-    country?: string;
-  };
-  worker_details?: {
-    company?: string;
-    is_company_admin?: boolean;
-  };
-  student_details?: {
-    school?: string;
-    formation: Array<{
-      degree?: string;
-      field?: string;
-      school?: string;
-      graduation_year?: number;
-    }>;
-    experience: Array<{
-      title?: string;
-      company?: string;
-      location?: string;
-      start_date?: Date;
-      end_date?: Date;
-      description?: string;
-    }>;
-    skills: Array<{
-      name?: string;
-      level?: string;
-    }>;
-    certification: Array<{
-      name?: string;
-      provider?: string;
-      date?: Date;
-    }>;
-    languages: Array<{
-      name?: string;
-      level?: string;
-    }>;
-    game_info: Array<{
-      level?: number;
-      nb_jobs_done?: number;
-      nb_jobs_atm?: number;
-      title?: string;
-    }>;
-  };
+  contact_info?: IContactInfo;
+  worker_details?: IWDetails;
+  student_details?: ISDetails;
   comparePassword: (candidatePassword: string) => Promise<boolean>;
 }
 
@@ -142,4 +162,4 @@ userSchema.methods.comparePassword = async function(candidatePassword: string): 
 
 const UserModel = model<IUser>('User', userSchema);
 
-export { UserModel, IUser };
+export { UserModel, IUser, ISDetails, IWDetails, IContactInfo };
