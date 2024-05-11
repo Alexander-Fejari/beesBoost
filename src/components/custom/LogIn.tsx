@@ -34,7 +34,7 @@ const onSubmit = async (values: LoginValues): Promise<void> => {
                 localStorage.setItem('token', data.accessToken);
                 localStorage.setItem('username', data.username);
 
-                window.location.href = '/dashboard';
+                window.location.href = '/';
             } else {
                 console.log('Échec de la connexion: Token non reçu');
             }

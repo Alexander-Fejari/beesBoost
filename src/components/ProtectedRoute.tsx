@@ -1,8 +1,13 @@
 import React, { useEffect } from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext';
+import { useAuth } from '@/context/AuthContext';
 
-const ProtectedRoute: React.FC<{ children: JSX.Element }> = ({ children }) => {
+type ProtectedRouteProps = {
+  children: React.ReactNode;
+  path?: string;
+};
+
+const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children, path }) => {
   const { isAuthenticated, checkJWT } = useAuth();
   const location = useLocation();
 
@@ -11,7 +16,7 @@ const ProtectedRoute: React.FC<{ children: JSX.Element }> = ({ children }) => {
   }, [checkJWT]);
 
   if (!isAuthenticated) {
-    return <Navigate to="/" state={{ from: location }} replace />;
+    return <Navigate to={path || '/'} state={{ from: location }} replace />;
   }
 
   return children;
