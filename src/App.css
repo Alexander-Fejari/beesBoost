@@ -1,0 +1,18 @@
+.hexagon {
+    position: relative;
+    width: 100px;
+    height: 57.74px; 
+    background-color: #64C7CC; 
+    margin: 28.87px 0; 
+    clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%); 
+  }
+  
+  .hexagon img {
+    position: absolute;
+    top: -28.87px;
+    left: 0;
+    width: 100%;
+    height: calc(100% + 57.74px); 
+    object-fit: cover;
+  }
+  
