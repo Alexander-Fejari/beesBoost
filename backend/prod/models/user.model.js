@@ -3,9 +3,48 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.UserModel = void 0;
+exports.IS_DETAILS = exports.UserModel = void 0;
 const mongoose_1 = require("mongoose");
 const bcrypt_1 = __importDefault(require("bcrypt"));
+const IS_DETAILS = {
+    school: {
+        name: true
+    },
+    formation: {
+        degree: true,
+        field: true,
+        school: true,
+        graduation_year: true
+    },
+    experience: {
+        title: true,
+        company: true,
+        location: true,
+        start_date: true,
+        end_date: true,
+        description: true
+    },
+    skills: {
+        name: true,
+        level: true
+    },
+    certification: {
+        name: true,
+        provider: true,
+        date: true
+    },
+    languages: {
+        name: true,
+        level: true
+    },
+    game_info: {
+        level: true,
+        nb_jobs_done: true,
+        nb_jobs_atm: true,
+        title: true
+    }
+};
+exports.IS_DETAILS = IS_DETAILS;
 const userSchema = new mongoose_1.Schema({
     username: { type: String, required: true, unique: true },
     password: { type: String, required: true },

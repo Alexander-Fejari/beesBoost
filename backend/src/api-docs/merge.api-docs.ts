@@ -17,6 +17,8 @@ const files: string[] = [
   './beesboost.api-docs.yaml',
   './user.api-docs.yaml',
   './auth.api-docs.yaml',
+  './student.api-docs.yaml',
+  './worker.api-docs.yaml'
 ];
 
 const mergedSpec: object = mergeYAMLFiles(files);

@@ -43,7 +43,6 @@ function authenticateToken(req: Request, res: Response, next: NextFunction): voi
   });
 }
 
-
 function authorizeRoles(...allowedRoles: string[]) {
   return (req: Request, res: Response, next: NextFunction) => {
     if (req.user && allowedRoles.includes(req.user.role)) {

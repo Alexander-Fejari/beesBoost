@@ -65,6 +65,45 @@ interface ISDetails {
   game_info?: Array<IGameInfo>;
 }
 
+const IS_DETAILS: { [key in keyof ISDetails]: Record<string, any> } = {
+  school: {
+      name: true
+  },
+  formation: {
+      degree: true,
+      field: true,
+      school: true,
+      graduation_year: true
+  },
+  experience: {
+      title: true,
+      company: true,
+      location: true,
+      start_date: true,
+      end_date: true,
+      description: true
+  },
+  skills: {
+      name: true,
+      level: true
+  },
+  certification: {
+      name: true,
+      provider: true,
+      date: true
+  },
+  languages: {
+      name: true,
+      level: true
+  },
+  game_info: {
+      level: true,
+      nb_jobs_done: true,
+      nb_jobs_atm: true,
+      title: true
+  }
+};
+
 interface IUser extends Document {
   username: string;
   password: string;
@@ -163,4 +202,4 @@ userSchema.methods.comparePassword = async function(candidatePassword: string): 
 
 const UserModel = model<IUser>('User', userSchema);
 
-export { UserModel, IUser, ISDetails, IWDetails, IContactInfo };
+export { UserModel, IUser, ISDetails, IWDetails, IContactInfo, IS_DETAILS };

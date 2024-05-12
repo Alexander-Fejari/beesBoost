@@ -1,6 +1,8 @@
 import { Request, Response } from 'express';
 import bcrypt from 'bcrypt';
-import { UserModel, ISDetails, IWDetails } from '../models/user.model';
+import { UserModel, ISDetails, IWDetails, IS_DETAILS } from '../models/user.model';
+import { ObjectId } from 'mongodb';
+import { update } from 'lodash';
 
 class UserController {
   // UTILS
@@ -47,6 +49,18 @@ class UserController {
         res.status(500).json({ error: `Error updating user` });
         return true;
       }
+  }
+
+  protected async validateFields(dataFields: string[], detailType: keyof ISDetails): Promise<boolean> {
+    const validFields = IS_DETAILS[detailType];
+    if (validFields) {
+      return dataFields.every(field => validFields[field]);
+    }
+    return false;
+  }
+
+  async isValidObjectId(id: string): Promise<boolean> {
+    return ObjectId.isValid(id) && new ObjectId(id).toString() === id;
   }
 
   // GENERAL
@@ -372,6 +386,12 @@ class UserController {
       const param = req.params.param;
       const updateData = req.body;
 
+      const updateKeys = Object.keys(updateData);
+      if (updateKeys.length !== 1) {
+        res.status(400).json({ error: `Only one field can be updated at a time` });
+        return ;
+      }
+
       const userToUpdate = await this.getUserObject(req, res, param);
 
       if (!userToUpdate) {
@@ -409,54 +429,139 @@ class UserController {
   }
 
   // STUDENT
-  async updateStudentDetail<T extends keyof ISDetails>(req: Request, res: Response, detailKey: T): Promise<void> {
+  async updateStudentDetail(req: Request, res: Response, detailKey: keyof ISDetails): Promise<void> {
     try {
-        const param = req.params.param;
-        const updateData: { action: string; 
-                            id?: string; 
-                            value: any } = req.body; 
+      const param = req.params.param;
+      const updateData = req.body;
 
-        let updateObject = {};
-        switch (updateData.action) {
-            case `add`:
-                updateObject = { $push: { [`student_details.${detailKey}`]: updateData.value } };
-                break ;
-            case `remove`:
-              if (!updateData.id) {
-                res.status(400).json({ error: "ID is required for remove operations" });
-                return ;
-            }
-                updateObject = { $pull: { [`student_details.${detailKey}`]: { id: updateData.id } } };
-                break ;
-            case `update`:
-              if (!updateData.id) {
-                res.status(400).json({ error: "ID is required for update operations" });
-                return ;
-            }
-                updateObject = { $set: { [`student_details.${detailKey}.$[elem]`]: updateData.value } };
-                break ;
-            default:
-                res.status(400).json({ error: `Invalid action specified` });
-                return ;
-        }
+      const updateKeys = Object.keys(updateData);
+      if (updateKeys.length !== 1) {
+        res.status(400).json({ error: `Only one field can be updated at a time` });
+        return ;
+      }
 
-        const result = await UserModel.updateOne(
-          { _id: param },
-          updateObject,
-          { 
-            arrayFilters: [{'elem.id': updateData.id}],
-          }
+      const userToUpdate = await this.getUserObject(req, res, param);
+
+      if (!userToUpdate) {
+        res.status(404).json({ error: `User not found` });
+        return ;
+      }
+      if (userToUpdate.role == `worker`) {
+        res.status(403).json({ error: `${userToUpdate.username} aint a student`});
+        return ;
+      }
+      if (updateData[detailKey] === undefined) {
+        res.status(400).json({ error: `Missing data for ${detailKey}` });
+        return ;
+      }
+
+      const result = await UserModel.updateOne(
+        param.length < 24 ? { username: param } : { _id: param },
+        { $set: { [`student_details.${detailKey}`]: updateData[detailKey] } }
       );
 
-        if (result.modifiedCount > 0) {
-            res.json({ message: `${detailKey} details updated successfully` });
-        } else {
-            res.status(404).json({ error: `No changes made or user not found` });
+      if (result.modifiedCount > 0) {
+        res.json({ message: `${detailKey} updated successfully` });
+      } 
+      else {
+        res.status(404).json({ error: `No changes made or student not found` });
+      }
+    } catch (error) {
+      console.error(`Error updating student's ${detailKey}:`, error);
+      res.status(500).json({ error: `Internal server error` });
+    }
+  }
+
+  async updateStudentDetailArray<T extends keyof ISDetails>(req: Request, res: Response, detailKey: T): Promise<void> {
+    try {
+      const param = req.params.param;
+      const updateData: { action: string; id?: string; value?: any } = req.body; 
+        
+      const userToUpdate = await this.getUserObject(req, res, param);
+
+      if (!userToUpdate) {
+        res.status(404).json({ error: `User not found` });
+        return ;
+      }
+
+      if (userToUpdate.role == `worker`) {
+        res.status(403).json({ error: `${userToUpdate.username} aint a student`});
+        return ;
+      }
+
+      if (updateData.action == `add` || updateData.action == `update`) {
+        const dataFields = Object.keys(updateData.value);
+        const isValid = await this.validateFields(dataFields, detailKey);
+
+        if (['add', 'update'].includes(updateData.action) && !isValid) {
+            res.status(400).json({ error: `Provided fields do not match the expected fields in the schema` });
+            return;
         }
+      }
+
+      if (updateData.action === 'remove' || updateData.action === 'update') {
+        if (updateData.id) {
+          if (! await this.isValidObjectId(updateData.id)) {
+            res.status(400).json({ error: `Invalid ID format` });
+            return ;
+          }
+        }
+        const itemExists = await UserModel.findOne({
+          [param.length < 24 ? 'username' : '_id']: param,
+          [`student_details.${detailKey}._id`]: updateData.id
+        });
+      
+        if (!itemExists) {
+          res.status(404).json({ error: `Object not found with ID: ${updateData.id}` });
+          return;
+        }
+      }
+                            
+      let updateObject = {};
+      switch (updateData.action) {
+        case `add`: {
+          updateObject = { $push: { [`student_details.${detailKey}`]: updateData.value } };
+          break ;
+        }
+        case `remove`: {
+          if (!updateData.id) {
+            res.status(400).json({ error: `ID is required for remove operations` });
+            return ;
+          }
+          updateObject = { $pull: { [`student_details.${detailKey}`]: { _id: updateData.id } } };
+          break ;
+        }
+        case `update`: {
+          if (!updateData.id) {
+            res.status(400).json({ error: `ID is required for update operations` });
+            return ;
+          }
+          updateObject = { $set: { [`student_details.${detailKey}.$[elem]`]: updateData.value } };
+          break ;
+        }
+        default:
+          res.status(400).json({ error: `Invalid action specified` });
+          return ;
+      }
+
+      const result = await UserModel.updateOne(
+        param.length < 24 ? { username: param } : { _id: param },
+        updateObject,
+        { 
+          arrayFilters: [{'elem._id': updateData.id}],
+        }
+      );
+
+      if (result.modifiedCount > 0) {
+        res.json({ message: `${detailKey} details updated successfully` });
+      } 
+      else {
+        res.status(404).json({ error: `No changes made or user not found` });
+      }
     } 
     catch (error) {
-        console.error(`Error updating ${detailKey} details:`, error);
-        res.status(500).json({ error: `Internal server error` });
+      console.error(`Error updating ${detailKey} details:`, error);
+      res.status(500).json({ error: `Internal server error` });
     }
   }
 
