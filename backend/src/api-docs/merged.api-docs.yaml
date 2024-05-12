@@ -562,6 +562,9 @@ paths:
                 contact_info.country:
                   type: string
                   example: USA
+                student_details.school:
+                  type: string
+                  example: MIT
       responses:
         '200':
           description: 'User information updated successfully.'
