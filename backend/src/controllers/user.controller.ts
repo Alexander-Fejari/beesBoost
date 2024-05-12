@@ -287,7 +287,7 @@ class UserController {
       const allowedFields: string[] = [
         `profile_pic`, `lastname`, `firstname`, `occupation`, `location`, 
         `contact_info.phone`, `contact_info.street`, `contact_info.street_number`, `contact_info.box`,
-        `contact_info.city`, `contact_info.country`, `contact_info.postal_code`
+        `contact_info.city`, `contact_info.country`, `contact_info.postal_code`, `student_details.school`
       ];
 
       if (await this.checkErrorUpdateField(req, res, param, `N`) === true) {
