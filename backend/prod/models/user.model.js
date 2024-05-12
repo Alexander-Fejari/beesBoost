@@ -26,6 +26,7 @@ const userSchema = new mongoose_1.Schema({
         phone: { type: String },
         street: { type: String },
         street_number: { type: String },
+        box: { type: String },
         city: { type: String },
         country: { type: String },
         postal_code: { type: Number },

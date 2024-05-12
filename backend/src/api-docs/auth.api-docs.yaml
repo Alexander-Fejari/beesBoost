@@ -145,8 +145,8 @@ paths:
       operationId: "logOut"
       tags:
         - "Auth"
-      security:
-        - BearerAuth: []
+      # security:
+        # - BearerAuth: []
       parameters:
         - in: path
           name: param

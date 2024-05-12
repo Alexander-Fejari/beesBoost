@@ -2,7 +2,7 @@ servers:
   - url: 'http://localhost:5000'
     description: Local Development Server
   - url: 'https://cinemania.space'
-    description: Production Server
+    description: VPS Development Server
 components:
   securitySchemes:
     BearerAuth:
@@ -71,6 +71,8 @@ components:
               type: string
             street_number:
               type: integer
+            box:
+              type: string
             city:
               type: string
             postal_code:
@@ -196,5 +198,9 @@ tags:
   - name: Auth
     description: Operations about authentication
   - name: User
-    description: Operations about users
+    description: General operations about users
+  - name: Student
+    description: Operations about students
+  - name: Worker
+    description: Operations about workers
 paths: {}

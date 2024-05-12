@@ -49,7 +49,7 @@ class UserController {
       }
   }
 
-  // POST
+  // GENERAL
   async addUser(req: Request, res: Response): Promise<void> {
     try {
       const { username, password, profile_pic, role, lastname, firstname, occupation, location, contact_info } = req.body;
@@ -93,6 +93,7 @@ class UserController {
       else if (role === `worker`) {
         userData.worker_details = {};
         userData.worker_details = { ...req.body.worker_details };
+        // Ajouter logique pour mettre is_company_admin à true quand c'est le premier de la company 
       }
 
       const newUser = new UserModel(userData);
@@ -106,7 +107,6 @@ class UserController {
     }
   }
 
-  // GET
   async getAllUsers(req: Request, res: Response): Promise<void> {
     try {
       let query = {};
@@ -114,7 +114,7 @@ class UserController {
       if (req.query && Object.keys(req.query).length > 0) {
         const validKeys = Object.keys(req.query).every(key => Object.keys(UserModel.schema.obj).includes(key));
         if (!validKeys) {
-          res.status(400).json({ error: 'Invalid query parameters' });
+          res.status(400).json({ error: `Invalid query parameters` });
           return ;
         }
         query = req.query;
@@ -123,7 +123,7 @@ class UserController {
       const users = await UserModel.find(query);
 
       if (users.length === 0) {
-        res.status(404).json({ message: 'User not found matching those parameters' });
+        res.status(404).json({ message: `User not found matching those parameters` });
         return;
     }
       
@@ -158,10 +158,10 @@ class UserController {
   
   async getAllStudents(req: Request, res: Response): Promise<void> {
     try {
-      const students = await UserModel.find({ role: 'student' });
+      const students = await UserModel.find({ role: `student` });
 
       if (students.length === 0) {
-          res.status(404).json({ message: 'No students found' });
+          res.status(404).json({ message: `No students found` });
           return;
       }
 
@@ -173,23 +173,6 @@ class UserController {
     }
   }
 
-  async getLastStudents(req: Request, res: Response, number: number) {
-    try {
-      const students = await UserModel.find({ role: 'student' })
-                                      .sort({ registered_date: 1 })
-                                      .limit(number);
-      res.status(200).json(students);
-    }
-    catch (error) {
-      console.error(`Error retrieving ${number} lasts registered students`, error);
-      res.status(500).json({ error: `Error retrieving students` });
-    }
-  }
-
-
-
-  // DELETE
-  
   async deleteUser(req: Request, res: Response): Promise<void> {
     try {
       const id = req.body.id;
@@ -222,7 +205,6 @@ class UserController {
     }
   }
 
-  // PUT
   async updateField(req: Request, res: Response, fieldToUpdate: string): Promise<void> {
     try {
       const param = req.params.param;
@@ -290,11 +272,11 @@ class UserController {
     
       const allowedFields: string[] = [
         `profile_pic`, `lastname`, `firstname`, `occupation`, `location`, 
-        `contact_info.phone`, `contact_info.street`, `contact_info.street_number`, 
+        `contact_info.phone`, `contact_info.street`, `contact_info.street_number`, `contact_info.box`,
         `contact_info.city`, `contact_info.country`, `contact_info.postal_code`
       ];
 
-      if (await this.checkErrorUpdateField(req, res, param, 'N') === true) {
+      if (await this.checkErrorUpdateField(req, res, param, `N`) === true) {
         return ;
       }
 
@@ -323,6 +305,42 @@ class UserController {
     }
   }
 
+  async getDetails(req: Request, res: Response, SorW: string): Promise<void> {
+    try {
+      const param = req.params.param;
+
+      if (param.length > 24) {
+        res.status(404).json({ error: `Wrong username or id: ${param}`});
+        return ;
+      }
+      const user = await this.getUserObject(req, res, param);
+
+      if (!user) {
+        res.status(404).json({ error: `No user found with this username or id: ${param}` });
+        return ;
+      }
+
+      const user_details = user[SorW] as any;
+
+      if ((user.role == `student` && SorW == 'worker_details') || (user.role == `worker` && SorW == `student_details`)) {
+        res.status(403).json({ error: `This field doenst exist for ${user.username} because he/she has no ${SorW}` });
+        return ;
+      }
+
+      if (user_details) {
+        res.json(user_details);
+      } 
+      else {
+        res.status(404).json({ message: `Student not found` });
+      }
+    } 
+    catch (error) {
+      console.error(`Error fetching student details:`, error);
+      res.status(500).json({ error: `Internal server error` });
+    }
+  }
+
+  // WORKER
   async updateWorkerIsAdmin(req: Request, res: Response): Promise<void> {
     try {
       const param = req.params.param;
@@ -349,32 +367,86 @@ class UserController {
     }
   }
 
+  async updateWorkerDetail(req: Request, res: Response, detailKey: keyof IWDetails): Promise<void> {
+    try {
+      const param = req.params.param;
+      const updateData = req.body;
+
+      const userToUpdate = await this.getUserObject(req, res, param);
+
+      if (!userToUpdate) {
+        res.status(404).json({ error: `User not found` });
+        return ;
+      }
+      if (userToUpdate.role == `student`) {
+        res.status(403).json({ error: `${userToUpdate.username} aint a worker`});
+        return ;
+      }
+      if (updateData[detailKey] === undefined) {
+        res.status(400).json({ error: `Missing data for ${detailKey}` });
+        return ;
+      }
+
+      // if (updateData[detailKey] === `company`) {
+      //   // Ajouter logique pour vérifier si elle existe déjà ou non, si elle n'existe pas, mettre le worker en admin
+      // }
+
+      const result = await UserModel.updateOne(
+        param.length < 24 ? { username: param } : { _id: param },
+        { $set: { [`worker_details.${detailKey}`]: updateData[detailKey] } }
+      );
+
+      if (result.modifiedCount > 0) {
+        res.json({ message: `${detailKey} updated successfully` });
+      } 
+      else {
+        res.status(404).json({ error: `No changes made or worker not found` });
+      }
+    } catch (error) {
+      console.error(`Error updating worker's ${detailKey}:`, error);
+      res.status(500).json({ error: `Internal server error` });
+    }
+  }
+
+  // STUDENT
   async updateStudentDetail<T extends keyof ISDetails>(req: Request, res: Response, detailKey: T): Promise<void> {
     try {
         const param = req.params.param;
-        const updateData: ISDetails[T] = req.body; 
-        const { action, index, value } = updateData as any;
+        const updateData: { action: string; 
+                            id?: string; 
+                            value: any } = req.body; 
 
         let updateObject = {};
-        switch (action) {
-            case 'add':
-                updateObject = { $push: { [`student_details.${detailKey}`]: value } };
-                break;
-            case 'remove':
-                updateObject = { $pull: { [`student_details.${detailKey}`]: { id: value.id } } }; // Supposons que chaque élément a un 'id'
-                break;
-            case 'update':
-                updateObject = { $set: { [`student_details.${detailKey}.${index}`]: value } };
-                break;
+        switch (updateData.action) {
+            case `add`:
+                updateObject = { $push: { [`student_details.${detailKey}`]: updateData.value } };
+                break ;
+            case `remove`:
+              if (!updateData.id) {
+                res.status(400).json({ error: "ID is required for remove operations" });
+                return ;
+            }
+                updateObject = { $pull: { [`student_details.${detailKey}`]: { id: updateData.id } } };
+                break ;
+            case `update`:
+              if (!updateData.id) {
+                res.status(400).json({ error: "ID is required for update operations" });
+                return ;
+            }
+                updateObject = { $set: { [`student_details.${detailKey}.$[elem]`]: updateData.value } };
+                break ;
             default:
                 res.status(400).json({ error: `Invalid action specified` });
-                return;
+                return ;
         }
 
         const result = await UserModel.updateOne(
-            { _id: param },
-            updateObject
-        );
+          { _id: param },
+          updateObject,
+          { 
+            arrayFilters: [{'elem.id': updateData.id}],
+          }
+      );
 
         if (result.modifiedCount > 0) {
             res.json({ message: `${detailKey} details updated successfully` });
@@ -388,30 +460,16 @@ class UserController {
     }
   }
 
-  async updateWorkerDetail(req: Request, res: Response, detailKey: keyof IWDetails): Promise<void> {
+  async getLastStudents(req: Request, res: Response, number: number) {
     try {
-      const userId = req.params.userId; // Assurez-vous que le paramètre d'URL est correctement nommé
-      const updateData: Pick<IWDetails, typeof detailKey> = req.body;
-
-      // Vérifier que la donnée pour la mise à jour est présente
-      if (updateData[detailKey] === undefined) {
-        res.status(400).json({ error: `Missing data for ${detailKey}` });
-        return;
-      }
-
-      const result = await UserModel.updateOne(
-        { _id: userId },
-        { $set: { [detailKey]: updateData[detailKey] } }
-      );
-
-      if (result.modifiedCount > 0) {
-        res.json({ message: `${detailKey} updated successfully` });
-      } else {
-        res.status(404).json({ error: `No changes made or worker not found` });
-      }
-    } catch (error) {
-      console.error(`Error updating worker's ${detailKey}:`, error);
-      res.status(500).json({ error: `Internal server error` });
+      const students = await UserModel.find({ role: `student` })
+                                      .sort({ registered_date: 1 })
+                                      .limit(number);
+      res.status(200).json(students);
+    }
+    catch (error) {
+      console.error(`Error retrieving ${number} lasts registered students`, error);
+      res.status(500).json({ error: `Error retrieving students` });
     }
   }
 }

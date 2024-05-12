@@ -5,6 +5,7 @@ interface IContactInfo {
     phone?: string;
     street?: string;
     street_number?: number;
+    box?: string;
     city?: string;
     postal_code?: number;
     country?: string;
@@ -42,7 +43,6 @@ interface ICertification {
   date?: Date;
 }
 
-
 interface ILanguages {
   name?: string;
   level?: string;
@@ -65,7 +65,6 @@ interface ISDetails {
   game_info?: Array<IGameInfo>;
 }
 
-
 interface IUser extends Document {
   username: string;
   password: string;
@@ -86,6 +85,7 @@ interface IUser extends Document {
   worker_details?: IWDetails;
   student_details?: ISDetails;
   comparePassword: (candidatePassword: string) => Promise<boolean>;
+  [key: string]: any;
 }
 
 const userSchema = new Schema({
@@ -108,6 +108,7 @@ const userSchema = new Schema({
     phone: { type: String },
     street: { type: String },
     street_number: { type: String },
+    box: { type : String },
     city: { type: String },
     country: { type: String },
     postal_code: { type: Number },
