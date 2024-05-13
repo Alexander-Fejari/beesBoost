@@ -1,5 +1,8 @@
 {
     "home": {
-        "message": "Welkom"
+        "studentButton": "Vind een baan",
+        "employerButton": "Word partner",
+        "title": "Uw volgende website",
+        "subTitle": "Trek meer klanten aan met effectieve communicatie!"
     }
 }

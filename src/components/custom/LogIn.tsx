@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label.tsx";
 import { loginSchema, LoginValues } from "@/components/formSchema";
 import { useTranslation } from 'react-i18next';
+import {redirect} from "react-router-dom";
 
 const LogIn = () => {
     const { t } = useTranslation();
@@ -34,7 +35,8 @@ const onSubmit = async (values: LoginValues): Promise<void> => {
                 localStorage.setItem('token', data.accessToken);
                 localStorage.setItem('username', data.username);
 
-                window.location.href = '/dashboard';
+                redirect("/dashboard")
+
             } else {
                 console.log('Échec de la connexion: Token non reçu');
             }
@@ -43,46 +45,6 @@ const onSubmit = async (values: LoginValues): Promise<void> => {
         }
     };
 
-    // const onSubmit = async (values: LoginValues): Promise<void> => {
-    //     try {
-    //       const response = await fetch('http://localhost:5000/user/login', {
-    //         method: 'POST',
-    //         headers: {
-    //           'Content-Type': 'application/json',
-    //         },
-    //         body: JSON.stringify(values),
-    //       });
-      
-    //       if (!response.ok) {
-    //         throw new Error('Échec de la connexion au serveur');
-    //       }
-      
-    //       console.log('Succès');
-      
-    //       const data = await response.json();
-    //       if (data.token) {
-    //         localStorage.setItem('token', data.token);
-    //         localStorage.setItem('username', data.username); 
-    //         console.log('Token reçu:', data.token);
-    //         console.log('Username reçu:', data.username);     
-    //         // Update the isConnected field in the user collection
-    //         await fetch('http://localhost:5000/user/update-isconnected', {
-    //           method: 'PUT',
-    //           headers: {
-    //             'Content-Type': 'application/json',
-    //           },
-    //           body: JSON.stringify({ username: values.username, isConnected: true }),
-    //         });
-      
-    //         // Redirection vers la page sécurisée
-    //         window.location.href = '/dashboard';
-    //       } else {
-    //         console.log('Échec de la connexion: Token non reçu');
-    //       }
-    //     } catch (error) {
-    //       console.error('Erreur de connexion:', error);
-    //     }
-    //   };
     return (
         <form onSubmit={handleSubmit(onSubmit)} className="mt-8 space-y-8">
             <section className="flex flex-col items-start space-y-2">
