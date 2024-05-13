@@ -569,7 +569,8 @@ class UserController {
     try {
       const students = await UserModel.find({ role: `student` })
                                       .sort({ registered_date: 1 })
-                                      .limit(number);
+                                      .limit(number)
+                                      .select('username profile_pic');
       res.status(200).json(students);
     }
     catch (error) {
