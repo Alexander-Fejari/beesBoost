@@ -25,7 +25,7 @@ const Welcome = ({ className }: WelcomeProps) => {
                 </div>
             </div>
             <div className="flex justify-end">
-                <StudentHive />
+                <StudentHive /> 
             </div>
         </section>
 
