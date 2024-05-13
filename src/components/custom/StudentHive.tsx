@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
+import { NavLink } from "react-router-dom";
 
 interface StudentProps {
     className?: string;
@@ -54,7 +55,11 @@ const StudentHive = ({ className, numHives = 5 }: StudentProps) => {
                     />
                     {hoverIndex === index && (
                         <div className="absolute inset-0 flex items-end justify-center bg-black bg-opacity-55 text-white rounded-lg">
-                            {user.username}
+                             <NavLink
+                                key={user.id}
+                                to={`/user/${user.id}`}
+                                >
+                            {user.username}</NavLink>
                         </div>
                     )}
                 </div>
