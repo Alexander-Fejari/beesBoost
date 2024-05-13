@@ -1,8 +1,11 @@
+import Layout from "@/components/Layout";
+import Welcome from "@/components/custom/Welcome";
+
 const Home = () => {
     return (
-        <h1>
-            Home
-        </h1>
+        <Layout>
+            <Welcome/>
+        </Layout>
     )
 }
 

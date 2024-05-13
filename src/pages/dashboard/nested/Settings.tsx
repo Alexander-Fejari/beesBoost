@@ -1,12 +1,12 @@
 import Layout from "@/components/Layout";
 
+const Settings = () => {
 
-const DesignSystem = () => {
     return (
         <Layout>
-
+            settings
         </Layout>
     )
 }
 
-export default DesignSystem
+export default Settings

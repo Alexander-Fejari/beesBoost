@@ -20,7 +20,7 @@ Nous confions des missions de communication à de jeunes talents qui excellent d
 ## Comment contribuer
 Si vous êtes intéressé(e) à rejoindre notre projet en tant qu'étudiant ou entreprise locale, n'hésitez pas à nous contacter pour en savoir plus sur la manière dont vous pouvez participer.
 
-## Contact
+## Blog
 Pour toute question ou demande d'information supplémentaire, veuillez contacter notre équipe à l'adresse suivante : [info@beesboost.com](mailto:info@beesboost.com).
 
 ---
@@ -47,7 +47,7 @@ We entrust communication missions to young talents who excel in areas such as so
 ## How to Contribute
 If you're interested in joining our project as a student or local business, feel free to contact us to learn more about how you can participate.
 
-## Contact
+## Blog
 For any questions or further information, please contact our team at the following address: [info@beesboost.com](mailto:info@beesboost.com).
 
 ---

@@ -1,0 +1,49 @@
+{
+    "navbar": {
+        "beesBoost": "Bees Boost",
+        "home": "Home",
+        "services": "Our services",
+        "FAQ": "FAQ",
+        "contact": "Contact",
+        "blog": "Blog"
+    },
+    "sidebar": {
+        "dashboard": "Dashboard",
+        "user": "My Profile",
+        "search": "Search",
+        "messages": "Messages",
+        "notifications": "Notifications",
+        "calendar": "Calendar",
+        "tasks": "Tasks",
+        "payements": "Payments",
+        "settings": "Settings",
+        "logout": "Log Out"
+
+    },
+    "ctaUser": {
+        "ctaSignIn": "Sign in",
+        "ctaLogIn": "Login",
+        "ctaGreetingUser": "Welcome"
+    },
+    "signIn": {
+        "lastname": "Lastname:",
+        "firstname": "Firstname:",
+        "email": "E-mail: ",
+        "password": "Password:",
+        "reset": "Cancel",
+        "submit": "Submit",
+        "username": "Username:",
+        "worker": "Employee",
+        "student": "Student",
+        "role" : "Role:"
+    },
+    "logIn": {
+        "email": "Email:",
+        "password": "Password:",
+        "connect": "Login"
+    },
+    "logOut": {
+        "out": "Logout",
+        "settings": "Settings"
+    }
+}

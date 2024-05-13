@@ -1,0 +1,49 @@
+{
+    "navbar": {
+        "beesBoost": "Bees Boost",
+        "home": "Ontvangst",
+        "services": "Onze diensten",
+        "FAQ": "FAQ",
+        "contact": "Contact",
+        "blog": "Blog"
+    },
+    
+    "sidebar": {
+        "dashboard": "Dashboard",
+        "user": "Mijn profiel",
+        "search": "Zoeken",
+        "messages": "Berichten",
+        "notifications": "Meldingen",
+        "calendar": "Kalender",
+        "tasks": "Taken",
+        "payements": "Betalingen",
+        "settings": "Instellingen",
+        "logout": "Uitloggen"
+    },
+    "ctaUser": {
+        "ctaSignIn": "Inschrijven",
+        "ctaLogIn": "Inloggen",
+        "ctaGreetingUser": "Welkome"
+    },
+    "signIn": {
+        "lastname": "Achternaam:",
+        "firstname": "Voornaam:",
+        "email": "Email: ",
+        "password": "Wachtwoord",
+        "reset": "Annuleren",
+        "submit": "Indienen",
+        "username": "Pseudo:",
+        "worker": "Medwerker",
+        "student": "Student",
+        "role" : "Rol:"
+    },
+    "logIn": {
+        "email": "Email:",
+        "password": "Wachtwoord",
+        "connect": "Login"
+    },
+    "logOut": {
+        "out": "Logout",
+        "settings": "Settings"
+    }
+}

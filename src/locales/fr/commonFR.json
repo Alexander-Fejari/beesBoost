@@ -1,0 +1,52 @@
+{
+  "navbar": {
+    "beesBoost": "Bees Boost",
+    "home": "Accueil",
+    "FAQ": "FAQ",
+    "contact": "Contact",
+    "blog": "Blog"
+  },
+  "footer": {
+    "contact": "Contactez-nous",
+    "legal": "Mentions légales",
+    "credits": "Tous droits réservés"
+  },
+  "sidebar": {
+    "dashboard": "Tableau de bord",
+    "user": "Mon profil",
+    "search": "Recherche",
+    "messages": "Messages",
+    "notifications": "Notifications",
+    "calendar": "Calendrier",
+    "tasks": "Missions",
+    "payements": "Paiements",
+    "settings": "Paramètres",
+    "logout": "Déconnexion"
+  },
+  "ctaUser": {
+    "ctaSignIn": "S'inscrire",
+    "ctaLogIn": "Connexion",
+    "ctaGreetingUser": "Bienvenue"
+  },
+  "signIn": {
+    "lastname": "Nom:",
+    "firstname": "Prénom:",
+    "email": "E-mail: ",
+    "password": "Mot de passe:",
+    "reset": "Annuler",
+    "submit": "Envoyer",
+    "username": "Pseudo:",
+    "worker": "Employé",
+    "student": "Etudiant",
+    "role": "Rôle:"
+  },
+  "logIn": {
+    "email": "E-mail:",
+    "password": "Mot de passe:",
+    "connect": "Connexion"
+  },
+  "logOut": {
+    "out": "Déconnexion",
+    "settings": "Paramètres"
+  }
+}
