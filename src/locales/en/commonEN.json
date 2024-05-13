@@ -22,7 +22,7 @@
     },
     "ctaUser": {
         "ctaSignIn": "Sign in",
-        "ctaLogIn": "Log in",
+        "ctaLogIn": "Login",
         "ctaGreetingUser": "Welcome"
     },
     "signIn": {
@@ -42,12 +42,8 @@
         "password": "Password:",
         "connect": "Login"
     },
-    "WelcomePage": {
-        "StudentButton": "Find a job",
-        "EmployerButton": "Become a partner",
-        "Title": "Your next website",
-        "SubTitle": "Attract more customers with effective communication!"
+    "logOut": {
+        "out": "Logout",
+        "settings": "Settings"
     }
-    
-
 }

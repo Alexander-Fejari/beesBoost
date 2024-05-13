@@ -1,5 +1,8 @@
 {
     "home": {
-        "message": "Bienvenue"
+        "studentButton": "Trouver un job",
+        "employerButton": "Devenir partenaire",
+        "title": "Votre prochain site internet",
+        "subTitle": "Attirez plus de clients grâce à une communication efficace !"
     }
 }

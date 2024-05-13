@@ -1,5 +1,8 @@
 {
     "home": {
-        "message": "Welcome"
+        "studentButton": "Find a job",
+        "employerButton": "Become a partner",
+        "title": "<span className=\\\"font-bold\\\">Your next </span> website",
+        "subTitle": "Attract more customers with effective communication!"
     }
 }

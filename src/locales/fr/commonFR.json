@@ -1,29 +1,28 @@
 {
-    "navbar": {
-        "beesBoost": "Bees Boost",
-        "home": "Accueil",
-        "FAQ": "FAQ",
-        "contact": "Contact",
-        "blog": "Blog"
-    },
-    "footer": {
-        "contact": "Contactez-nous",
-        "legal": "Mentions légales",
-        "credits": "Tous droits réservés"
-    },
-    "sidebar": {
-        "dashboard": "Tableau de bord",
-        "user": "Mon profil",
-        "search": "Recherche",
-        "messages": "Messages",
-        "notifications": "Notifications",
-        "calendar": "Calendrier",
-        "tasks": "Missions",
-        "payements": "Paiements",
-        "settings": "Paramètres",
-        "logout": "Déconnexion"
-    },
-
+  "navbar": {
+    "beesBoost": "Bees Boost",
+    "home": "Accueil",
+    "FAQ": "FAQ",
+    "contact": "Contact",
+    "blog": "Blog"
+  },
+  "footer": {
+    "contact": "Contactez-nous",
+    "legal": "Mentions légales",
+    "credits": "Tous droits réservés"
+  },
+  "sidebar": {
+    "dashboard": "Tableau de bord",
+    "user": "Mon profil",
+    "search": "Recherche",
+    "messages": "Messages",
+    "notifications": "Notifications",
+    "calendar": "Calendrier",
+    "tasks": "Missions",
+    "payements": "Paiements",
+    "settings": "Paramètres",
+    "logout": "Déconnexion"
+  },
   "ctaUser": {
     "ctaSignIn": "S'inscrire",
     "ctaLogIn": "Connexion",
@@ -39,17 +38,15 @@
     "username": "Pseudo:",
     "worker": "Employé",
     "student": "Etudiant",
-    "role" : "Rôle:"
+    "role": "Rôle:"
   },
   "logIn": {
     "email": "E-mail:",
     "password": "Mot de passe:",
     "connect": "Connexion"
   },
-  "WelcomePage": {
-    "StudentButton": "Trouver un job",
-    "EmployerButton": "Devenir partenaire",
-    "Title": "Votre prochain site internet", 
-    "SubTitle": "Attirez plus de clients grâce à une communication efficace !"
+  "logOut": {
+    "out": "Déconnexion",
+    "settings": "Paramètres"
   }
 }

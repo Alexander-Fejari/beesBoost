@@ -4,7 +4,7 @@ const Profile = () => {
 
     return (
         <Layout>
-            <h1>settings</h1>
+            <h1>Profile</h1>
         </Layout>
     )
 }
