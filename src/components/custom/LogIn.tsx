@@ -33,7 +33,6 @@ const onSubmit = async (values: LoginValues): Promise<void> => {
             const data = await response.json();
             if (data.accessToken) {
                 localStorage.setItem('token', data.accessToken);
-                localStorage.setItem('username', data.username);
 
                 redirect("/dashboard")
 
