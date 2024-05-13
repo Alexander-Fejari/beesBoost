@@ -10,7 +10,6 @@ import ProtectedRoute from './components/ProtectedRoute';
 import Profile from "@/pages/dashboard/nested/Profile";
 import Settings from "@/pages/dashboard/nested/Settings";
 
-
 const router = createBrowserRouter(
     createRoutesFromElements(
         <Route path="/">
