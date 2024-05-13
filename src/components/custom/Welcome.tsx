@@ -26,7 +26,7 @@ const Welcome = () => {
                     </Button>
                 </div>
             </div>
-            <div className="flex md:w-1/2">
+            <div className="flex sm:w-content lg:w-1/2 mt-4 ">
                 <StudentHive/>
             </div>
         </section>

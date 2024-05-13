@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { AspectRatio } from "@/components/ui/aspect-ratio";
 
 interface StudentProps {
     className?: string;
@@ -11,10 +12,9 @@ interface User {
     username: string; 
 }
 
-const StudentHive = ({ className, numHives = 3 }: StudentProps) => {
+const StudentHive = ({ className, numHives = 5 }: StudentProps) => {
     const [users, setUsers] = useState<User[]>([]); 
     const [hoverIndex, setHoverIndex] = useState<number | null>(null);
-
 
     useEffect(() => {
         const fetchUsers = async () => {
@@ -36,29 +36,40 @@ const StudentHive = ({ className, numHives = 3 }: StudentProps) => {
         };
 
         fetchUsers();
-    }, [numHives]); 
-
+    }, [numHives]);
 
     const hives = users.map((user, index) => (
-        <div key={user.id} 
-            className="hexagon w-40"
+        <div 
+            key={user.id} 
+            className="relative w-40"
             onMouseEnter={() => setHoverIndex(index)}
             onMouseLeave={() => setHoverIndex(null)}
-        >
-            <img src={user.profile_pic} alt={`User ${index}`} className="relative" />
-            {hoverIndex === index && (
-                <div className="absolute w-40 text-center bg-black text-white opacity-75">
-                    {user.username}
+        >   
+            <AspectRatio ratio={1}>
+                <div className="w-full h-full">
+                    <img 
+                        src={user.profile_pic} 
+                        alt={user.username} 
+                        className="object-cover w-full h-full "
+                    />
+                    {hoverIndex === index && (
+                        <div className="absolute inset-0 flex items-end justify-center bg-black bg-opacity-55 text-white rounded-lg">
+                            {user.username}
+                        </div>
+                    )}
                 </div>
-            )}
+            </AspectRatio>
         </div>
     ));
 
     return (
-        <section className={`w-full ${className}`}>  
-            <div className="flex flex-col">
+        <section className={`w-full ${className}`}>
+            <div className="flex justify-center gap-2 flex-wrap">
                 <div className="flex justify-center gap-2">
-                    {hives}
+                    {hives.slice(0, 3)}
+                </div>
+                <div className="flex justify-center gap-2 mt-2">
+                    {hives.slice(3)}
                 </div>
             </div>
         </section>
