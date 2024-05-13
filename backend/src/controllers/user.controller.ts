@@ -2,7 +2,6 @@ import { Request, Response } from 'express';
 import bcrypt from 'bcrypt';
 import { UserModel, ISDetails, IWDetails, IS_DETAILS } from '../models/user.model';
 import { ObjectId } from 'mongodb';
-import { update } from 'lodash';
 
 class UserController {
   // UTILS
