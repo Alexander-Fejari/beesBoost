@@ -1,0 +1,213 @@
+paths:
+  # GET
+  /worker/getDetails/{username or id}:
+    get:
+      summary: "Retrieve worker details"
+      description: "Fetches detailed information for a worker based on the provided username or ID. This endpoint ensures the user is identified correctly and fetches worker details if available."
+      operationId: "getWorkerDetails"
+      tags:
+        - "Worker"
+      # security:
+      #   - BearerAuth: []
+      parameters:
+        - in: path
+          name: param
+          required: true
+          schema:
+            type: string
+            description: "Username or ID of the worker to retrieve details for."
+            example: "worker123"
+      responses:
+        '200':
+          description: "Worker details retrieved successfully."
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  worker_details:
+                    type: object
+                    additionalProperties: true
+                    description: "Detailed information about the worker, structured based on worker-specific attributes."
+        '403':
+          description: "Forbidden - Attempt to access details not applicable to the user's role."
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "This field doesn't exist for the user because he/she has no worker_details"
+        '404':
+          description: "No worker found with the provided username or ID, or incorrect detail type specified."
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "No user found with this username or id: worker123"
+        '500':
+          description: "Internal server error while fetching worker details."
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Internal server error"
+  # PUT
+  /worker/updateIsAdmin/{username or id}:
+    put:
+      summary: "Update worker's company admin status"
+      description: "Updates the `is_company_admin` status for a worker. This operation checks if the user is a worker and updates their company admin status."
+      operationId: "updateWorkerIsAdmin"
+      tags:
+        - "Worker"
+      # security:
+        # - BearerAuth: []
+      parameters:
+        - in: path
+          name: param
+          required: true
+          schema:
+            type: string
+            description: "Username or ID of the worker whose admin status is to be updated."
+            example: "worker123"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                is_company_admin:
+                  type: boolean
+                  description: "New admin status within the company for the worker."
+                  example: true
+      responses:
+        '200':
+          description: "Admin status for the worker updated successfully."
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Worker admin status updated successfully"
+        '400':
+          description: "Bad request, such as when the user is not a worker or the field is invalid."
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "User is not a worker"
+        '404':
+          description: "User not found."
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "User not found"
+        '500':
+          description: "Internal server error while updating worker admin status."
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Error updating worker admin status"
+  /worker/updateCompany/{username or id}:
+    put:
+      summary: "Update worker's company detail"
+      description: "Updates a specific detail within the worker's profile, identified by username or ID. Ensures the user is a worker and updates the specified detail if valid, can also be used with empty string to delete worker's company"
+      operationId: "updateWorkerCompany"
+      tags:
+        - "Worker"
+      # Uncomment the following line if authentication is required
+      # security:
+      #   - BearerAuth: []
+      parameters:
+        - in: path
+          name: param
+          required: true
+          schema:
+            type: string
+            description: "Username or ID of the worker whose detail is to be updated."
+            example: "worker123"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                company:
+                  type: string
+                  description: "The new company detail to update for the worker."
+                  example: "NewCompany Inc."
+      responses:
+        '200':
+          description: "Detail updated successfully."
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Company updated successfully"
+        '400':
+          description: "Bad request due to missing data for the update."
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Missing data for company"
+        '403':
+          description: "Forbidden - Attempted to update a worker detail for a non-worker user."
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "johndoe isn't a worker"
+        '404':
+          description: "User not found or no changes made, possibly due to incorrect or unchanged input data."
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "No changes made or worker not found"
+        '500':
+          description: "Internal server error while updating worker information."
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Internal server error"
+
+

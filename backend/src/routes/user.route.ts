@@ -5,46 +5,70 @@ import { authenticateToken, authorizeRoles } from '../middlewares/auth.middlewar
 const router: Router = express.Router();
 const userController = new UserController();
 
-// POST
+// ----------------------------------------------------------- GENERAL -----------------------------------------------------------
+
+  // POST GENERAL INFOS
+router.post(`/user/signUp`, (req, res) => userController.addUser(req, res));
+
+  // GET GENERAL INFOS
+router.get(`/user/getAllUsers`, /*authenticateToken,*/ (req, res) => userController.getAllUsers(req, res));
+
+router.get(`/user/getUser/:param`, /*authenticateToken,*/ (req, res) => userController.getUser(req, res));
+
+  // DELETE GENERAL INFOS
+router.delete(`/user/deleteUser`, /*authenticateToken, authorizeRoles(`superAdmin`),*/ (req, res) => userController.deleteUser(req, res)); // Only for superAdmin
+
+  // UPDATE GENERAL INFOS
+router.put(`/user/updateInfos/:param`, /*authenticateToken,*/ (req, res) => userController.updateFields(req, res));
+
+router.put(`/user/updateVerified/:param`, /*authenticateToken, authorizeRoles(`admin`, `superAdmin`),*/ (req, res) => userController.updateField(req, res, `is_verified`));
+
+router.put(`/user/updateActive/:param`, /*authenticateToken,*/ (req, res) => userController.updateField(req, res, `is_active`));
+
+router.put(`/user/updateConnected/:param`, /*authenticateToken, authorizeRoles(`admin`, `superAdmin`),*/ (req, res) => userController.updateField(req, res, `is_connected`));
+
+router.put(`/user/updateUsername/:param`, /*authenticateToken, authorizeRoles(`admin`, `superAdmin`),*/ (req, res) => userController.updateField(req, res, `username`)); // pas nécéssaire à priori sauf si l'admin doit pouvoir le changer dans la vérif
+
+router.put(`/user/updatePassword/:param`, /*authenticateToken,*/ (req, res) => userController.updateField(req, res, `password`));
+
+router.put(`/user/updateEmail/:param`, /*authenticateToken, */ (req, res) => userController.updateField(req, res, `email`));
 
 
-router.post(`/signUp`, (req, res) => userController.addUser(req, res)); // Swagger à faire
+// ----------------------------------------------------------- WORKER -----------------------------------------------------------
 
-// GET
+  // GET WORKER INFOS
+//router.get(`worker/getAllWorkers`, (req, res) => userController.getAllWorkers(req, res)); // Pas finie + Swagger à faire
 
+router.get(`/worker/getDetails/:param`, /*authenticateToken,*/ (req, res) => userController.getDetails(req, res, `worker_details`));
 
-router.get(`/getAllUsers`, /*authenticateToken, authorizeRoles(`admin`),*/ (req, res) => userController.getAllUsers(req, res)); // Swagger à faire
+  // UPDATE WORKER INFOS
+router.put(`/worker/updateIsAdmin/:param`, /*authenticateToken,*/ (req, res) => userController.updateWorkerIsAdmin(req, res));
 
-router.get(`/getUser/:param`, (req, res) => userController.getUser(req, res)); // Swagger à faire
-
-router.get(`/getAllStudents`, (req, res) => userController.getAllStudents(req, res)); // Swagger à faire
-
-//router.get(`/getAllWorkers`, (req, res) => userController.getAllSW(req, res, `worker`)); // Swagger à faire
-
-router.get(`/getLastRegisteredStudents`, (req, res) => userController.getLastStudents(req, res, 5)); // Swagger à faire
-
-// DELETE
+router.put(`/worker/updateCompany/:param`, /*authenticateToken,*/ (req, res) => userController.updateWorkerDetail(req, res, `company`));
 
 
-router.delete(`/deleteUser`, (req, res) => userController.deleteUser(req, res)); // Swagger à faire + Ajouter Protection : admin/superAdmin 
+// ----------------------------------------------------------- STUDENT -----------------------------------------------------------
 
-// PUT
+  // GET STUDENT INFOS
+router.get(`/student/getAllStudents`, /*authenticateToken,*/ (req, res) => userController.getAllStudents(req, res));  // Pas finie + Swagger à faire
 
+router.get(`/student/getDetails/:param`, /*authenticateToken,*/ (req, res) => userController.getDetails(req, res, `student_details`));
 
-router.put(`/updateInfo/:param`, (req, res) => userController.updateFields(req, res, [`profile_pic`, `email`, `lastname`, `firstname`, `occupation`, `location`, `contact_info`])); // Swagger à faire
+router.get(`/student/getLastRegisteredStudents`, /*authenticateToken,*/ (req, res) => userController.getLastStudents(req, res, 5));
 
-router.put(`/updateVerified/:param`, (req, res) => userController.updateField(req, res, `is_verified`));// Swagger à faire + Ajouter protection : Possible que si admin/superAdmin
+  // UPDATE STUDENT INFOS
+router.put(`/student/updateSchool/:param`, /*authenticateToken,*/ (req, res) => userController.updateStudentDetail(req, res, `school`));
 
-router.put(`/updateActive/:param`, (req, res) => userController.updateField(req, res, `is_active`)); // Swagger à faire
+router.put(`/student/updateFormation/:param`, /*authenticateToken,*/ (req, res) => userController.updateStudentDetailArray(req, res, `formation`));
 
-router.put(`/updateConnected/:param`, (req, res) => userController.updateField(req, res, `is_connected`));// Swagger à faire + Ajouter protection : Possible que si admin/superAdmin
+router.put(`/student/updateExperience/:param`, /*authenticateToken,*/ (req, res) => userController.updateStudentDetailArray(req, res, `experience`));
 
-router.put(`/updateUsername/:param`, (req, res) => userController.updateField(req, res, `username`));// Swagger à faire + Ajouter protection : Possible que si admin/superAdmin + pas nécéssaire a priori sauf si l'admin doit pouvoir le changer dans la verif
+router.put(`/student/updateSkill/:param`, /*authenticateToken,*/ (req, res) => userController.updateStudentDetailArray(req, res, `skills`));
 
-router.put(`/updatePassword/:param`, (req, res) => userController.updateField(req, res, `password`));// Swagger à faire
+router.put(`/student/updateCertification/:param`, /*authenticateToken,*/ (req, res) => userController.updateStudentDetailArray(req, res, `certification`));
 
-router.put(`/updateWorkerIsAdmin/:param`, (req, res) => userController.updateWorkerIsAdmin(req, res));// Swagger à faire
+router.put(`/student/updateLanguage/:param`, /*authenticateToken,*/ (req, res) => userController.updateStudentDetailArray(req, res, `languages`));
 
-router.put(`/updateStudentDetails/:param`, (req, res) => userController.updateStudentDetails(req, res)); // Swagger à faire
+router.put(`/student/updateGameInfo/:param`, /*authenticateToken,*/ (req, res) => userController.updateStudentDetailArray(req, res, `game_info`));
 
 export default router;

@@ -1,0 +1,786 @@
+paths:
+  # POST
+  /user/signUp:
+    post:
+      summary: "Sign up a new user"
+      description: "Creates a new user with provided details. Validates required fields and roles, checks for existing users, hashes password, and stores the user"
+      operationId: "addUser"
+      tags:
+        - "User"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - username
+                - password
+                - role
+                - email
+              properties:
+                username:
+                  type: string
+                  example: "johndoe"
+                password:
+                  type: string
+                  format: "password"
+                  example: "123456"
+                profile_pic:
+                  type: string
+                  example: "https://example.com/profile.jpg"
+                role:
+                  type: string
+                  enum:
+                    - "student"
+                    - "worker"
+                    - "admin"
+                    - "superAdmin"
+                  example: "student"
+                email:
+                  type: string
+                  example: "user@example.com"
+                lastname:
+                  type: string
+                  example: "Doe"
+                firstname:
+                  type: string
+                  example: "John"
+                occupation:
+                  type: string
+                  example: "Student"
+                location:
+                  type: string
+                  example: "New York"
+                registration_date:
+                  type: string
+                  format: date-time
+                  default: Date.now
+                deletion_date:
+                  type: string
+                  format: date-time
+                contact_info:
+                  type: object
+                  properties:
+                    phone:
+                      type: string
+                    street:
+                      type: string
+                    street_number:
+                      type: integer
+                    city:
+                      type: string
+                    postal_code:
+                      type: integer
+                    country:
+                      type: string
+                student_details:
+                  $ref: '#/components/schemas/StudentDetails'
+                worker_details:
+                  $ref: '#/components/schemas/WorkerDetails'
+        responses:
+          '201':
+            description: "User created successfully."
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                  message:
+                    type: string
+                    example: "User added successfully"
+                  userId:
+                    type: string
+                    example: "5e5df7fc8953ad317845f0f9"
+          '400':
+            description: "Bad request. Missing required fields or invalid role."
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    error:
+                      type: string
+                      example: "Bad request: username, password, role, and email are required fields."
+          '409':
+          description: "Conflict. A user with the same username or email already exists."
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "User already exists with this email: user@example.com"
+          '500':
+          description: "Internal Server Error. The server encountered an unexpected condition that prevented it from fulfilling the request."
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Error adding user"
+  # GET
+  /user/getAllUsers:
+    get:
+      summary: "Retrieve all users"
+      description: "Fetches a list of all users or a subset based on extensive query parameters. It requires authentication and supports a comprehensive filter based on user model attributes."
+      operationId: "getAllUsers"
+      tags:
+        - "User"
+      # security:
+        # - BearerAuth: []
+      parameters:
+        - in: query
+          name: username
+          schema:
+            type: string
+          description: "Filter users by username."
+        - in: query
+          name: email
+          schema:
+            type: string
+          description: "Filter users by email."
+        - in: query
+          name: role
+          schema:
+            type: string
+          description: "Filter users by role."
+        - in: query
+          name: is_verified
+          schema:
+            type: boolean
+          description: "Filter users by verification status."
+        - in: query
+          name: is_active
+          schema:
+            type: boolean
+          description: "Filter users by active status."
+        - in: query
+          name: is_connected
+          schema:
+            type: boolean
+          description: "Filter users by connected status."
+        - in: query
+          name: lastname
+          schema:
+            type: string
+          description: "Filter users by last name."
+        - in: query
+          name: firstname
+          schema:
+            type: string
+          description: "Filter users by first name."
+        - in: query
+          name: occupation
+          schema:
+            type: string
+          description: "Filter users by occupation."
+        - in: query
+          name: location
+          schema:
+            type: string
+          description: "Filter users by location."
+      responses:
+        '200':
+          description: "Successful retrieval of users."
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+        '400':
+          description: "Invalid query parameters provided."
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Invalid query parameters"
+        '404':
+          description: "No users found matching the provided query parameters."
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "User not found matching those parameters"
+        '500':
+          description: "Server error occurred while retrieving users."
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Error retrieving users"
+  /user/getUser/{username or id}:
+    get:
+      summary: "Retrieve a single user"
+      description: "Fetches a user based on a username or ID provided in the URL path. It requires authentication and returns details if the user is found. It expects a username or an ID less than 24 characters as a parameter; IDs typically fit this condition, and excessive length could imply an erroneous input."
+      operationId: "getUser"
+      tags:
+        - "User"
+      # security:
+        # - BearerAuth: []
+      parameters:
+        - in: path
+          name: param
+          required: true
+          schema:
+            type: string
+            description: "Username or ID of the user to retrieve. Must be less than 24 characters."
+            example: "johndoe"
+      responses:
+        '200':
+          description: "Successful retrieval of the user."
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '404':
+          description: "No user found with this username or ID, or parameter is too long."
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "No user found with this username or id: johndoe"
+        '500':
+          description: "Internal server error when trying to retrieve the user."
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Error retrieving user"
+  #DELETE
+  /user/deleteUser:
+    delete:
+      summary: "Delete a user"
+      description: "Deletes a user by ID or username. Requires authentication and appropriate authorization (superAdmin role only). The request must contain either an ID or a username but not both, with specific format constraints."
+      operationId: "deleteUser"
+      tags:
+        - "User"
+      # security:
+        # - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: string
+                  description: "The unique identifier of the user to delete."
+                  example: "5e5df7fc8953ad317845f0f9"
+                username:
+                  type: string
+                  description: "The username of the user to delete."
+                  example: "johnDoe23"
+              oneOf:
+                - required: [id]
+                - required: [username]
+      responses:
+        '200':
+          description: "User deleted successfully."
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "User deleted successfully"
+        '400':
+          description: "Bad request due to input errors, such as both or neither ID and username provided, or format issues."
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Request must contain id OR username or id or username not in the good format"
+        '404':
+          description: "User not found or no user matches the provided identifier."
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "User not found"
+        '500':
+          description: "Internal server error when trying to delete the user."
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Error deleting user"  
+  # PUT
+  /user/updateInfos/{username or id}:
+    put:
+      summary: "Update user information"
+      description: "Updates specified fields for a user, identified by username or ID. The endpoint ensures that only certain fields can be updated, checks user existence, and field validity based on the user's role."
+      operationId: "updateUserInformation"
+      tags:
+        - "User"
+      # security:
+        # - BearerAuth: []
+      parameters:
+        - in: path
+          name: param
+          required: true
+          schema:
+            type: string
+            description: "Username or ID of the user to update."
+            example: "johndoe"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                profile_pic:
+                  type: string
+                  description: "New URL of the user's profile picture."
+                  example: "https://example.com/new-profile.jpg"
+                lastname:
+                  type: string
+                  description: "New last name of the user."
+                  example: "Doe"
+                firstname:
+                  type: string
+                  description: "New first name of the user."
+                  example: "John"
+                occupation:
+                  type: string
+                  description: "New occupation of the user."
+                  example: "Developer"
+                location:
+                  type: string
+                  description: "New location of the user."
+                  example: "New York"
+                contact_info.phone:
+                  type: string
+                  example: "123-456-7890"
+                contact_info.street:
+                  type: string
+                  example: "Elm Street"
+                contact_info.street_number:
+                  type: integer
+                  example: 42
+                contact_info.box:
+                  type: string
+                  example: "B"
+                contact_info.city:
+                  type: string
+                  example: "Gotham"
+                contact_info.postal_code:
+                  type: integer
+                  example: 12345
+                contact_info.country:
+                  type: string
+                  example: "USA"
+                student_details.school:
+                  type: string
+                  example: "MIT"
+      responses:
+        '200':
+          description: "User information updated successfully."
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "User's infos have been updated successfully"
+        '400':
+          description: "Bad request due to invalid input fields or improper field updates based on user role."
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Invalid field in the body, only this can be updated: profile_pic, lastname, firstname, occupation, location, contact_info.phone, contact_info.street, contact_info.street_number, contact_info.box, contact_info.city, contact_info.country, contact_info.postal_code"
+        '404':
+          description: "User not found or no changes needed (input same as existing data)."
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "User not found or no changes have been made, same infos as before have been given"
+        '500':
+          description: "Internal server error while updating user information."
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Error updating user"
+  /user/updateVerified/{username or id}:
+    put:
+      summary: "Update user verification status"
+      description: "Updates the verification status (`is_verified`) for a specified user. Requires administrator-level permissions."
+      operationId: "updateVerifiedStatus"
+      tags:
+        - "User"
+      # security:
+        # - BearerAuth: []
+      parameters:
+        - in: path
+          name: param
+          required: true
+          schema:
+            type: string
+            description: "Username or ID of the user to update."
+            example: "5e5df7fc8953ad317845f0f9"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                is_verified:
+                  type: boolean
+                  description: "The new verification status of the user."
+                  example: true
+      responses:
+        '200':
+          description: "Verification status updated successfully."
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "User is_verified updated successfully"
+        '400':
+          description: "Bad request due to input errors, such as providing multiple fields, empty request, or incorrect fields."
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    examples:
+                      multipleFields: "Only one field (is_verified) can be updated at a time"
+                      emptyRequest: "Empty request: Need is_verified"
+                      wrongField: "Only the is_verified can be updated"
+        '404':
+          description: "User not found or no changes needed (input same as existing data)."
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "No changes have been made, same info as before has been given"
+        '500':
+          description: "Internal server error while updating user information."
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Error updating user"
+  /user/updateActive/{username or id}:
+    put:
+      summary: "Update user active status"
+      description: "Updates the active status (`is_active`) for a specified user. This endpoint requires administrator-level permissions and will adjust the `deletion_date` based on the active status."
+      operationId: "updateActiveStatus"
+      tags:
+        - "User"
+      # security:
+        # - BearerAuth: []
+      parameters:
+        - in: path
+          name: param
+          required: true
+          schema:
+            type: string
+            description: "Username or ID of the user to update."
+            example: "5e5df7fc8953ad317845f0f9"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                is_active:
+                  type: boolean
+                  description: "The new active status of the user. If set to false, `deletion_date` will be set to the current date."
+                  example: false
+      responses:
+        '200':
+          description: "Active status updated successfully."
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "User is_active updated successfully"
+        '400':
+          description: "Bad request due to incorrect field input or invalid request format."
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    examples:
+                      onlyField: "Only the is_active can be updated"
+                      wrongField: "Request must contain the is_active field"
+        '404':
+          description: "User not found or no changes needed (input same as existing data)."
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "No changes have been made, same info as before has been given or user not found"
+        '500':
+          description: "Internal server error while updating user information."
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Error updating user"
+  /user/updateConnected/{username or id}:
+    put:
+      summary: "Update user connection status"
+      description: "Updates the connection status (`is_connected`) for a specified user. Access is restricted to administrators and superAdmins."
+      operationId: "updateConnectedStatus"
+      tags:
+        - "User"
+      # security:
+        # - BearerAuth: []
+      parameters:
+        - in: path
+          name: param
+          required: true
+          schema:
+            type: string
+            description: "Username or ID of the user to update."
+            example: "5e5df7fc8953ad317845f0f9"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                is_connected:
+                  type: boolean
+                  description: "The new connection status of the user."
+                  example: true
+      responses:
+        '200':
+          description: "Connection status updated successfully."
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "User is_connected updated successfully"
+        '400':
+          description: "Invalid request format or wrong fields provided."
+        '404':
+          description: "User not found."
+        '500':
+          description: "Internal server error while updating user information."
+  /user/updateUsername/{username or id}:
+    put:
+      summary: "Update user's username"
+      description: "Updates the username for a specified user. Access is restricted to administrators and superAdmins."
+      operationId: "updateUsername"
+      tags:
+        - "User"
+      # security:
+        # - BearerAuth: []
+      parameters:
+        - in: path
+          name: param
+          required: true
+          schema:
+            type: string
+            description: "Current username or ID of the user to update."
+            example: "5e5df7fc8953ad317845f0f9"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                  description: "The new username for the user."
+                  example: "newUsername2024"
+      responses:
+        '200':
+          description: "Username updated successfully."
+        '400':
+          description: "Invalid request format or wrong fields provided."
+        '404':
+          description: "User not found."
+        '500':
+          description: "Internal server error while updating username."
+  /user/updatePassword/{username or id}:
+    put:
+      summary: "Update user's password"
+      description: "Updates the password for a specified user. Requires user authentication."
+      operationId: "updatePassword"
+      tags:
+        - "User"
+      # security:
+        # - BearerAuth: []
+      parameters:
+        - in: path
+          name: param
+          required: true
+          schema:
+            type: string
+            description: "Username or ID of the user whose password is to be updated."
+            example: "5e5df7fc8953ad317845f0f9"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                password:
+                  type: string
+                  format: "password"
+                  description: "The new password for the user. This will be securely hashed in storage."
+                  example: "newSecurePassword123!"
+      responses:
+        '200':
+          description: "Password updated successfully."
+        '400':
+          description: "Invalid request format or wrong fields provided."
+        '404':
+          description: "User not found."
+        '500':
+          description: "Internal server error while updating password."
+  /user/updateEmail/{username or id}:
+    put:
+      summary: "Update user's email"
+      description: "Updates the email address for a user, identified by a username or ID. This operation ensures the input is correct and checks if the specified email update is valid."
+      operationId: "updateUserEmail"
+      tags:
+        - "User"
+      # Uncomment the following line if authentication is required
+      # security:
+      #   - BearerAuth: []
+      parameters:
+        - in: path
+          name: param
+          required: true
+          schema:
+            type: string
+            description: "Username or ID of the user whose email is to be updated."
+            example: "johndoe"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  format: "email"
+                  description: "The new email address to be updated."
+                  example: "newemail@example.com"
+      responses:
+        '200':
+          description: "Email updated successfully."
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "User email updated successfully"
+        '400':
+          description: "Bad request due to invalid input fields or improper field update attempt."
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Only the email can be updated"
+        '404':
+          description: "No changes made due to incorrect or unchanged input data, or user not found."
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "No changes have been made, same info as before has been given or user not found"
+        '500':
+          description: "Internal server error while updating user information."
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Error updating user"
+  
+
+
+  
+

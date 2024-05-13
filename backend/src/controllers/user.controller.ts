@@ -1,10 +1,11 @@
 import { Request, Response } from 'express';
 import bcrypt from 'bcrypt';
-import { UserModel } from '../models/user.model';
+import { UserModel, ISDetails, IWDetails, IS_DETAILS } from '../models/user.model';
+import { ObjectId } from 'mongodb';
 
 class UserController {
   // UTILS
-  protected async getUserObject(req: Request, res: Response, username_or_id: string) {
+  async getUserObject(req: Request, res: Response, username_or_id: string) {
     try {
       const user = (username_or_id.length < 24 ? await UserModel.findOne({ username: username_or_id }) : await UserModel.findOne({ _id: username_or_id}));
       return user;
@@ -15,7 +16,7 @@ class UserController {
     }
   }
 
-  protected async checkErrorUpdateField(req: Request, res: Response, param: string): Promise<boolean> {
+  protected async checkErrorUpdateField(req: Request, res: Response, param: string, NorD: string): Promise<boolean> {
     try {
       if (param.length > 24) {
         res.status(404).json({ error: `Wrong username or id: ${param}`});
@@ -28,14 +29,17 @@ class UserController {
         return true;
       }
 
-      if (req.body.worker_details && user.role == `student`) {
-        res.status(404).json({ error: `Cant update worker_details on student profile` });
-        return true;
-      }
-      else if (req.body.student_details && user.role == `worker`) {
-        res.status(404).json({ error: `Cant update student_details on worker profile` });
-        return true;
-      }
+      // if (NorD == `D`) {
+      //   if ((req.body.is_company_admin || req.body.company) && user.role == `student`) {
+      //     res.status(404).json({ error: `Cant update worker_details on student profile` });
+      //     return true;
+      //   }
+      //   else if (req.body.string && user.role == `worker`) {
+      //     res.status(404).json({ error: `Cant update student_details on worker profile` });
+      //     return true;
+      //   }
+      //   if (req)
+      // }
 
       return false;
     }
@@ -46,7 +50,19 @@ class UserController {
       }
   }
 
-  // POST
+  protected async validateFields(dataFields: string[], detailType: keyof ISDetails): Promise<boolean> {
+    const validFields = IS_DETAILS[detailType];
+    if (validFields) {
+      return dataFields.every(field => validFields[field]);
+    }
+    return false;
+  }
+
+  async isValidObjectId(id: string): Promise<boolean> {
+    return ObjectId.isValid(id) && new ObjectId(id).toString() === id;
+  }
+
+  // GENERAL
   async addUser(req: Request, res: Response): Promise<void> {
     try {
       const { username, password, profile_pic, role, lastname, firstname, occupation, location, contact_info } = req.body;
@@ -68,14 +84,14 @@ class UserController {
       const existingUserEmail = await UserModel.findOne({ email: email });
 
       if (existingUserEmail) {
-        res.status(400).json({ error: `User already exists with this email : ${ email }` });
+        res.status(409).json({ error: `User already exists with this email : ${ email }` });
         return ;
       }
 
       const existingUserUsername = await UserModel.findOne({ username: username });
 
       if (existingUserUsername) {
-        res.status(400).json({ error: `User already exists with this username : ${ username }` });
+        res.status(409).json({ error: `User already exists with this username : ${ username }` });
         return ;
       }
 
@@ -90,6 +106,7 @@ class UserController {
       else if (role === `worker`) {
         userData.worker_details = {};
         userData.worker_details = { ...req.body.worker_details };
+        // Ajouter logique pour mettre is_company_admin à true quand c'est le premier de la company 
       }
 
       const newUser = new UserModel(userData);
@@ -103,7 +120,6 @@ class UserController {
     }
   }
 
-  // GET
   async getAllUsers(req: Request, res: Response): Promise<void> {
     try {
       let query = {};
@@ -111,7 +127,7 @@ class UserController {
       if (req.query && Object.keys(req.query).length > 0) {
         const validKeys = Object.keys(req.query).every(key => Object.keys(UserModel.schema.obj).includes(key));
         if (!validKeys) {
-          res.status(400).json({ error: 'Invalid query parameters' });
+          res.status(400).json({ error: `Invalid query parameters` });
           return ;
         }
         query = req.query;
@@ -120,7 +136,7 @@ class UserController {
       const users = await UserModel.find(query);
 
       if (users.length === 0) {
-        res.status(404).json({ message: 'User not found matching those parameters' });
+        res.status(404).json({ message: `User not found matching those parameters` });
         return;
     }
       
@@ -155,10 +171,10 @@ class UserController {
   
   async getAllStudents(req: Request, res: Response): Promise<void> {
     try {
-      const students = await UserModel.find({ role: 'student' });
+      const students = await UserModel.find({ role: `student` });
 
       if (students.length === 0) {
-          res.status(404).json({ message: 'No students found' });
+          res.status(404).json({ message: `No students found` });
           return;
       }
 
@@ -170,118 +186,6 @@ class UserController {
     }
   }
 
-  async getLastStudents(req: Request, res: Response, number: number) {
-    try {
-      const students = await UserModel.find({ role: 'student' })
-                                      .sort({ registered_date: 1 })
-                                      .limit(number);
-      res.status(200).json(students);
-    }
-    catch (error) {
-      console.error(`Error retrieving ${number} lasts registered students`, error);
-      res.status(500).json({ error: `Error retrieving students` });
-    }
-  }
-
-  //   async getAllSWV2(req: Request, res: Response, studentOrWorker: string): Promise<void> {
-//     try {
-//         let query: any = { role: studentOrWorker };  // Start with a role-based query.
-
-//         // Handle query parameters with flexibility for nested fields
-//         if (req.query && Object.keys(req.query).length > 0) {
-//             query = Object.entries(req.query).reduce((acc: any, [key, value]: [string, any]) => {
-//                 const nestedFields = ['school', 'skills', 'certification', 'languages', 'experience', 'formation'];
-//                 if (nestedFields.some(field => key.startsWith(field))) {
-//                     // Directly apply nested structure in query
-//                     acc[`student_details.${key}`] = value;
-//                 } else if (key in UserModel.schema.obj || (UserModel.schema.obj.student_details && Object.keys(UserModel.schema.obj.student_details as object).includes(key))) {
-//                     // Apply directly if it's a recognized field in the schema or in student_details
-//                     acc[`student_details.${key}`] = value;
-//                 } else {
-//                     res.status(400).json({ error: `Invalid query parameter: ${key}` });
-//                     return acc; // Return accumulated query so far to exit
-//                 }
-//                 return acc;
-//             }, query);
-//         }
-
-//         const users = await UserModel.find(query);
-//         if (users.length === 0) {
-//             res.status(404).json({ message: 'No students found matching those parameters' });
-//             return;
-//         }
-
-//         // Flatten the student details into the root of the user object and handle renaming to avoid clashes
-//         const students = users.map(user => {
-//             const student: any = user.toObject();
-
-//             // Function to rename and merge specific fields to avoid naming conflicts
-//             const renameAndMerge = (field: string, prefix: string): void => {
-//                 if (student.student_details && student.student_details[field]) {
-//                     student[prefix + '_' + field] = student.student_details[field];
-//                     delete student.student_details[field];
-//                 }
-//             };
-
-//             // Execute renaming for each necessary field
-//             renameAndMerge('school', 'student');
-//             renameAndMerge('skills', 'student');
-//             renameAndMerge('certification', 'student_cert');
-//             renameAndMerge('languages', 'student_lang');
-//             renameAndMerge('experience', 'student_exp');
-//             renameAndMerge('formation', 'student_form');
-
-//             // Remove the now-empty student_details if it's completely emptied
-//             if (student.student_details && Object.keys(student.student_details).length === 0) {
-//                 delete student.student_details;
-//             }
-
-//             return student;
-//         });
-
-//         res.json(students);
-//     } catch (error) {
-//         console.error(`Error retrieving students:`, error);
-//         res.status(500).json({ error: `Error retrieving students` });
-//     }
-// }
-  
- // async getAllSW(req: Request, res: Response, studentOrWorker: string): Promise<void> {
-  //   try {
-  //     let query: any = { role: studentOrWorker };
-
-  //     if (req.query && Object.keys(req.query).length > 0) {
-  //       for (const key of Object.keys(req.query)) {
-  //         if (
-  //           Object.keys(UserModel.schema.obj.student_details).includes(key) ||
-  //           key === 'school'
-  //         ) {
-  //           query[key] = req.query[key];
-  //         } 
-  //         else {
-  //           res.status(400).json({ error: `Invalid query parameter: ${key}` });
-  //           return;
-  //         }
-  //       }
-  //     }
-
-  //     const students = await UserModel.find(query);
-
-  //     if (students.length === 0) {
-  //         res.status(404).json({ message: 'No students found matching those parameters' });
-  //         return;
-  //     }
-
-  //     res.json(students);
-  //   } 
-  //   catch (error) {
-  //     console.error(`Error retrieving students:`, error);
-  //     res.status(500).json({ error: `Error retrieving students` });
-  //   }
-  // }
-
-  // DELETE
-  
   async deleteUser(req: Request, res: Response): Promise<void> {
     try {
       const id = req.body.id;
@@ -314,13 +218,12 @@ class UserController {
     }
   }
 
-  // PUT
   async updateField(req: Request, res: Response, fieldToUpdate: string): Promise<void> {
     try {
       const param = req.params.param;
       const updateData = req.body;
 
-      if (await this.checkErrorUpdateField(req, res, param) == true) {
+      if (await this.checkErrorUpdateField(req, res, param, `N`) == true) {
         return ;
       }
 
@@ -344,6 +247,7 @@ class UserController {
         const hashedPassword = await bcrypt.hash(updateData.password, 10);
       
         updateData.password = hashedPassword;
+        // Mettre logique mailer
       }
 
       if (fieldToUpdate == `is_active`) {
@@ -374,37 +278,82 @@ class UserController {
     }
   }
 
-  async updateFields(req: Request, res: Response, allowedFields: Array<string>): Promise<void> {
+  async updateFields(req: Request, res: Response): Promise<void> {
     try {
       const param = req.params.param;
       const updateData = req.body;
     
-      if (await this.checkErrorUpdateField(req, res, param) == true) {
+      const allowedFields: string[] = [
+        `profile_pic`, `lastname`, `firstname`, `occupation`, `location`, 
+        `contact_info.phone`, `contact_info.street`, `contact_info.street_number`, `contact_info.box`,
+        `contact_info.city`, `contact_info.country`, `contact_info.postal_code`, `student_details.school`
+      ];
+
+      if (await this.checkErrorUpdateField(req, res, param, `N`) === true) {
         return ;
       }
 
+      const updateObject: { [key: string]: any } = {};
       for (const field of Object.keys(updateData)) {
         if (!allowedFields.includes(field)) {
-          res.status(400).json({ error: `Invalid field in the body, only this can be updated ${allowedFields}`});
+          res.status(400).json({ error: `Invalid field in the body, only this can be updated: ${allowedFields.join(', ')}` });
           return ;
         }
-      } 
-       // Mettre la logique du mailer plus tard
+        updateObject[field] = updateData[field];
+      }
       
-      const result = await UserModel.updateOne(param.length < 24 ? { username: param } : { _id: param }, updateData);
+      const userToUpdate = { [param.length < 24 ? `username` : `_id`]: param };
+      
+      const result = await UserModel.updateOne(userToUpdate, { $set: updateObject });
       if (result.modifiedCount > 0) {
         res.json({ message: `User's infos have been updated successfully` });
       } 
       else {
         res.status(404).json({ error: `No changes have been made, same infos as before have been given` });
       }
-    }
+    } 
     catch (error) {
       console.error(`Error updating user's infos:`, error);
       res.status(500).json({ error: `Error updating user` });
     }
   }
 
+  async getDetails(req: Request, res: Response, SorW: string): Promise<void> {
+    try {
+      const param = req.params.param;
+
+      if (param.length > 24) {
+        res.status(404).json({ error: `Wrong username or id: ${param}`});
+        return ;
+      }
+      const user = await this.getUserObject(req, res, param);
+
+      if (!user) {
+        res.status(404).json({ error: `No user found with this username or id: ${param}` });
+        return ;
+      }
+
+      const user_details = user[SorW] as any;
+
+      if ((user.role == `student` && SorW == 'worker_details') || (user.role == `worker` && SorW == `student_details`)) {
+        res.status(403).json({ error: `This field doenst exist for ${user.username} because he/she has no ${SorW}` });
+        return ;
+      }
+
+      if (user_details) {
+        res.json(user_details);
+      } 
+      else {
+        res.status(404).json({ message: `Student not found` });
+      }
+    } 
+    catch (error) {
+      console.error(`Error fetching student details:`, error);
+      res.status(500).json({ error: `Internal server error` });
+    }
+  }
+
+  // WORKER
   async updateWorkerIsAdmin(req: Request, res: Response): Promise<void> {
     try {
       const param = req.params.param;
@@ -412,42 +361,220 @@ class UserController {
   
       const user = await this.getUserObject(req, res, param);
       if (!user) {
-        res.status(404).json({ error: 'User not found' });
+        res.status(404).json({ error: `User not found` });
         return ;
       }
 
-      if (user.role !== 'worker' || !user.worker_details) {
-        res.status(400).json({ error: 'User is not a worker' });
+      if (user.role !== `worker` || !user.worker_details) {
+        res.status(400).json({ error: `User is not a worker` });
         return ;
       }
   
       user.worker_details.is_company_admin = changeAdminPerm;
       await user.save();
   
-      res.json({ message: 'Worker admin status updated successfully' });
+      res.json({ message: `Worker admin status updated successfully` });
     } catch (error) {
-      console.error('Error updating worker admin status:', error);
-      res.status(500).json({ error: 'Error updating worker admin status' });
+      console.error(`Error updating worker admin status: ${error}`);
+      res.status(500).json({ error: `Error updating worker admin status` });
     }
   }
 
-  async updateStudentDetails(req: Request, res: Response): Promise<void> {
+  async updateWorkerDetail(req: Request, res: Response, detailKey: keyof IWDetails): Promise<void> {
     try {
       const param = req.params.param;
-      //const updateData = req.body;
-  
-      const user = await this.getUserObject(req, res, param);
-      if (!user) {
-        res.status(404).json({ error: 'User not found' });
+      const updateData = req.body;
+
+      const updateKeys = Object.keys(updateData);
+      if (updateKeys.length !== 1) {
+        res.status(400).json({ error: `Only one field can be updated at a time` });
         return ;
       }
-  
-      // I need u here
-  
-      res.json({ message: 'Student details updated successfully' });
+
+      const userToUpdate = await this.getUserObject(req, res, param);
+
+      if (!userToUpdate) {
+        res.status(404).json({ error: `User not found` });
+        return ;
+      }
+      if (userToUpdate.role == `student`) {
+        res.status(403).json({ error: `${userToUpdate.username} aint a worker`});
+        return ;
+      }
+      if (updateData[detailKey] === undefined) {
+        res.status(400).json({ error: `Missing data for ${detailKey}` });
+        return ;
+      }
+
+      // if (updateData[detailKey] === `company`) {
+      //   // Ajouter logique pour vérifier si elle existe déjà ou non, si elle n'existe pas, mettre le worker en admin
+      // }
+
+      const result = await UserModel.updateOne(
+        param.length < 24 ? { username: param } : { _id: param },
+        { $set: { [`worker_details.${detailKey}`]: updateData[detailKey] } }
+      );
+
+      if (result.modifiedCount > 0) {
+        res.json({ message: `${detailKey} updated successfully` });
+      } 
+      else {
+        res.status(404).json({ error: `No changes made or worker not found` });
+      }
     } catch (error) {
-      console.error('Error updating student details:', error);
-      res.status(500).json({ error: 'Error updating student details' });
+      console.error(`Error updating worker's ${detailKey}:`, error);
+      res.status(500).json({ error: `Internal server error` });
+    }
+  }
+
+  // STUDENT
+  async updateStudentDetail(req: Request, res: Response, detailKey: keyof ISDetails): Promise<void> {
+    try {
+      const param = req.params.param;
+      const updateData = req.body;
+
+      const updateKeys = Object.keys(updateData);
+      if (updateKeys.length !== 1) {
+        res.status(400).json({ error: `Only one field can be updated at a time` });
+        return ;
+      }
+
+      const userToUpdate = await this.getUserObject(req, res, param);
+
+      if (!userToUpdate) {
+        res.status(404).json({ error: `User not found` });
+        return ;
+      }
+      if (userToUpdate.role == `worker`) {
+        res.status(403).json({ error: `${userToUpdate.username} aint a student`});
+        return ;
+      }
+      if (updateData[detailKey] === undefined) {
+        res.status(400).json({ error: `Missing data for ${detailKey}` });
+        return ;
+      }
+
+      const result = await UserModel.updateOne(
+        param.length < 24 ? { username: param } : { _id: param },
+        { $set: { [`student_details.${detailKey}`]: updateData[detailKey] } }
+      );
+
+      if (result.modifiedCount > 0) {
+        res.json({ message: `${detailKey} updated successfully` });
+      } 
+      else {
+        res.status(404).json({ error: `No changes made or student not found` });
+      }
+    } catch (error) {
+      console.error(`Error updating student's ${detailKey}:`, error);
+      res.status(500).json({ error: `Internal server error` });
+    }
+  }
+
+  async updateStudentDetailArray<T extends keyof ISDetails>(req: Request, res: Response, detailKey: T): Promise<void> {
+    try {
+      const param = req.params.param;
+      const updateData: { action: string; id?: string; value?: any } = req.body; 
+        
+      const userToUpdate = await this.getUserObject(req, res, param);
+
+      if (!userToUpdate) {
+        res.status(404).json({ error: `User not found` });
+        return ;
+      }
+
+      if (userToUpdate.role == `worker`) {
+        res.status(403).json({ error: `${userToUpdate.username} aint a student`});
+        return ;
+      }
+
+      if (updateData.action == `add` || updateData.action == `update`) {
+        const dataFields = Object.keys(updateData.value);
+        const isValid = await this.validateFields(dataFields, detailKey);
+
+        if (['add', 'update'].includes(updateData.action) && !isValid) {
+            res.status(400).json({ error: `Provided fields do not match the expected fields in the schema` });
+            return;
+        }
+      }
+
+      if (updateData.action === 'remove' || updateData.action === 'update') {
+        if (updateData.id) {
+          if (! await this.isValidObjectId(updateData.id)) {
+            res.status(400).json({ error: `Invalid ID format` });
+            return ;
+          }
+        }
+        const itemExists = await UserModel.findOne({
+          [param.length < 24 ? 'username' : '_id']: param,
+          [`student_details.${detailKey}._id`]: updateData.id
+        });
+      
+        if (!itemExists) {
+          res.status(404).json({ error: `Object not found with ID: ${updateData.id}` });
+          return;
+        }
+      }
+                            
+      let updateObject = {};
+      switch (updateData.action) {
+        case `add`: {
+          updateObject = { $push: { [`student_details.${detailKey}`]: updateData.value } };
+          break ;
+        }
+        case `remove`: {
+          if (!updateData.id) {
+            res.status(400).json({ error: `ID is required for remove operations` });
+            return ;
+          }
+          updateObject = { $pull: { [`student_details.${detailKey}`]: { _id: updateData.id } } };
+          break ;
+        }
+        case `update`: {
+          if (!updateData.id) {
+            res.status(400).json({ error: `ID is required for update operations` });
+            return ;
+          }
+          updateObject = { $set: { [`student_details.${detailKey}.$[elem]`]: updateData.value } };
+          break ;
+        }
+        default:
+          res.status(400).json({ error: `Invalid action specified` });
+          return ;
+      }
+
+      const result = await UserModel.updateOne(
+        param.length < 24 ? { username: param } : { _id: param },
+        updateObject,
+        { 
+          arrayFilters: [{'elem._id': updateData.id}],
+        }
+      );
+
+      if (result.modifiedCount > 0) {
+        res.json({ message: `${detailKey} details updated successfully` });
+      } 
+      else {
+        res.status(404).json({ error: `No changes made or user not found` });
+      }
+    } 
+    catch (error) {
+      console.error(`Error updating ${detailKey} details:`, error);
+      res.status(500).json({ error: `Internal server error` });
+    }
+  }
+
+  async getLastStudents(req: Request, res: Response, number: number) {
+    try {
+      const students = await UserModel.find({ role: `student` })
+                                      .sort({ registered_date: 1 })
+                                      .limit(number)
+                                      .select('username profile_pic');
+      res.status(200).json(students);
+    }
+    catch (error) {
+      console.error(`Error retrieving ${number} lasts registered students`, error);
+      res.status(500).json({ error: `Error retrieving students` });
     }
   }
 }
