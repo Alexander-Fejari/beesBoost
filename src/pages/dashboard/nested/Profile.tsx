@@ -1,12 +1,11 @@
 import Layout from "@/components/Layout";
 
+const Profile = () => {
 
-const DesignSystem = () => {
     return (
         <Layout>
-
+            <h1>Profile</h1>
         </Layout>
     )
 }
-
-export default DesignSystem
+export default Profile

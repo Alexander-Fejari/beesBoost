@@ -1,7 +1,7 @@
-const SignIn = () => {
+const Faq = () => {
     return (
         <h1>Sign In</h1>
     )
 }
 
-export default SignIn
+export default Faq
