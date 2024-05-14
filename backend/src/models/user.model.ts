@@ -110,11 +110,11 @@ interface IUser extends Document {
   profile_pic: string;
   role: string;
   email: string;
+  email_confirmed: boolean;
+  confirmation_token?: string;
   is_verified: boolean;
   is_active: boolean;
   is_connected: boolean;
-  email_confirmed: boolean;
-  confirmationn_token: string;
   refresh_token?: string;
   lastname?: string;
   firstname?: string;
@@ -135,11 +135,11 @@ const userSchema = new Schema({
   profile_pic: { type: String, required: true, default: `https://scontent.fcrl1-1.fna.fbcdn.net/v/t1.6435-9/107209573_3210813778982759_4891830877933540151_n.jpg?_nc_cat=109&ccb=1-7&_nc_sid=5f2048&_nc_ohc=GNNwt0wMw28Q7kNvgFRvakj&_nc_ht=scontent.fcrl1-1.fna&oh=00_AfDE5teHqwAc3S1qdVcqKQ6Z2Dk1ftFbHNqSTkGaPpACBg&oe=665E101A` },
   role: { type: String, required: true },
   email: { type: String, required: true, unique: true },
-  is_verified: { type: Boolean, required: true, default: false }, // A mettre en false pour la production
-  is_active: { type: Boolean, required: true, default: true },
-  is_connected: { type: Boolean, required: true, default: false },
   email_confirmed: { type: Boolean, required: true, default: false },
   confirmation_token: { type: String },
+  is_verified: { type: Boolean, required: true, default: true }, // A mettre en false pour la production
+  is_active: { type: Boolean, required: true, default: true },
+  is_connected: { type: Boolean, required: true, default: false },
   refresh_token: { type: String, default: `` },
   lastname: { type: String },
   firstname: { type: String },

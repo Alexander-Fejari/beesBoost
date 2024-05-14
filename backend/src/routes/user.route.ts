@@ -15,6 +15,8 @@ router.get(`/user/getAllUsers`, /*authenticateToken,*/ (req, res) => userControl
 
 router.get(`/user/getUser/:param`, /*authenticateToken,*/ (req, res) => userController.getUser(req, res));
 
+router.get('/user/confirmEmail/:token', (req, res) => userController.confirmEmail(req, res));
+
   // DELETE GENERAL INFOS
 router.delete(`/user/deleteUser`, /*authenticateToken, authorizeRoles(`superAdmin`),*/ (req, res) => userController.deleteUser(req, res)); // Only for superAdmin
 

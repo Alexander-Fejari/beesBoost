@@ -23,8 +23,8 @@ class AuthController {
                 res.status(401).json({ error: `Login failed : No user matches those credentials` });
                 return;
             }
-            if (user.is_active == false) {
-                res.status(403).json({ error: `This account isnt active` });
+            if (user.is_active == false || user.is_verified == false || user.email_confirmed == false) {
+                res.status(403).json({ error: `This account isnt active, verified and/or its email hasnt been confirmed` });
                 return;
             }
             const isMatch = await user.comparePassword(password);

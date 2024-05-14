@@ -111,18 +111,40 @@ class UserController {
         // Ajouter logique pour mettre is_company_admin à true quand c'est le premier de la company 
       }
 
-      userData.confirmationToken = jwt.sign({ userId: userData }, process.env.JWT_SECRET_EMAIL_CONFIRM!, { expiresIn: '1d' });
+      userData.confirmation_token = jwt.sign({ username: userData.username }, process.env.JWT_SECRET_EMAIL_CONFIRM!, { expiresIn: '15m' });
 
-      mailerService.sendConfirmationEmail(userData.email, userData.username, `45123`);
+      mailerService.sendConfirmationEmail(userData.email, userData.username, userData.confirmation_token);
 
       const newUser = new UserModel(userData);
       await newUser.save();
 
-      res.status(201).json({ message: `User added successfully`, userId: newUser._id });
+      res.status(201).json({ message: `User added successfully`, user_id: newUser._id });
     }
     catch (error) {
       console.error(`Error adding user:`, error);
       res.status(500).json({ error: `Error adding user` });
+    }
+  }
+
+  async confirmEmail(req: Request, res: Response): Promise<void> {
+    try {
+      const { token } = req.params;
+      
+      const decoded = jwt.verify(token, process.env.JWT_SECRET_EMAIL_CONFIRM!) as { username: string };
+      const user = await UserModel.findOne({ confirmation_token: token });
+
+      if (!user) {
+        res.status(400).json({ error: 'Token invalide ou expiré.' });
+        return;
+      }
+
+      user.email_confirmed = true;
+      user.confirmationToken = '';
+      await user.save();
+
+      res.status(200).json({ message: 'Compte confirmé avec succès !' });
+    } catch (error) {
+      res.status(400).json({ error: 'Token invalide ou expiré.' });
     }
   }
 

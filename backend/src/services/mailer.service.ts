@@ -22,7 +22,7 @@ class MailerService {
       html: `<h1>Email de Confirmation</h1>
           <h2>Hello ${userName}</h2>
           <p>Merci pour votre inscription. Veuillez confirmer votre email en cliquant sur le lien suivant</p>
-          <a href=http://localhost:5000/confirm/${confirmationCode}> Click here</a>
+          <a href=http://localhost:5000/user/confirmEmail/${confirmationCode}> Click here</a>
           </div>`,
     };
   
