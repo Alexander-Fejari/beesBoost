@@ -2,7 +2,6 @@ import { createContext, useContext, useState, useEffect, ReactNode } from 'react
 
 interface AuthContextType {
   isAuthenticated: boolean;
-  checkJWT: () => void;
   setIsAuthenticated: (value: boolean) => void;
   setToken: (value: string | null) => void;
   token: string | null;
@@ -26,21 +25,22 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     }
   }, []);
 
-  const checkJWT = () => {
-    const storedToken = localStorage.getItem('token');
-    if (storedToken) {
+  useEffect(() => {
+    if (token) {
+      localStorage.setItem('token', token);
       setIsAuthenticated(true);
     } else {
+      localStorage.removeItem('token');
       setIsAuthenticated(false);
     }
-  };
+  }, [token]);
 
-  const value = { isAuthenticated, checkJWT, setIsAuthenticated, setToken, token };
+  const value = { isAuthenticated, setIsAuthenticated, setToken, token };
 
   return (
-      <AuthContext.Provider value={value}>
-        {children}
-      </AuthContext.Provider>
+    <AuthContext.Provider value={value}>
+      {children}
+    </AuthContext.Provider>
   );
 };
 

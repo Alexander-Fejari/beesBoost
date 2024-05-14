@@ -5,8 +5,8 @@ import StudentHive from "./StudentHive";
 const Welcome = () => {
     const {t} = useTranslation('home')
     return (
-        <section className="w-full h-full flex flex-col md:flex-row overflow-hidden">
-            <div className="flex flex-col my-auto sm:gap-2 md:gap-0 md:w-1/2">
+        <section className="w-full h-full flex flex-col lg:flex-row overflow-hidden">
+            <div className="my-auto sm:gap-2 md:gap-0 lg:w-1/2">
                 <div className="text-4xl text-center">
                     <h1 className={'text-normal'}>
                             {t('home.title')}
@@ -26,7 +26,7 @@ const Welcome = () => {
                     </Button>
                 </div>
             </div>
-            <div className="flex md:w-1/2">
+            <div className="flex sm:w-content lg:w-1/2 mt-4 ">
                 <StudentHive/>
             </div>
         </section>
