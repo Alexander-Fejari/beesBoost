@@ -1,4 +1,4 @@
-import express, { Request, Response } from 'express';
+import express from 'express';
 import swaggerUi from 'swagger-ui-express';
 import swaggerSpec from './config/swagger.config'
 import cors from 'cors';
@@ -7,7 +7,7 @@ import dotenv from 'dotenv';
 import { connectToDatabase, closeDatabase } from './config/database.config';
 import userRouter from './routes/user.route';
 import authRouter from './routes/auth.route';
-import mailerRouter from './routes/mailer.route';
+//import mailerRouter from './routes/mailer.route';
 
 dotenv.config();
 

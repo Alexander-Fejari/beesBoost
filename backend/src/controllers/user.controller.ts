@@ -2,7 +2,8 @@ import { Request, Response } from 'express';
 import bcrypt from 'bcrypt';
 import { UserModel, ISDetails, IWDetails, IS_DETAILS } from '../models/user.model';
 import { ObjectId } from 'mongodb';
-import MailerController from './mailer.controller';
+import mailerService from '../services/mailer.service';
+import jwt from 'jsonwebtoken';
 
 class UserController {
   // UTILS
@@ -110,11 +111,13 @@ class UserController {
         // Ajouter logique pour mettre is_company_admin à true quand c'est le premier de la company 
       }
 
+      userData.confirmationToken = jwt.sign({ userId: userData }, process.env.JWT_SECRET_EMAIL_CONFIRM!, { expiresIn: '1d' });
+
+      mailerService.sendConfirmationEmail(userData.email, userData.username, `45123`);
+
       const newUser = new UserModel(userData);
       await newUser.save();
 
-      const mailerController = new MailerController();
-      mailerController.sendConfirmationEmail(userData.email, userData.username, `45123`);
       res.status(201).json({ message: `User added successfully`, userId: newUser._id });
     }
     catch (error) {
@@ -581,4 +584,4 @@ class UserController {
   }
 }
 
-export default UserController;
+export default new UserController;

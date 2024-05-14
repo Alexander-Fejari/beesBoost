@@ -37,11 +37,11 @@ class AuthController {
                 id: user._id,
                 username: user.username,
                 role: user.role
-            }, process.env.JWT_SECRET, { expiresIn: `1h` });
+            }, process.env.JWT_SECRET_AUTH, { expiresIn: `1h` });
             const refreshToken = jsonwebtoken_1.default.sign({
                 id: user._id,
                 username: user.username
-            }, process.env.REFRESH_TOKEN_SECRET, { expiresIn: `7d` });
+            }, process.env.JWT_SECRET_REFRESH, { expiresIn: `7d` });
             await user_model_1.UserModel.updateOne({ _id: user._id }, {
                 $set: {
                     is_connected: true,
@@ -117,8 +117,7 @@ class AuthController {
                 res.status(400).json({ error: `User id/username is required for logout` });
                 return;
             }
-            const userController = new user_controller_1.default();
-            const user = await userController.getUserObject(req, res, param);
+            const user = await user_controller_1.default.getUserObject(req, res, param);
             if (!user) {
                 res.status(404).json({ error: `User not found` });
                 return;
@@ -136,4 +135,4 @@ class AuthController {
         }
     }
 }
-exports.default = AuthController;
+exports.default = new AuthController;

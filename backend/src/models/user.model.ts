@@ -114,6 +114,7 @@ interface IUser extends Document {
   is_active: boolean;
   is_connected: boolean;
   email_confirmed: boolean;
+  confirmationn_token: string;
   refresh_token?: string;
   lastname?: string;
   firstname?: string;
@@ -138,6 +139,7 @@ const userSchema = new Schema({
   is_active: { type: Boolean, required: true, default: true },
   is_connected: { type: Boolean, required: true, default: false },
   email_confirmed: { type: Boolean, required: true, default: false },
+  confirmation_token: { type: String },
   refresh_token: { type: String, default: `` },
   lastname: { type: String },
   firstname: { type: String },

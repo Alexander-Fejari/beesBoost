@@ -11,7 +11,7 @@ const dotenv_1 = __importDefault(require("dotenv"));
 const database_config_1 = require("./config/database.config");
 const user_route_1 = __importDefault(require("./routes/user.route"));
 const auth_route_1 = __importDefault(require("./routes/auth.route"));
-const mailer_route_1 = __importDefault(require("./routes/mailer.route"));
+//import mailerRouter from './routes/mailer.route';
 dotenv_1.default.config();
 // Initialize
 const app = (0, express_1.default)();
@@ -30,7 +30,7 @@ app.use((0, cors_1.default)({
 // Routes
 app.use(`/`, user_route_1.default); // User
 app.use(`/auth`, auth_route_1.default); // Authentification
-app.use(`/mail`, mailer_route_1.default); // Testing mailer
+//app.use(`/mail`, mailerRouter); // Testing mailer
 // Connection database + Launching server
 (0, database_config_1.connectToDatabase)()
     .then(() => {

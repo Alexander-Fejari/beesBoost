@@ -6,7 +6,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const bcrypt_1 = __importDefault(require("bcrypt"));
 const user_model_1 = require("../models/user.model");
 const mongodb_1 = require("mongodb");
-const mailer_controller_1 = __importDefault(require("./mailer.controller"));
+const mailer_service_1 = __importDefault(require("../services/mailer.service"));
+const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 class UserController {
     // UTILS
     async getUserObject(req, res, username_or_id) {
@@ -95,10 +96,10 @@ class UserController {
                 userData.worker_details = { ...req.body.worker_details };
                 // Ajouter logique pour mettre is_company_admin à true quand c'est le premier de la company 
             }
+            userData.confirmationToken = jsonwebtoken_1.default.sign({ userId: userData }, process.env.JWT_SECRET_EMAIL_CONFIRM, { expiresIn: '1d' });
+            mailer_service_1.default.sendConfirmationEmail(userData.email, userData.username, `45123`);
             const newUser = new user_model_1.UserModel(userData);
             await newUser.save();
-            const mailerController = new mailer_controller_1.default();
-            mailerController.sendConfirmationEmail(userData.email, userData.username, `45123`);
             res.status(201).json({ message: `User added successfully`, userId: newUser._id });
         }
         catch (error) {
@@ -488,4 +489,4 @@ class UserController {
         }
     }
 }
-exports.default = UserController;
+exports.default = new UserController;

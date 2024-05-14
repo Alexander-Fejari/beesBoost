@@ -1,6 +1,6 @@
 import nodemailer from 'nodemailer';
 
-class MailerController {
+class MailerService {
   protected async initMailer(): Promise<any> {
     const transporter = nodemailer.createTransport({
       host: "smtp-auth.mailprotect.be",
@@ -35,4 +35,4 @@ class MailerController {
   }
 }
 
-export default MailerController;
+export default new MailerService;

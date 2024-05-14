@@ -1,9 +1,8 @@
 import express, { Router } from 'express';
-import AuthController from '../controllers/auth.controller';
+import authController from '../controllers/auth.controller';
 import { authenticateToken } from '../middlewares/auth.middleware';
 
 const router: Router = express.Router();
-const authController = new AuthController();
 
 router.post(`/signIn`, (req, res) => authController.userLogin(req, res));
 

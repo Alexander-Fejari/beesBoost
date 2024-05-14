@@ -55,6 +55,7 @@ const userSchema = new mongoose_1.Schema({
     is_active: { type: Boolean, required: true, default: true },
     is_connected: { type: Boolean, required: true, default: false },
     email_confirmed: { type: Boolean, required: true, default: false },
+    confirmation_token: { type: String },
     refresh_token: { type: String, default: `` },
     lastname: { type: String },
     firstname: { type: String },

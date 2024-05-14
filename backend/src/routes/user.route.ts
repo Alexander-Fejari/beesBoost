@@ -1,9 +1,9 @@
 import express, { Router } from 'express';
-import UserController from '../controllers/user.controller';
+import userController from '../controllers/user.controller';
 import { authenticateToken, authorizeRoles } from '../middlewares/auth.middleware'
 
 const router: Router = express.Router();
-const userController = new UserController();
+//const userController = new UserController();
 
 // ----------------------------------------------------------- GENERAL -----------------------------------------------------------
 
