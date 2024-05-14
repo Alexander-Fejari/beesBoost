@@ -10,6 +10,7 @@ const router = express_1.default.Router();
 // ----------------------------------------------------------- GENERAL -----------------------------------------------------------
 // POST GENERAL INFOS
 router.post(`/user/signUp`, (req, res) => user_controller_1.default.addUser(req, res));
+router.post('/user/resendConfirmationEmail', (req, res) => user_controller_1.default.resendConfirmationEmail(req, res));
 // GET GENERAL INFOS
 router.get(`/user/getAllUsers`, /*authenticateToken,*/ (req, res) => user_controller_1.default.getAllUsers(req, res));
 router.get(`/user/getUser/:param`, /*authenticateToken,*/ (req, res) => user_controller_1.default.getUser(req, res));

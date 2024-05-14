@@ -148,6 +148,40 @@ class UserController {
     }
   }
 
+  async resendConfirmationEmail(req: Request, res: Response): Promise<void> {
+    try {
+      const { email } = req.body;
+      
+      const user = await UserModel.findOne({ email });
+
+      if (!user) {
+        res.status(404).json({ error: `Utilisateur non trouvé.` });
+        return ;
+      }
+
+      if (user.is_confirmed) {
+        res.status(400).json({ error: `Cet utilisateur est déjà confirmé.` });
+        return ;
+      }
+
+      const confirmationToken = jwt.sign(
+        { username: user.username },
+        process.env.JWT_SECRET_EMAIL_CONFIRM!,
+        { expiresIn: '15m' }
+      );
+      user.confirmation_token = confirmationToken;
+
+      await user.save();
+
+      await mailerService.resendConfirmationEmail(user.email, user.username, confirmationToken);
+
+      res.status(200).json({ message: 'Un nouvel email de confirmation a été envoyé.' });
+    } catch (error) {
+      console.error('Erreur lors de l\'envoi de l\'email de confirmation :', error);
+      res.status(500).json({ error: 'Erreur interne du serveur.' });
+    }
+  }
+
   async getAllUsers(req: Request, res: Response): Promise<void> {
     try {
       let query = {};

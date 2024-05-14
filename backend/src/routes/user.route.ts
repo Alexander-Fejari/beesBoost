@@ -10,12 +10,15 @@ const router: Router = express.Router();
   // POST GENERAL INFOS
 router.post(`/user/signUp`, (req, res) => userController.addUser(req, res));
 
+router.post('/user/resendConfirmationEmail', (req, res) => userController.resendConfirmationEmail(req, res));
+
   // GET GENERAL INFOS
 router.get(`/user/getAllUsers`, /*authenticateToken,*/ (req, res) => userController.getAllUsers(req, res));
 
 router.get(`/user/getUser/:param`, /*authenticateToken,*/ (req, res) => userController.getUser(req, res));
 
 router.get('/user/confirmEmail/:token', (req, res) => userController.confirmEmail(req, res));
+
 
   // DELETE GENERAL INFOS
 router.delete(`/user/deleteUser`, /*authenticateToken, authorizeRoles(`superAdmin`),*/ (req, res) => userController.deleteUser(req, res)); // Only for superAdmin
