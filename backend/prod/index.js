@@ -30,7 +30,7 @@ app.use((0, cors_1.default)({
 // Routes
 app.use(`/`, user_route_1.default); // User
 app.use(`/auth`, auth_route_1.default); // Authentification
-app.use(`/mail`, mailer_route_1.default);
+app.use(`/mail`, mailer_route_1.default); // Testing mailer
 // Connection database + Launching server
 (0, database_config_1.connectToDatabase)()
     .then(() => {

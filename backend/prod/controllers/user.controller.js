@@ -6,6 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const bcrypt_1 = __importDefault(require("bcrypt"));
 const user_model_1 = require("../models/user.model");
 const mongodb_1 = require("mongodb");
+const mailer_controller_1 = __importDefault(require("./mailer.controller"));
 class UserController {
     // UTILS
     async getUserObject(req, res, username_or_id) {
@@ -96,6 +97,8 @@ class UserController {
             }
             const newUser = new user_model_1.UserModel(userData);
             await newUser.save();
+            const mailerController = new mailer_controller_1.default();
+            mailerController.sendConfirmationEmail(userData.email, userData.username, `45123`);
             res.status(201).json({ message: `User added successfully`, userId: newUser._id });
         }
         catch (error) {

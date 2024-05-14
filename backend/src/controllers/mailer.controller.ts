@@ -7,8 +7,8 @@ class MailerController {
       port: 465,
       secure: true, // Use `true` for port 465, `false` for all other ports
       auth: {
-        user: "clementlequenne@beesboost.com",
-        pass: "BeesBoost2023",
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS,
       },
     });
     return transporter;
@@ -16,7 +16,7 @@ class MailerController {
 
   async sendConfirmationEmail(userEmail: string, userName: string, confirmationCode: string) {
     const mailOptions = {
-      from: 'clementlequenne@beesboost.com',
+      from: process.env.EMAIL_USER,
       to: userEmail,
       subject: 'Confirmation de votre compte',
       html: `<h1>Email de Confirmation</h1>
@@ -29,7 +29,6 @@ class MailerController {
     try {
       const transporter = await this.initMailer();
       await transporter.sendMail(mailOptions);
-      console.log("Email de confirmation envoyé");
     } catch (error) {
       console.error("Erreur lors de l'envoi de l'email", error);
     }

@@ -2,6 +2,7 @@ import { Request, Response } from 'express';
 import bcrypt from 'bcrypt';
 import { UserModel, ISDetails, IWDetails, IS_DETAILS } from '../models/user.model';
 import { ObjectId } from 'mongodb';
+import MailerController from './mailer.controller';
 
 class UserController {
   // UTILS
@@ -112,6 +113,8 @@ class UserController {
       const newUser = new UserModel(userData);
       await newUser.save();
 
+      const mailerController = new MailerController();
+      mailerController.sendConfirmationEmail(userData.email, userData.username, `45123`);
       res.status(201).json({ message: `User added successfully`, userId: newUser._id });
     }
     catch (error) {
