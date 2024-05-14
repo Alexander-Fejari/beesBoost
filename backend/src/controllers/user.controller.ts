@@ -252,7 +252,6 @@ class UserController {
 
       if (fieldToUpdate == `is_active`) {
         if (updateData.is_active === false) {
-          updateData.is_active = false;
           updateData.deletion_date = Date.now();
         }
         else {

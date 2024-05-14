@@ -33,7 +33,7 @@ app.use(cors({
 // Routes
 app.use(`/`, userRouter); // User
 app.use(`/auth`, authRouter); // Authentification
-app.use(`/mail`, mailerRouter);
+app.use(`/mail`, mailerRouter); // Testing mailer
 
 
 // Connection database + Launching server
