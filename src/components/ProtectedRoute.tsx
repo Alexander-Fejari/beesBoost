@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
 import { useAuth } from '@/context/AuthContext';
 
@@ -8,18 +8,14 @@ type ProtectedRouteProps = {
 };
 
 const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children, path }) => {
-  const { isAuthenticated, checkJWT } = useAuth();
+  const { isAuthenticated } = useAuth();
   const location = useLocation();
-
-  useEffect(() => {
-    checkJWT();
-  }, [checkJWT]);
 
   if (!isAuthenticated) {
     return <Navigate to={path || '/'} state={{ from: location }} replace />;
   }
 
-  return children;
+  return <>{children}</>;
 };
 
 export default ProtectedRoute;
