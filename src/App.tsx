@@ -1,5 +1,4 @@
-import {createBrowserRouter, createRoutesFromElements, Route, RouterProvider,} from "react-router-dom";
-import {AuthProvider} from './context/AuthContext';
+import { createBrowserRouter, createRoutesFromElements, Route, RouterProvider } from "react-router-dom";
 import NotFound from '@/pages/notFound/NotFound.tsx';
 import DesignSystem from '@/pages/designSystem/DesignSystem.tsx';
 import Home from '@/pages/home/Home.tsx';
@@ -13,27 +12,22 @@ import Settings from "@/pages/dashboard/nested/Settings";
 const router = createBrowserRouter(
     createRoutesFromElements(
         <Route path="/">
-            <Route path="*" element={<NotFound/>}/>
-            <Route path="design-system" element={<DesignSystem/>}/>
-            <Route index element={<Home/>}/>
-            <Route path="faq" element={<Faq/>}/>
-            <Route path="contact" element={<Contact/>}/>
-            <Route path="blog" element={<Blog/>}/>
-            <Route path="dashboard/profile" element={<ProtectedRoute><Profile></Profile></ProtectedRoute>}/>
-            <Route path="dashboard/settings" element={<ProtectedRoute><Settings></Settings></ProtectedRoute>}/>
+            <Route path="*" element={<NotFound />} />
+            <Route path="design-system" element={<DesignSystem />} />
+            <Route index element={<Home />} />
+            <Route path="faq" element={<Faq />} />
+            <Route path="contact" element={<Contact />} />
+            <Route path="blog" element={<Blog />} />
+            <Route path="dashboard/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
+            <Route path="dashboard/settings" element={<ProtectedRoute><Settings /></ProtectedRoute>} />
         </Route>
     )
 );
 
 function App() {
-
     return (
-        <>
-            <AuthProvider>
-                <RouterProvider router={router}/>
-            </AuthProvider>
-        </>
-    )
+        <RouterProvider router={router} />
+    );
 }
 
-export default App
+export default App;

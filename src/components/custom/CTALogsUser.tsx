@@ -13,7 +13,7 @@ import SignIn from "@/components/custom/SignIn.tsx";
 import LogIn from "@/components/custom/LogIn.tsx";
 import LogOut from "@/components/custom/logOut.tsx";
 import { jwtDecode } from "jwt-decode";
-import { useAuth } from "@/context/AuthContext";
+import { useAuthStore } from "@/context/AuthStore";
 
 
 interface DecodedToken {
@@ -25,7 +25,7 @@ interface DecodedToken {
 
     const CTALogsUser = () => {
         const { t } = useTranslation();
-        const { isAuthenticated, setToken, token } = useAuth();
+        const { isAuthenticated, setToken, token } = useAuthStore();
         const [username, setUsername] = useState<string | null>(null);
     
         useEffect(() => {

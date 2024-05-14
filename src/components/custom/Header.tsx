@@ -43,7 +43,7 @@ const Header = ({ className }: HeaderProps) => {
                         <LanguageSwitcher />
                         <ModeToggle />
                     </section>
-                    <CTALogsUser isLog={true} />
+                    <CTALogsUser/>
                 </section>
             </section>
         </header>

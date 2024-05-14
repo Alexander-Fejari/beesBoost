@@ -1,14 +1,14 @@
 import Header from "@/components/custom/Header"
 import Footer from "@/components/custom/Footer"
 import Sidebar from "@/components/custom/Sidebar.tsx";
-import { useAuth } from "@/context/AuthContext";
+import { useAuthStore } from "@/context/AuthStore";
 
 interface LayoutProps {
     children?: React.ReactNode
 }
 
 const Layout = ({ children }: LayoutProps) => {
-    const { isAuthenticated } = useAuth();
+    const { isAuthenticated } = useAuthStore();
 
     return (
         <section className={'h-dvh p-6 grid grid-rows-sm md:grid-cols-lg md:grid-rows-lg'}>
