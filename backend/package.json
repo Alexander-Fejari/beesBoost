@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "npm run build && node ./prod/index.js",
+    "build": "npx ts-node ./src/api-docs/merge.api-docs.ts && npx tsc"
   },
   "keywords": [],
   "author": "",
@@ -14,9 +15,12 @@
     "@types/cors": "^2.8.17",
     "@types/express": "^4.17.21",
     "@types/jsonwebtoken": "^9.0.6",
-    "@types/node": "^20.12.7",
+    "@types/lodash": "^4.17.1",
+    "@types/node": "^20.12.11",
     "@types/swagger-jsdoc": "^6.0.4",
     "@types/swagger-ui-express": "^4.1.6",
+    "@types/yamljs": "^0.2.34",
+    "ts-node": "^10.9.2",
     "typescript": "^5.4.5"
   },
   "dependencies": {
@@ -25,9 +29,11 @@
     "dotenv": "^16.4.5",
     "express": "^4.19.2",
     "jsonwebtoken": "^9.0.2",
+    "lodash": "^4.17.21",
     "mongodb": "^6.5.0",
     "mongoose": "^8.3.2",
     "swagger-jsdoc": "^6.2.8",
-    "swagger-ui-express": "^5.0.0"
+    "swagger-ui-express": "^5.0.0",
+    "yamljs": "^0.3.0"
   }
 }

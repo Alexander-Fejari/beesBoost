@@ -19,25 +19,26 @@ app.use(express.json()); // Creates the app
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec)); // Swagger - Documents the app
 
 app.use(cors({
-  origin: ["http://localhost:5000", "http://localhost:5173", "http://localhost:5174", "http://localhost:8000", "http://127.0.0.1:5000"],
+  origin: ["http://localhost:5000", "http://localhost:5173", "http://localhost:5174", "http://localhost:8000", "http://127.0.0.1:5173"],
   
     credentials: true
   })); // cors - Protects the connection with the front
 
 // Test route
-app.get('/', (req: Request, res: Response) => {
-  res.send('Gucci');
-});
+// app.get('/', (req: Request, res: Response) => {
+//   res.send('Gucci');
+// });
 
 // Routes
+app.use('/', userRouter); // User
 app.use(`/auth`, authRouter); // Authentification
-app.use('/user', userRouter); // User
+
 
 // Connection database + Launching server
 connectToDatabase()
   .then(() => {
     app.listen(port, () => {
-      console.log(`Server launched on http://localhost:${port}`);
+      console.log(`Server launched on http://localhost:${port} and Documentation available on http://localhost:${port}/api-docs`);
     });
   })
   .catch((err) => {

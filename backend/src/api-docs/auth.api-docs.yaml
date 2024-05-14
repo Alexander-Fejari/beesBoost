@@ -1,0 +1,213 @@
+paths:
+  /auth/signIn:
+    post:
+      summary: "User login"
+      description: "Authenticates a user by their email or username and password, returns JWT access tokens if successful."
+      operationId: "userLogin"
+      tags:
+        - "Auth"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                  description: "The user's username."
+                  example: "johndoe"
+                password:
+                  type: string
+                  format: "password"
+                  description: "The user's password."
+                  example: "password123"
+                email:
+                  type: string
+                  description: "The user's email address."
+                  example: "johndoe@example.com"
+      responses:
+        '200':
+          description: "Login successful, access token provided."
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Login successful"
+                  accessToken:
+                    type: string
+                    example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVmODQ..."
+        '401':
+          description: "Unauthorized access. Login failed due to no matching user, non-active account, or incorrect password."
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    examples:
+                      noUser:
+                        value: "Login failed: No user matches those credentials"
+                      inactive:
+                        value: "This account isn't active"
+                      badPassword:
+                        value: "Login failed: Bad password"
+        '500':
+          description: "Internal server error during login."
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Internal server error"
+  /auth/renewToken:
+    post:
+      summary: "Renew access token"
+      description: "Renews the user's access token by validating the provided refresh token."
+      operationId: "renewToken"
+      tags:
+        - "Auth"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                refreshToken:
+                  type: string
+                  description: "The refresh token used to renew the access token."
+                  example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVmODQ..."
+      responses:
+        '200':
+          description: "Access token successfully renewed."
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  accessToken:
+                    type: string
+                    example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVmODQ..."
+        '401':
+          description: "Unauthorized - No refresh token provided or token has expired."
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "No refresh token provided"
+                  message:
+                    type: string
+                    example: "Token expired"
+        '403':
+          description: "Forbidden - Refresh token not found or invalid."
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Refresh token not found or invalid"
+        '404':
+          description: "Not Found - Failed to decode refresh token."
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Failed to decode refresh token"
+        '500':
+          description: "Internal Server Error - Failed to authenticate token."
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Failed to authenticate token"
+  /auth/logOut/{param}:
+    post:
+      summary: "User logout"
+      description: "Logs out a user by clearing their refresh token and setting the is_connected status to false. Requires a valid refresh token."
+      operationId: "logOut"
+      tags:
+        - "Auth"
+      # security:
+        # - BearerAuth: []
+      parameters:
+        - in: path
+          name: param
+          required: true
+          schema:
+            type: string
+            description: "The user's ID or username indicating which user is logging out."
+            example: "5e5df7fc8953ad317845f0f9"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                refreshToken:
+                  type: string
+                  description: "The refresh token that needs to be invalidated."
+                  example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVmODQ..."
+      responses:
+        '200':
+          description: "Logout successful, the user's session has been effectively terminated."
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Logout successful"
+        '400':
+          description: "Bad request, no refresh token provided."
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "No refresh token provided"
+        '404':
+          description: "Refresh token not found, indicating no action was taken."
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Refresh token not found"
+        '500':
+          description: "Internal server error during the logout process."
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Internal server error"
+
+
+
+
