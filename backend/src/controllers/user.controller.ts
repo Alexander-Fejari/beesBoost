@@ -150,7 +150,7 @@ class UserController {
 
   async resendConfirmationEmail(req: Request, res: Response): Promise<void> {
     try {
-      const { email } = req.body;
+      const { email } = req.params;
       
       const user = await UserModel.findOne({ email });
 

@@ -6,15 +6,14 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const user_controller_1 = __importDefault(require("../controllers/user.controller"));
 const router = express_1.default.Router();
-//const userController = new UserController();
 // ----------------------------------------------------------- GENERAL -----------------------------------------------------------
 // POST GENERAL INFOS
 router.post(`/user/signUp`, (req, res) => user_controller_1.default.addUser(req, res));
-router.post('/user/resendConfirmationEmail', (req, res) => user_controller_1.default.resendConfirmationEmail(req, res));
 // GET GENERAL INFOS
 router.get(`/user/getAllUsers`, /*authenticateToken,*/ (req, res) => user_controller_1.default.getAllUsers(req, res));
 router.get(`/user/getUser/:param`, /*authenticateToken,*/ (req, res) => user_controller_1.default.getUser(req, res));
 router.get('/user/confirmEmail/:token', (req, res) => user_controller_1.default.confirmEmail(req, res));
+router.get('/user/resendConfirmationEmail/:email', (req, res) => user_controller_1.default.resendConfirmationEmail(req, res));
 // DELETE GENERAL INFOS
 router.delete(`/user/deleteUser`, /*authenticateToken, authorizeRoles(`superAdmin`),*/ (req, res) => user_controller_1.default.deleteUser(req, res)); // Only for superAdmin
 // UPDATE GENERAL INFOS

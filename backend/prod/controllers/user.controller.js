@@ -127,7 +127,7 @@ class UserController {
     }
     async resendConfirmationEmail(req, res) {
         try {
-            const { email } = req.body;
+            const { email } = req.params;
             const user = await user_model_1.UserModel.findOne({ email });
             if (!user) {
                 res.status(404).json({ error: `Utilisateur non trouvé.` });

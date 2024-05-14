@@ -24,7 +24,7 @@ class AuthController {
         return;
       }
 
-      if (user.is_active == false || user.is_verified == false || user.email_confirmed == false) {
+      if (user.is_active == false || user.is_verified == false /*|| user.email_confirmed == false*/) {
         res.status(403).json({ error: `This account isnt active, verified and/or its email hasnt been confirmed`});
         return ;
       }

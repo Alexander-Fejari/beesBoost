@@ -22,7 +22,8 @@ class MailerService {
       html: `<h1>Email de Confirmation</h1>
           <h2>Hello ${userName}</h2>
           <p>Merci pour votre inscription. Veuillez confirmer votre email en cliquant sur le lien suivant</p>
-          <a href=http://localhost:5000/user/confirmEmail/${confirmationCode}> Click here</a>
+          <a href=${process.env.DOMAIN_EMAIL}/user/confirmEmail/${confirmationCode}> Click here to confirm your account</a><br><br>
+          <a href=${process.env.DOMAIN_EMAIL}/user/resendConfirmationEmail/${userEmail}>Send a new confirmation token</a>
           </div>`,
     };
   
@@ -42,7 +43,8 @@ class MailerService {
       html: `<h1>Email de Confirmation</h1>
           <h2>Hello ${userName}</h2>
           <p>Merci pour votre inscription. Veuillez confirmer votre email en cliquant sur ce nouveau lien</p>
-          <a href=http://localhost:5000/user/confirmEmail/${confirmationCode}> Click here</a>
+          <a href=${process.env.DOMAIN_EMAIL}/user/confirmEmail/${confirmationCode}> Click here</a><br><br>
+          <a href=${process.env.DOMAIN_EMAIL}/user/resendConfirmationEmail/${userEmail}>Send a new confirmation token</a>
           </div>`,
     };
   
