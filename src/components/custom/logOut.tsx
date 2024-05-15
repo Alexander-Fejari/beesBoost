@@ -3,7 +3,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from "react-router-dom";
-import { useAuthStore } from "@/context/AuthStore"; 
+import { useAuthStore } from "@/store/Store"; 
 
 const LogOut = () => {
   const { t } = useTranslation();
