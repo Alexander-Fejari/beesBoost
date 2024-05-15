@@ -1,0 +1,15 @@
+{
+    "dashboard": {
+        "studentButton": "Vind een baan",
+        "employerButton": "Word partner",
+        "title": "Uw volgende ",
+        "subtitle": {
+            "boost":"boost",
+            "video":"video",
+            "photo":"fotoshoot",
+            "site":"website",
+            "blog":"blog post"
+        },
+        "pickUpLine":"Trek meer klanten aan met effectieve communicatie!"
+    }
+}

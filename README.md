@@ -31,7 +31,7 @@ Pour toute question ou demande d'information supplémentaire, veuillez contacter
 
 
 ## Introduction
-Welcome to the **Bees Boost** project. Our goal is to boost the performance of local small businesses using innovative communication approaches, while also providing an opportunity for passionate young talents to gain practical experience.
+HeroBanner to the **Bees Boost** project. Our goal is to boost the performance of local small businesses using innovative communication approaches, while also providing an opportunity for passionate young talents to gain practical experience.
 
 ## Our Mission
 Our main mission is to enhance the performance of local small businesses through innovative communication. To achieve this, we call upon students who are as passionate as they are skilled, offering them the opportunity to apply their knowledge and skills in real communication missions.
