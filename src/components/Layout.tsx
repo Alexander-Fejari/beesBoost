@@ -1,7 +1,7 @@
 import Header from "@/components/custom/Header"
 import Footer from "@/components/custom/Footer"
 import Sidebar from "@/components/custom/Sidebar.tsx";
-import { useAuthStore } from "@/context/AuthStore";
+import { useAuthStore } from "@/store/Store";
 
 interface LayoutProps {
     children?: React.ReactNode
