@@ -7,6 +7,8 @@ import dotenv from 'dotenv';
 import { connectToDatabase, closeDatabase } from './config/database.config';
 import userRouter from './routes/user.route';
 import authRouter from './routes/auth.route';
+import companyRouter from './routes/company.route';
+import cOffersRouter from './routes/companyOffers.route';
 //import mailerRouter from './routes/mailer.route';
 
 dotenv.config();
@@ -33,6 +35,8 @@ app.use(cors({
 // Routes
 app.use(`/`, userRouter); // User
 app.use(`/auth`, authRouter); // Authentification
+app.use(`/company`, companyRouter); // Companies
+app.use(`/cOffers`, cOffersRouter); // Companies Offers
 //app.use(`/mail`, mailerRouter); // Testing mailer
 
 

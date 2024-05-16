@@ -1,5 +1,5 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-class CompanyController {
+class CompanyOffersController {
 }
-exports.default = new CompanyController;
+exports.default = new CompanyOffersController;

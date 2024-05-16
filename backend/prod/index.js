@@ -11,6 +11,8 @@ const dotenv_1 = __importDefault(require("dotenv"));
 const database_config_1 = require("./config/database.config");
 const user_route_1 = __importDefault(require("./routes/user.route"));
 const auth_route_1 = __importDefault(require("./routes/auth.route"));
+const company_route_1 = __importDefault(require("./routes/company.route"));
+const companyOffers_route_1 = __importDefault(require("./routes/companyOffers.route"));
 //import mailerRouter from './routes/mailer.route';
 dotenv_1.default.config();
 // Initialize
@@ -30,6 +32,8 @@ app.use((0, cors_1.default)({
 // Routes
 app.use(`/`, user_route_1.default); // User
 app.use(`/auth`, auth_route_1.default); // Authentification
+app.use(`/company`, company_route_1.default); // Companies
+app.use(`/cOffers`, companyOffers_route_1.default); // Companies Offers
 //app.use(`/mail`, mailerRouter); // Testing mailer
 // Connection database + Launching server
 (0, database_config_1.connectToDatabase)()

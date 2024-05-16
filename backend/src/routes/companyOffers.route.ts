@@ -1,6 +1,7 @@
 import express, { Router } from 'express';
-import companyController from '../controllers/company.controller';
+import cOffersController from '../controllers/companyOffers.controller';
 
 const router: Router = express.Router();
+
 
 export default router;
