@@ -104,7 +104,7 @@ class UserController {
                 // Ajouter logique pour mettre is_company_admin à true quand c'est le premier de la company 
             }
             userData.confirmation_token = jsonwebtoken_1.default.sign({ username: userData.username }, process.env.JWT_SECRET_EMAIL_CONFIRM, { expiresIn: '15m' });
-            mailer_service_1.default.sendConfirmationEmail(userData.email, userData.username, userData.confirmation_token);
+            //mailerService.sendConfirmationEmail(userData.email, userData.username, userData.confirmation_token);
             const newUser = new user_model_1.UserModel(userData);
             await newUser.save();
             res.status(201).json({ message: `User added successfully`, user_id: newUser._id });

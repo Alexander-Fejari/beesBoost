@@ -121,7 +121,7 @@ class UserController {
 
       userData.confirmation_token = jwt.sign({ username: userData.username }, process.env.JWT_SECRET_EMAIL_CONFIRM!, { expiresIn: '15m' });
 
-      mailerService.sendConfirmationEmail(userData.email, userData.username, userData.confirmation_token);
+      //mailerService.sendConfirmationEmail(userData.email, userData.username, userData.confirmation_token);
 
       const newUser = new UserModel(userData);
       await newUser.save();
