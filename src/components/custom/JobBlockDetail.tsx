@@ -1,4 +1,3 @@
-import { ChevronDownIcon } from "@radix-ui/react-icons"
 
 import {
   Avatar,
@@ -19,42 +18,50 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover"
 
-export function JobBlock() {
+export function JobBlockDetail() {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Team Members</CardTitle>
+          <Avatar>
+              <AvatarImage src="/avatars/01.png" />
+              <AvatarFallback>OM</AvatarFallback>
+          </Avatar>
+          <CardTitle>Intitulé du job</CardTitle>
         <CardDescription>
-          Invite your team members to collaborate.
+          Description du job
         </CardDescription>
       </CardHeader>
       <CardContent className="grid gap-6">
         <div className="flex items-center justify-between space-x-4">
           <div className="flex items-center space-x-4">
-            <Avatar>
-              <AvatarImage src="/avatars/01.png" />
-              <AvatarFallback>OM</AvatarFallback>
-            </Avatar>
+
             <div>
               <p className="text-sm font-medium leading-none">Sofia Davis</p>
               <p className="text-sm text-muted-foreground">m@example.com</p>
             </div>
           </div>
           <Popover>
-            <PopoverTrigger asChild>
+            <PopoverTrigger>
               <Button variant="outline" className="ml-auto">
-                Owner{" "}
-                <ChevronDownIcon className="ml-2 h-4 w-4 text-muted-foreground" />
+                Postuler
               </Button>
-            </PopoverTrigger>
+              </PopoverTrigger>
             <PopoverContent className="p-0" align="end">
              
             </PopoverContent>
-          </Popover>
+            <PopoverTrigger>
+              <Button variant="primary" className="ml-auto">
+                Envoyer un message
+              </Button>
+              </PopoverTrigger>
+            <PopoverContent className="p-0" align="end">
+             
+            </PopoverContent>
+            </Popover>
         </div>
       </CardContent>
     </Card>
   )
 }
 
-export default JobBlock
+export default JobBlockDetail
