@@ -3,12 +3,12 @@ import { NavLink } from "react-router-dom";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 import useStudentStore from '@/store/LastStudentsStore';
 
-interface StudentProps {
+interface LastStudentProps {
     className?: string;
     numHives?: number;  
 }
 
-const StudentHive: React.FC<StudentProps> = ({ className, numHives = 5 }) => {
+const StudentHive: React.FC<LastStudentProps> = ({ className, numHives = 5 }) => {
     const { users, fetchUsers } = useStudentStore(state => ({
         users: state.users,
         fetchUsers: state.fetchUsers

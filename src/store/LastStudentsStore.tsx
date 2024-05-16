@@ -1,20 +1,20 @@
 import { create } from 'zustand';
 import { devtools } from 'zustand/middleware';
 
-interface User {
+interface LastUserProps {
     id: string;
     profile_pic: string;
     username: string;
 }
 
-interface StudentState {
-    users: User[];
+interface LastStudentStateProps {
+    users: LastUserProps[];
     isLoading: boolean;
     errorMessage: string | null;
     fetchUsers: (apiUrl: string, numHives: number) => Promise<void>;
 }
 
-const useStudentStore = create<StudentState>()(devtools((set) => ({
+const useStudentStore = create<LastStudentStateProps>()(devtools((set) => ({
     users: [],
     isLoading: false,
     errorMessage: null,
