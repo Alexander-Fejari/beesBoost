@@ -2,7 +2,7 @@ import {useTranslation} from "react-i18next";
 import {NavLink} from "react-router-dom";
 import {Button} from "@/components/ui/button"
 import AnimatedTitle from "@/components/custom/AnimatedTitle";
-
+import LastRegisteredStudents from "@/components/custom/LastRegisteredStudents.tsx";
 
 const HeroBanner = () => {
     const {t} = useTranslation('dashboard')
@@ -12,7 +12,7 @@ const HeroBanner = () => {
                 <h1 className={'text-2xl font-normal'}>
                     {t('dashboard.title')}
                 </h1>
-                <AnimatedTitle/>
+                <AnimatedTitle />
             </section>
             <section className="flex justify-center items-center gap-x-8">
                 <Button size={'sm'} variant={'default'} asChild>
@@ -29,8 +29,8 @@ const HeroBanner = () => {
             <section>
                 <h3 className={'font-normal'}>{t('dashboard.pickUpLine')}</h3>
             </section>
+            <LastRegisteredStudents />
         </section>
-
     )
 }
 

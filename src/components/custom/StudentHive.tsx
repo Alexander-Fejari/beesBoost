@@ -1,3 +1,4 @@
+/*
 import { useEffect, useState } from "react";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { NavLink } from "react-router-dom";
@@ -82,3 +83,4 @@ const StudentHive = ({ className, numHives = 5 }: StudentProps) => {
 }
 
 export default StudentHive;
+*/
