@@ -67,7 +67,7 @@ class UserController {
   // GENERAL
   async addUser(req: Request, res: Response): Promise<void> {
     try {
-      const { username, password, profile_pic, role, lastname, firstname, occupation, location, contact_info } = req.body;
+      const { username, password, profile_pic, role, lastname, firstname, occupation, location, contact_info, prefered_language } = req.body;
       let { email } = req.body;
       
       email = email.toLowerCase();
@@ -99,8 +99,16 @@ class UserController {
 
       const hashedPassword = await bcrypt.hash(password, 10);
 
-      const userData: any = { username, password: hashedPassword, profile_pic, role, email, lastname, firstname, occupation, location, contact_info };
+      const userData: any = { username, password: hashedPassword, profile_pic, role, email, lastname, firstname, occupation, location, contact_info, prefered_language };
      
+      if (userData.prefered_language === 'prefered_language') {
+        const validLanguages = ['fr', 'nl', 'en'];
+        if (!validLanguages.includes(userData.prefered_language)) {
+          res.status(400).json({ message: 'Only fr, nl, or en can be chosen as prefered_language' });
+          return;
+        }
+      }
+
       if (role === `student`) {
         userData.student_details = {};
         userData.student_details = { ...req.body.student_details };
@@ -322,6 +330,14 @@ class UserController {
         }
       }
 
+      if (fieldToUpdate === 'prefered_language') {
+        const validLanguages = ['fr', 'nl', 'en'];
+        if (!validLanguages.includes(updateData.prefered_language)) {
+          res.status(400).json({ message: 'Only fr, nl, or en can be chosen as prefered_language' });
+          return;
+        }
+      }
+
       const result = await UserModel.updateOne(param.length < 24 ? { username: param } : { _id: param } , updateData);
 
       // Mettre la logique du mailer plus tard
@@ -345,7 +361,7 @@ class UserController {
       const updateData = req.body;
     
       const allowedFields: string[] = [
-        `profile_pic`, `lastname`, `firstname`, `occupation`, `location`, 
+        `profile_pic`, `lastname`, `firstname`, `occupation`, `location`, `prefered_language`,
         `contact_info.phone`, `contact_info.street`, `contact_info.street_number`, `contact_info.box`,
         `contact_info.city`, `contact_info.country`, `contact_info.postal_code`, `student_details.school`
       ];
@@ -359,6 +375,13 @@ class UserController {
         if (!allowedFields.includes(field)) {
           res.status(400).json({ error: `Invalid field in the body, only this can be updated: ${allowedFields.join(', ')}` });
           return ;
+        }
+        if (field === 'prefered_language') {
+          const validLanguages = ['fr', 'nl', 'en'];
+          if (!validLanguages.includes(updateData.prefered_language)) {
+            res.status(400).json({ message: 'Only fr, nl, or en can be chosen as prefered_language' });
+            return;
+          }
         }
         updateObject[field] = updateData[field];
       }

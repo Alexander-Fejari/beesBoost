@@ -7,7 +7,7 @@ const router: Router = express.Router();
 // ----------------------------------------------------------- GENERAL -----------------------------------------------------------
 
   // POST GENERAL INFOS
-router.post(`/user/signUp`, (req, res) => userController.addUser(req, res));
+router.post(`/user/signUp`, (req, res) => userController.addUser(req, res)); // Swagger à modifier (mailer + prefered_language)
 
 
   // GET GENERAL INFOS
@@ -15,16 +15,16 @@ router.get(`/user/getAllUsers`, /*authenticateToken,*/ (req, res) => userControl
 
 router.get(`/user/getUser/:param`, /*authenticateToken,*/ (req, res) => userController.getUser(req, res));
 
-router.get('/user/confirmEmail/:token', (req, res) => userController.confirmEmail(req, res));
+router.get('/user/confirmEmail/:token', (req, res) => userController.confirmEmail(req, res)); // Swagger à faire
 
-router.get('/user/resendConfirmationEmail/:email', (req, res) => userController.resendConfirmationEmail(req, res));
-
+router.get('/user/resendConfirmationEmail/:email', (req, res) => userController.resendConfirmationEmail(req, res)); // Swagger à faire
+ 
 
   // DELETE GENERAL INFOS
 router.delete(`/user/deleteUser`, /*authenticateToken, authorizeRoles(`superAdmin`),*/ (req, res) => userController.deleteUser(req, res)); // Only for superAdmin
 
   // UPDATE GENERAL INFOS
-router.put(`/user/updateInfos/:param`, /*authenticateToken,*/ (req, res) => userController.updateFields(req, res));
+router.put(`/user/updateInfos/:param`, /*authenticateToken,*/ (req, res) => userController.updateFields(req, res)); // Swagger à Modifier
 
 router.put(`/user/updateVerified/:param`, /*authenticateToken, authorizeRoles(`admin`, `superAdmin`),*/ (req, res) => userController.updateField(req, res, `is_verified`));
 
@@ -37,6 +37,8 @@ router.put(`/user/updateUsername/:param`, /*authenticateToken, authorizeRoles(`a
 router.put(`/user/updatePassword/:param`, /*authenticateToken,*/ (req, res) => userController.updateField(req, res, `password`));
 
 router.put(`/user/updateEmail/:param`, /*authenticateToken, */ (req, res) => userController.updateField(req, res, `email`));
+
+router.put(`/user/updatePreferedLanguage/:param`, /*authenticateToken, */ (req, res) => userController.updateField(req, res, `prefered_language`)); // Swagger à faire
 
 
 // ----------------------------------------------------------- WORKER -----------------------------------------------------------

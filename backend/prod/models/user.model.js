@@ -56,6 +56,7 @@ const userSchema = new mongoose_1.Schema({
     is_verified: { type: Boolean, required: true, default: true }, // A mettre en false pour la production
     is_active: { type: Boolean, required: true, default: true },
     is_connected: { type: Boolean, required: true, default: false },
+    prefered_language: { type: String, required: true, default: `fr` },
     refresh_token: { type: String, default: `` },
     lastname: { type: String },
     firstname: { type: String },
