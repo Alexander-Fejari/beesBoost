@@ -1,4 +1,4 @@
-import express from 'express';
+import express, { Request, Response } from 'express';
 import swaggerUi from 'swagger-ui-express';
 import swaggerSpec from './config/swagger.config'
 import cors from 'cors';
@@ -28,15 +28,15 @@ app.use(cors({
   })); // cors - Protects the connection with the front
 
 // Test route
-// app.get('/', (req: Request, res: Response) => {
-//   res.send('Gucci');
-// });
+app.get('/home', (req: Request, res: Response) => {
+  res.send('Gucci');
+});
 
 // Routes
 app.use(`/`, userRouter); // User
 app.use(`/auth`, authRouter); // Authentification
 app.use(`/company`, companyRouter); // Companies
-app.use(`/cOffers`, cOffersRouter); // Companies Offers
+app.use(`/post`, cOffersRouter); // Companies Offers
 //app.use(`/mail`, mailerRouter); // Testing mailer
 
 

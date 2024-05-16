@@ -1,3 +1,107 @@
+components:
+  schemas:
+    StudentDetails:
+      type: object
+      properties:
+        school:
+          type: string
+          example: "University of Example"
+        formation:
+          type: array
+          items:
+            type: object
+            properties:
+              degree:
+                type: string
+                example: "Bachelor of Science"
+              field:
+                type: string
+                example: "Computer Science"
+              school:
+                type: string
+                example: "University of Example"
+              graduation_year:
+                type: integer
+                example: 2024
+        experience:
+          type: array
+          items:
+            type: object
+            properties:
+              title:
+                type: string
+                example: "Intern"
+              company:
+                type: string
+                example: "Tech Solutions Ltd"
+              location:
+                type: string
+                example: "New York, NY"
+              start_date:
+                type: string
+                format: date-time
+                example: "2023-01-01"
+              end_date:
+                type: string
+                format: date-time
+                example: "2023-12-31"
+              description:
+                type: string
+                example: "Worked on developing and maintaining front-end solutions."
+        skills:
+          type: array
+          items:
+            type: object
+            properties:
+              name:
+                type: string
+                example: "JavaScript"
+              level:
+                type: string
+                example: "Intermediate"
+        certification:
+          type: array
+          items:
+            type: object
+            properties:
+              name:
+                type: string
+                example: "Certified JavaScript Developer"
+              provider:
+                type: string
+                example: "Certification Board"
+              date:
+                type: string
+                format: date-time
+                example: "2022-06-15"
+        languages:
+          type: array
+          items:
+            type: object
+            properties:
+              name:
+                type: string
+                example: "English"
+              level:
+                type: string
+                example: "Fluent"
+        game_info:
+          type: array
+          items:
+            type: object
+            properties:
+              level:
+                type: integer
+                example: 5
+              nb_jobs_done:
+                type: integer
+                example: 15
+              nb_jobs_atm:
+                type: integer
+                example: 3
+              title:
+                type: string
+                example: "Achiever"
 paths:
   #GET
   /student/getDetails/{username or id}:

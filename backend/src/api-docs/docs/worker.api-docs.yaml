@@ -1,3 +1,14 @@
+components:
+  schemas:
+    WorkerDetails:
+      type: object
+      properties:
+        company:
+          type: string
+          example: "Example Company Inc."
+        is_company_admin:
+          type: boolean
+          example: false
 paths:
   # GET
   /worker/getDetails/{username or id}:

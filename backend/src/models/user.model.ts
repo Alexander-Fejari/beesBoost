@@ -130,7 +130,7 @@ interface IUser extends Document {
   [key: string]: any;
 }
 
-const userSchema = new Schema({
+const UserSchema = new Schema({
   username: { type: String, required: true, unique: true },
   password: { type: String, required: true },
   profile_pic: { type: String, required: true, default: `https://scontent.fcrl1-1.fna.fbcdn.net/v/t1.6435-9/107209573_3210813778982759_4891830877933540151_n.jpg?_nc_cat=109&ccb=1-7&_nc_sid=5f2048&_nc_ohc=GNNwt0wMw28Q7kNvgFRvakj&_nc_ht=scontent.fcrl1-1.fna&oh=00_AfDE5teHqwAc3S1qdVcqKQ6Z2Dk1ftFbHNqSTkGaPpACBg&oe=665E101A` },
@@ -200,12 +200,12 @@ const userSchema = new Schema({
   }
 });
 
-userSchema.index({ registered_date: -1 });
+UserSchema.index({ registered_date: -1 });
 
-userSchema.methods.comparePassword = async function(candidatePassword: string): Promise<boolean> {
+UserSchema.methods.comparePassword = async function(candidatePassword: string): Promise<boolean> {
   return bcrypt.compare(candidatePassword, this.password);
 };
 
-const UserModel = model<IUser>('User', userSchema);
+const UserModel = model<IUser>('User', UserSchema);
 
 export { UserModel, IUser, ISDetails, IWDetails, IContactInfo, IS_DETAILS };

@@ -85,15 +85,6 @@ components:
           $ref: '#/components/schemas/WorkerDetails'
         student_details:
           $ref: '#/components/schemas/StudentDetails'
-    WorkerDetails:
-      type: object
-      properties:
-        company:
-          type: string
-          example: 'Example Company Inc.'
-        is_company_admin:
-          type: boolean
-          example: false
     StudentDetails:
       type: object
       properties:
@@ -196,6 +187,15 @@ components:
               title:
                 type: string
                 example: Achiever
+    WorkerDetails:
+      type: object
+      properties:
+        company:
+          type: string
+          example: 'Example Company Inc.'
+        is_company_admin:
+          type: boolean
+          example: false
 tags:
   -
     name: Auth

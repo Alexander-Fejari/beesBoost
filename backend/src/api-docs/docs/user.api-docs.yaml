@@ -1,3 +1,78 @@
+components:
+  schemas:
+    User:
+      type: object
+      required:
+        - username
+        - password
+        - profile_pic
+        - role
+        - email
+        - is_verified
+        - is_active
+        - is_connected
+      properties:
+        username:
+          type: string
+          unique: true
+        password:
+          type: string
+        profile_pic:
+          type: string
+          default: 'https://scontent.fcrl1-1.fna.fbcdn.net/v/t1.6435-9/107209573_3210813778982759_4891830877933540151_n.jpg'
+        role:
+          type: string
+        email:
+          type: string
+          unique: true
+        is_verified:
+          type: boolean
+          default: false
+        is_active:
+          type: boolean
+          default: true
+        is_connected:
+          type: boolean
+          default: false
+        refresh_token:
+          type: string
+          default: ''
+        lastname:
+          type: string
+        firstname:
+          type: string
+        occupation:
+          type: string
+        location:
+          type: string
+        registration_date:
+          type: string
+          format: date-time
+          default: Date.now
+        deletion_date:
+          type: string
+          format: date-time
+        contact_info:
+          type: object
+          properties:
+            phone:
+              type: string
+            street:
+              type: string
+            street_number:
+              type: integer
+            box:
+              type: string
+            city:
+              type: string
+            postal_code:
+              type: integer
+            country:
+              type: string
+        worker_details:
+          $ref: '#/components/schemas/WorkerDetails'
+        student_details:
+          $ref: '#/components/schemas/StudentDetails'
 paths:
   # POST
   /user/signUp:
