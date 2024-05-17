@@ -1,10 +1,10 @@
 import { createBrowserRouter, createRoutesFromElements, Route, RouterProvider } from "react-router-dom";
 import NotFound from '@/pages/notFound/NotFound.tsx';
 import DesignSystem from '@/pages/designSystem/DesignSystem.tsx';
+import Dashboard from "./pages/dashboard/Dashboard";
 import ProtectedRoute from './components/ProtectedRoute';
 import Profile from "@/pages/dashboard/nested/Profile";
 import Settings from "@/pages/dashboard/nested/Settings";
-import Dashboard from "@/pages/dashboard/Dashboard";
 
 const router = createBrowserRouter(
     createRoutesFromElements(

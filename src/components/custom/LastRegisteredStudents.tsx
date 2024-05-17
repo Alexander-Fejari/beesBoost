@@ -1,43 +1,41 @@
-import {useState, useEffect } from "react";
+import {useEffect} from 'react';
 import HiveSVG from "@/components/custom/HiveSVG.tsx";
+import {AspectRatio} from "@/components/ui/aspect-ratio.tsx";
+import useStudentStore from "@/store/LastStudentsStore.tsx";
 
 interface LastRegisteredStudentsProps {
     numHives: number;
 }
 
-const LastRegisteredStudents = ({numHives}:LastRegisteredStudentsProps) => {
-    const [users, setUsers] = useState<User[]>([]);
+const LastRegisteredStudents = ({numHives}: LastRegisteredStudentsProps) => {
+    const {users, fetchUsers} = useStudentStore(state => ({
+        users: state.users,
+        fetchUsers: state.fetchUsers
+    }));
 
     useEffect(() => {
-        const fetchLastUsers = async () => {
-            try {
-                const response = await fetch(`${import.meta.env.VITE_APP_API_URL}/student/getLastRegisteredStudents`);
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                const data = await response.json();
-                const students = data.map((student: any) => ({
-                    id: student._id,
-                    profile_pic: student.profile_pic,
-                    username: student.username
-                }));
-                setUsers(students.slice(0, numHives));
-            } catch (error) {
-                console.error("Error fetching data: ", error);
-            }
-        };
-    }, [numHives]);
-
-    const hives = users.map(user, index) => (
-        <section key={user.id}>
-            <HiveSVG size={''} strokeColor={} strokeWidth={} fillColor={}
-        </section>
-    )
+        const apiUrl = import.meta.env.VITE_APP_API_URL;
+        fetchUsers(apiUrl, numHives);
+    }, [numHives, fetchUsers]);
 
     return (
-        <h3>
-            last students
-        </h3>
+        <AspectRatio ratio={1}>
+            <section className={'flex justify-evenly items-center flex-wrap'}>
+                {users.map((user) => (
+                    <section key={user.id}>
+                        <HiveSVG
+                            size={'w-24 h-24'}
+                            strokeColor={'stroke-primary'}
+                            strokeWidth={8}
+                            fillColor={'fill-transparent'}
+                        >
+                            <img className={'w-full h-full'} src={user.profile_pic} alt={user.username}/>
+                        </HiveSVG>
+                    </section>
+                ))}
+            </section>
+        </AspectRatio>
+
     )
 }
 

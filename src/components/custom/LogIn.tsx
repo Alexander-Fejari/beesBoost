@@ -6,7 +6,7 @@ import { Label } from "@/components/ui/label";
 import { loginSchema, LoginValues } from "@/components/formSchema";
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from "react-router-dom";
-import { useAuthStore } from "@/context/AuthStore"; // Ajustez ce chemin selon la structure de votre projet
+import { useAuthStore } from "@/store/Store"; // Ajustez ce chemin selon la structure de votre projet
 
 const LogIn = () => {
   const { t } = useTranslation();

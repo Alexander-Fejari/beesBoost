@@ -29,7 +29,7 @@ const HeroBanner = () => {
             <section>
                 <h3 className={'font-normal'}>{t('dashboard.pickUpLine')}</h3>
             </section>
-            <LastRegisteredStudents />
+            <LastRegisteredStudents numHives={5}/>
         </section>
     )
 }

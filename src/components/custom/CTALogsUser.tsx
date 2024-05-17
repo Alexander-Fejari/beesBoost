@@ -13,7 +13,7 @@ import SignIn from "@/components/custom/SignIn.tsx";
 import LogIn from "@/components/custom/LogIn.tsx";
 import LogOut from "@/components/custom/logOut.tsx";
 import { jwtDecode } from "jwt-decode";
-import { useAuthStore } from "@/context/AuthStore";
+import { useAuthStore } from "@/store/Store";
 
 
 interface DecodedToken {
