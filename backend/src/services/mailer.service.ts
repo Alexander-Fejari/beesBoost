@@ -30,7 +30,8 @@ class MailerService {
     try {
       const transporter = await this.initMailer();
       await transporter.sendMail(mailOptions);
-    } catch (error) {
+    } 
+    catch (error) {
       console.error("Erreur lors de l'envoi de l'email", error);
     }
   }
@@ -51,7 +52,27 @@ class MailerService {
     try {
       const transporter = await this.initMailer();
       await transporter.sendMail(mailOptions);
-    } catch (error) {
+    } 
+    catch (error) {
+      console.error("Erreur lors de l'envoi de l'email", error);
+    }
+  }
+
+  async sendPasswordResetEmail(userEmail: string, userName: string, resetToken: string): Promise<void> {
+    const mailOptions = {
+      from: process.env.EMAIL_USER,
+      to: userEmail,
+      subject: 'Réinitialisation de votre mot de passe',
+      html: `<h1>Réinitialisation du Mot de Passe</h1>
+             <h2>Hello ${userName}</h2>
+             <p>Veuillez cliquer sur le lien suivant pour réinitialiser votre mot de passe :</p>
+             <a href="${process.env.DOMAIN_EMAIL}/auth/resetPassword/${resetToken}">Réinitialiser le mot de passe</a>`
+    };
+    try {
+      const transporter = await this.initMailer();
+      await transporter.sendMail(mailOptions);
+    } 
+    catch (error) {
       console.error("Erreur lors de l'envoi de l'email", error);
     }
   }
