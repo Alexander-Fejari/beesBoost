@@ -45,5 +45,19 @@
     "logOut": {
         "out": "Logout",
         "settings": "Settings"
-    }
+    },
+    "postForm": {
+        "field": "Field",
+        "function": "Function",
+        "startDate": "Start Date",
+        "duration": "Duration",
+        "title": "Title",
+        "location": "Location",
+        "description": "Description",
+        "requirements": "Requirements",
+        "niceToHave": "Nice to Have",
+        "benefits": "Benefits",
+        "submit": "Submit",
+        "reset": "Reset"
+      }
 }

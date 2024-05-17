@@ -1,12 +1,12 @@
 import Layout from "@/components/Layout";
-import JobDetailContainer from "@/components/custom/Jobs";
+import PostForm from "@/components/custom/PostForm";
 
 
 
 const DesignSystem = () => {
     return (
         <Layout>
-            <JobDetailContainer />
+            <PostForm />
 
         </Layout>
     )
