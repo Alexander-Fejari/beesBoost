@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import JobBlockDetail from './JobBlockDetail';
 import useJobStore from '@/store/JobStore'; 
+import { Skeleton } from '@/components/ui/skeleton';
 
 const JobList: React.FC = () => {
   const { jobSummaries, fetchJobSummaries, isLoading, expandedJobId } = useJobStore();
@@ -10,7 +11,13 @@ const JobList: React.FC = () => {
   }, [fetchJobSummaries]);
 
   if (isLoading.summaries) {
-    return <div>Loading...</div>;
+    return (
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+        {Array.from({ length: 3 }).map((_, index) => (
+          <Skeleton key={index} className="w-full h-48" />
+        ))}
+      </div>
+    );
   }
 
   return (
@@ -32,7 +39,7 @@ const JobDetailWrapper: React.FC<{ jobId: string }> = ({ jobId }) => {
   }, [fetchJobDetail, jobId, jobDetails]);
 
   if (isLoading[jobId]) {
-    return <div>Loading job details...</div>;
+    return <Skeleton className="w-full h-64" />;
   }
 
   const jobDetail = jobDetails[jobId];
