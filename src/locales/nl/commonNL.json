@@ -45,5 +45,20 @@
     "logOut": {
         "out": "Logout",
         "settings": "Settings"
-    }
-}
+    },
+    "postForm": {
+        "field": "Veld",
+        "function": "Functie",
+        "startDate": "Startdatum",
+        "duration": "Duur",
+        "title": "Titel",
+        "location": "Locatie",
+        "description": "Beschrijving",
+        "requirements": "Vereisten",
+        "niceToHave": "Nice to Have",
+        "benefits": "Voordelen",
+        "submit": "Verzenden",
+        "reset": "Resetten"
+        }
+      }
+
