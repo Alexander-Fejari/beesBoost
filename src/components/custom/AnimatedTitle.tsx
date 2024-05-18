@@ -3,38 +3,31 @@ import { useTranslation } from "react-i18next";
 
 const AnimatedTitle = () => {
     const { t } = useTranslation('dashboard');
-    const subtitles = [
-        t('dashboard.subtitle.boost'),
-        t('dashboard.subtitle.video'),
-        t('dashboard.subtitle.photo'),
-        t('dashboard.subtitle.site'),
-        t('dashboard.subtitle.blog')
-    ];
+    const wordsToChange = ['boost', 'video', 'photo', 'site', 'blog'];
 
-    const [currentSubtitleIndex, setCurrentSubtitleIndex] = useState(0);
+    const [currentWordIndex, setCurrentWordIndex] = useState(0);
 
     useEffect(() => {
         const interval = setInterval(() => {
-            setCurrentSubtitleIndex((prevIndex) => (prevIndex + 1) % subtitles.length);
+            setCurrentWordIndex((prevIndex) => (prevIndex + 1) % wordsToChange.length);
         }, 3000);
 
         return () => clearInterval(interval);
-    }, [subtitles.length]);
+    }, [wordsToChange.length]);
 
     return (
-        <div className={'relative h-14'}>
-            {subtitles.map((subtitle, index) => (
+        <section className={'relative h-14'}>
+            {wordsToChange.map((word, index) => (
                 <h2
                     key={index}
                     className={`absolute pl-4 text-4xl transition-opacity duration-500 ${
-                        currentSubtitleIndex === index ? 'opacity-100' : 'opacity-0 pointer-events-none'
+                        currentWordIndex === index ? 'opacity-100' : 'opacity-0 pointer-events-none'
                     }`}
-                    style={{ left: 0, top: 0 }}
                 >
-                    {subtitle}
+                    {t(`dashboard.subtitle.${word}`)}
                 </h2>
             ))}
-        </div>
+        </section>
     );
 };
 
