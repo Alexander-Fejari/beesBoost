@@ -16,12 +16,12 @@ const AnimatedTitle = () => {
     }, [wordsToChange.length]);
 
     return (
-        <section className={'relative h-14'}>
+        <section className={'w-full'}>
             {wordsToChange.map((word, index) => (
                 <h2
                     key={index}
-                    className={`absolute pl-4 text-4xl transition-opacity duration-500 ${
-                        currentWordIndex === index ? 'opacity-100' : 'opacity-0 pointer-events-none'
+                    className={`pl-4 text-4xl transition-opacity duration-500 md:text-5xl ${
+                        currentWordIndex === index ? 'block opacity-100' : 'hidden opacity-0'
                     }`}
                 >
                     {t(`dashboard.subtitle.${word}`)}

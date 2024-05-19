@@ -18,7 +18,7 @@ const LastRegisteredStudents = ({ numHives }: LastRegisteredStudentsProps) => {
     }, [numHives, fetchUsers]);
 
     return (
-        <section className={'flex justify-center items-center flex-wrap'}>
+        <section className={'flex justify-center items-center flex-wrap md:w-2/3 md:h-1/2'}>
             {users.map((user) => (
                 <section
                     className="relative w-36 h-36 group"
@@ -28,6 +28,7 @@ const LastRegisteredStudents = ({ numHives }: LastRegisteredStudentsProps) => {
                         strokeColor={'stroke-primary'}
                         strokeWidth={8}
                         fillColor={'fill-transparent'}
+                        showClipPath={true}
                     >
                         <image
                             xlinkHref={user.profile_pic}
@@ -38,7 +39,7 @@ const LastRegisteredStudents = ({ numHives }: LastRegisteredStudentsProps) => {
                             className={'object-cover'}
                         />
                     </HiveSVG>
-                    <section className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                    <section className="absolute inset-0 bg-white/90 bg-blur flex items-center justify-center opacity-0 group-hover:opacity-100 transition">
                         <h3 className="text-primary text-center text-xs">{user.username}</h3>
                     </section>
                 </section>

@@ -31,6 +31,7 @@ const Nav = ({puces, fontSize}: NavProps) => {
                                      strokeWidth={15}
                                      strokeColor={'stroke-primary'}
                                      size={'w-4 h-4'}
+                                     showClipPath={false}
                             />
                         )
                     }
