@@ -48,5 +48,19 @@
   "logOut": {
     "out": "Déconnexion",
     "settings": "Paramètres"
-  }
+  },
+  "postForm": {
+      "field": "Domaine",
+      "function": "Fonction",
+      "startDate": "Début",
+      "duration": "Durée",
+      "title": "Fonction",
+      "location": "Lieu",
+      "description": "Description",
+      "requirements": "Nécessaire",
+      "niceToHave": "Bon à avoir",
+      "benefits": "Avantages",
+      "submit": "Envoyer",
+      "reset": "Annuler"
+    }
 }
