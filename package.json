@@ -1,6 +1,7 @@
 {
   "name": "bb-app",
   "private": true,
+  "license": "MIT",
   "version": "0.0.0",
   "type": "module",
   "scripts": {
@@ -11,7 +12,6 @@
   },
   "dependencies": {
     "@hookform/resolvers": "^3.3.4",
-    "@radix-ui/react-aspect-ratio": "^1.0.3",
     "@radix-ui/react-avatar": "^1.0.4",
     "@radix-ui/react-dialog": "^1.0.5",
     "@radix-ui/react-dropdown-menu": "^2.0.6",

@@ -25,7 +25,7 @@ interface Job {
 }
 
 const JobBlockDetail: React.FC<{ job: Job }> = ({ job }) => {
-  const { expandedJobId, setExpandedJobId } = useJobStore();
+  const {expandedJobId, setExpandedJobId } = useJobStore();
   const isExpanded = expandedJobId === job.id;
 
   const toggleExpand = () => {
