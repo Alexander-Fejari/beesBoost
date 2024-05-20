@@ -26,10 +26,10 @@ interface Job {
 
 const JobBlockDetail: React.FC<{ job: Job }> = ({ job }) => {
   const { expandedJobId, setExpandedJobId } = useJobStore();
-  const isExpanded = expandedJobId === job.id;
+  const isExpanded = expandedJobId === job?.id;
 
   const toggleExpand = () => {
-    setExpandedJobId(isExpanded ? null : job.id);
+    setExpandedJobId(isExpanded ? null : job?.id);
   };
 
   const startDate = new Date(job.startDate).toLocaleDateString();
