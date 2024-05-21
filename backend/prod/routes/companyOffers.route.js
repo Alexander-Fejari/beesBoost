@@ -5,9 +5,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const companyOffers_controller_1 = __importDefault(require("../controllers/companyOffers.controller"));
+const auth_middleware_1 = require("../middlewares/auth.middleware");
 const router = express_1.default.Router();
 // PSOT
-router.post('/addPost', companyOffers_controller_1.default.createOffer); // Swagger à faire + Ajouter protection si éléments manquants
+router.post('/addPost', auth_middleware_1.authenticateToken, companyOffers_controller_1.default.createOffer); // Swagger à faire + Ajouter protection si éléments manquants
 // GET
 router.get('/getPosts', companyOffers_controller_1.default.getOffers); // Swagger à faire 
 router.get('/getPostById/:id', companyOffers_controller_1.default.getOfferById); // Swagger à faire 

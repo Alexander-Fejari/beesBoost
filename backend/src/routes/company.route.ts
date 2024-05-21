@@ -5,7 +5,7 @@ import { authenticateToken, authorizeRoles } from '../middlewares/auth.middlewar
 const router: Router = express.Router();
 
 // POST
-router.post('/addCompany', companyController.createCompany); // Swagger à faire + Ajouter protection si élements manquants + Protection si nom déjà utilisé
+router.post('/addCompany', /*authenticateToken,*/ companyController.createCompany); // Swagger à faire + Ajouter protection si élements manquants + Protection si nom déjà utilisé
 
 // GET
 router.get('/getCompanies', companyController.getCompanies); // Swagger à faire + Perfectionner la gestion d'erreur

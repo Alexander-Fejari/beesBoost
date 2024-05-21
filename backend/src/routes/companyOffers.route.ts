@@ -5,7 +5,7 @@ import { authenticateToken, authorizeRoles } from '../middlewares/auth.middlewar
 const router: Router = express.Router();
 
 // PSOT
-router.post('/addPost', cOfferController.createOffer); // Swagger à faire + Ajouter protection si éléments manquants
+router.post('/addPost', authenticateToken, cOfferController.createOffer); // Swagger à faire + Ajouter protection si éléments manquants
 
 // GET
 router.get('/getPosts', cOfferController.getOffers); // Swagger à faire 

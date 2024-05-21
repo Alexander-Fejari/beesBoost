@@ -10,8 +10,9 @@ echo "Compiling:"
 
 # Compile l'API (ts -> js)
 npx tsc
+npx ts-node ./src/api-docs/merge.api-docs.ts
 
-echo "Compiling successfull \n"
+echo "Compiling successfull and merging yaml files \n"
 
 # Aller à la racine du repo
 cd ..

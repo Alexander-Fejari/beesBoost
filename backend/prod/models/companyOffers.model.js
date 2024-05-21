@@ -21,7 +21,7 @@ const COfferSchema = new mongoose_1.Schema({
     company_name: { type: String },
     field: { type: String },
     function: { type: String },
-    creation_date: { type: Date },
+    creation_date: { type: Date, default: Date.now },
     start_date: { type: Date },
     duration: { type: Number },
     CV: { type: String },
