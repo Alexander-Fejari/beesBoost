@@ -104,7 +104,7 @@ components:
                 example: "Achiever"
 paths:
   #GET
-  /student/getDetails/{username or id}:
+  /student/getDetails/{param}:
     get:
       summary: "Retrieve student details"
       description: "Fetches detailed information for a student based on the provided username or ID. This endpoint ensures the user is identified correctly and fetches student details if available."
@@ -200,7 +200,7 @@ paths:
                     type: string
                     example: "Error retrieving students"
   #PUT
-  /student/updateSchool/{username or id}:
+  /student/updateSchool/{param}:
     put:
       summary: "Update student's school"
       description: "Updates the school information for a student identified by username or ID. Ensures the user is a student and updates the specified detail if valid."
@@ -280,7 +280,7 @@ paths:
                   error:
                     type: string
                     example: "Internal server error"
-  /student/updateFormation/{username or id}:
+  /student/updateFormation/{param}:
     put:
       summary: "Update student's formation details"
       description: "Modifies the formation details array for a student, including adding, updating, or removing items, identified by username or ID."
@@ -368,7 +368,7 @@ paths:
                   error:
                     type: string
                     example: "Internal server error"
-  /student/updateExperience/{username or id}:
+  /student/updateExperience/{param}:
     put:
       summary: "Modify an experience entry from a student's profile"
       description: "Adds, updates, or removes a specific experience entry from a student's profile, identified by username or ID. Ensures that the operation is applicable only to students and validates the existence of the entry to be modified."
@@ -452,7 +452,7 @@ paths:
                   error:
                     type: string
                     example: "Internal server error"
-  /student/updateSkill/{username or id}:
+  /student/updateSkill/{param}:
     put:
       summary: "Modify skills in a student's profile"
       description: "Adds, updates, or removes a skill entry in a student's profile, depending on the specified action. The operation is only applicable to students and requires specifying the exact change needed."
@@ -544,7 +544,7 @@ paths:
                   error:
                     type: string
                     example: "Internal server error"
-  /student/updateCertification/{username or id}:
+  /student/updateCertification/{param}:
     put:
       summary: "Modify a certification to a student's profile"
       description: "Adds, updates, or removes a certification entry to a student's profile. This operation is applicable only to students."
@@ -598,7 +598,7 @@ paths:
           description: "Student not found."
         '500':
           description: "Internal server error."
-  /student/updateLanguage/{username or id}:
+  /student/updateLanguage/{param}:
     put:
       summary: "Modify a language from a student's profile"
       description: "Adds, updates, or removes a language entry from a student's profile. This operation requires the ID of the language entry to identify which one to remove/updated"
@@ -635,7 +635,7 @@ paths:
           description: "Language entry or student not found."
         '500':
           description: "Internal server error."
-  /student/updateGameInfo/{username or id}:
+  /student/updateGameInfo/{param}:
     put:
       summary: "Update game information in a student's profile"
       description: "Adds, updates, or removes an existing game info entry in a student's profile. This operation requires the ID of the game info entry to correctly apply updates or to remove it"
