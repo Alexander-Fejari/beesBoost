@@ -1,11 +1,31 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+const user_model_1 = require("../models/user.model");
 const company_model_1 = require("../models/company.model");
 const companyOffers_model_1 = require("../models/companyOffers.model");
 class CompanyOfferController {
     // POST
     async createOffer(req, res) {
         try {
+            const user = await user_model_1.UserModel.findOne(req.body.poster_id);
+            if (!user) {
+                res.status(404).json({ message: 'User not found' });
+                return;
+            }
+            if (user.role === `student`) {
+                res.status(403).json({ message: 'You are not allowed to do this, u are not an employee' });
+                return;
+            }
+            const companyName = user.worker_details?.company;
+            if (!companyName) {
+                res.status(403).json({ message: 'You are not allowed to post an add since u didnt join a company' });
+                return;
+            }
+            const company = await company_model_1.CompanyModel.findOne({ name: companyName });
+            if (!company) {
+                res.status(404).json({ message: 'Company not found' });
+                return;
+            }
             const newOffer = new companyOffers_model_1.COfferModel(req.body);
             const offer = await newOffer.save();
             res.status(201).json(offer);

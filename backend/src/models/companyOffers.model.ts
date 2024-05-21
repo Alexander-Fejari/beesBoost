@@ -1,14 +1,5 @@
 import { Schema, model, Document } from 'mongoose';
 
-interface IOfferAddress {
-  street?: string;
-  street_number?: number;
-  box?: string;
-  city?: string;
-  postal_code?: number;
-  country?: string;
-}
-
 interface IMissionBody {
   description?: string;
   requirements?: Array<string>;
@@ -29,19 +20,10 @@ interface ICOffer extends Document {
   promotion_expiration?: Date;
   title?: string;
   body?: IMissionBody;
-  address?: IOfferAddress;
   taker_id?: string;
   status?: string;
+  offer_language?: string;
 }
-
-const OfferAddressSchema: Schema = new Schema({
-  street: { type: String },
-  street_number: { type: Number },
-  box: { type: String },
-  city: { type: String },
-  postal_code: { type: Number },
-  country: { type: String }
-});
 
 const MissionBodySchema: Schema = new Schema({
   description: { type: String },
@@ -63,9 +45,9 @@ const COfferSchema: Schema = new Schema({
   promotion_expiration: { type: Date },
   title: { type: String },
   body: MissionBodySchema,
-  address: OfferAddressSchema,
   taker_id: { type: String },
-  status: { type: String }
+  status: { type: String },
+  offer_language: { type: String }
 });
 
 

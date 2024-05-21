@@ -1,0 +1,70 @@
+components:
+  schemas:
+    Company:
+      type: object
+      required:
+        - name
+        - verif_boolean
+      properties:
+        name:
+          type: string
+          unique: true
+        verif_boolean:
+          type: object
+      properties:
+        is_verified:
+          type: boolean
+          default: true 
+        is_active:
+          type: boolean
+          default: true
+        profile_pic:
+          type: string
+        contact_info:
+          type: object
+          properties:
+            email:
+              type: string
+            phone:
+              type: string
+            street:
+              type: string
+            street_number:
+              type: number
+            box:
+              type: string
+            city:
+              type: string
+            postal_code:
+              type: number
+            country:
+              type: string
+        fields:
+          type: array
+          items:
+            type: string
+        creation_date:
+          type: string
+          format: date-time
+        creator_username:
+          type: string
+        admins:
+          type: array
+          items:
+            type: string
+        worker:
+          type: array
+          items:
+            type: string
+        registration_date:
+          type: string
+          format: date-time
+        deletion_date:
+          type: string
+          format: date-time
+        offers:
+          type: array
+          items:
+            type: string
+        n_finished_contracts:
+          type: number

@@ -19,4 +19,8 @@ tags:
     description: Operations about students
   - name: Worker
     description: Operations about workers
+  - name: Company
+    description: Companies handler
+  - name: Offers
+    description: Company posts/offers handler
 paths: {}

@@ -11,7 +11,7 @@ components:
           example: false
 paths:
   # GET
-  /worker/getDetails/{username or id}:
+  /worker/getDetails/{param}:
     get:
       summary: "Retrieve worker details"
       description: "Fetches detailed information for a worker based on the provided username or ID. This endpoint ensures the user is identified correctly and fetches worker details if available."
@@ -71,7 +71,7 @@ paths:
                     type: string
                     example: "Internal server error"
   # PUT
-  /worker/updateIsAdmin/{username or id}:
+  /worker/updateIsAdmin/{param}:
     put:
       summary: "Update worker's company admin status"
       description: "Updates the `is_company_admin` status for a worker. This operation checks if the user is a worker and updates their company admin status."
@@ -140,7 +140,7 @@ paths:
                   error:
                     type: string
                     example: "Error updating worker admin status"
-  /worker/updateCompany/{username or id}:
+  /worker/updateCompany/{param}:
     put:
       summary: "Update worker's company detail"
       description: "Updates a specific detail within the worker's profile, identified by username or ID. Ensures the user is a worker and updates the specified detail if valid, can also be used with empty string to delete worker's company"

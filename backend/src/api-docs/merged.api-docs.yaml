@@ -196,6 +196,69 @@ components:
         is_company_admin:
           type: boolean
           example: false
+    Company:
+      type: object
+      required:
+        - name
+        - verif_boolean
+      properties:
+        name:
+          type: string
+          unique: true
+        verif_boolean:
+          type: object
+    COffer:
+      type: object
+      properties:
+        poster_id:
+          type: string
+        company_name:
+          type: string
+        field:
+          type: string
+        function:
+          type: string
+        creation_date:
+          type: string
+          format: date-time
+          default: now
+        start_date:
+          type: string
+          format: date-time
+        duration:
+          type: number
+        CV:
+          type: string
+        promoted:
+          type: boolean
+        promotion_expiration:
+          type: string
+          format: date-time
+        title:
+          type: string
+        body:
+          type: object
+          properties:
+            description:
+              type: string
+            requirements:
+              type: array
+              items:
+                type: string
+            nice_to_have:
+              type: array
+              items:
+                type: string
+            benefits:
+              type: array
+              items:
+                type: string
+        taker_id:
+          type: string
+        status:
+          type: string
+        offer_language:
+          type: string
 tags:
   -
     name: Auth
@@ -209,6 +272,12 @@ tags:
   -
     name: Worker
     description: 'Operations about workers'
+  -
+    name: Company
+    description: 'Companies handler'
+  -
+    name: Offers
+    description: 'Company posts/offers handler'
 paths:
   /user/signUp:
     post:
@@ -1574,7 +1643,7 @@ paths:
           description: 'Game info entry or student not found.'
         '500':
           description: 'Internal server error.'
-  '/worker/getDetails/{username or id}':
+  '/worker/getDetails/{param}':
     get:
       summary: 'Retrieve worker details'
       description: 'Fetches detailed information for a worker based on the provided username or ID. This endpoint ensures the user is identified correctly and fetches worker details if available.'
@@ -1623,7 +1692,7 @@ paths:
                 type: object
                 properties:
                   error: {type: string, example: 'Internal server error'}
-  '/worker/updateIsAdmin/{username or id}':
+  '/worker/updateIsAdmin/{param}':
     put:
       summary: 'Update worker''s company admin status'
       description: 'Updates the `is_company_admin` status for a worker. This operation checks if the user is a worker and updates their company admin status.'
@@ -1683,7 +1752,7 @@ paths:
                 type: object
                 properties:
                   error: {type: string, example: 'Error updating worker admin status'}
-  '/worker/updateCompany/{username or id}':
+  '/worker/updateCompany/{param}':
     put:
       summary: 'Update worker''s company detail'
       description: 'Updates a specific detail within the worker''s profile, identified by username or ID. Ensures the user is a worker and updates the specified detail if valid, can also be used with empty string to delete worker''s company'

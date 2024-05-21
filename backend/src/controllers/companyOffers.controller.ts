@@ -1,4 +1,5 @@
 import { Request, Response } from 'express';
+import { UserModel } from '../models/user.model';
 import { CompanyModel } from '../models/company.model';
 import { COfferModel } from '../models/companyOffers.model';
 
@@ -6,7 +7,31 @@ class CompanyOfferController {
   // POST
   public async createOffer(req: Request, res: Response): Promise<void> {
     try {
+      const user = await UserModel.findOne(req.body.poster_id);
+      if (!user) {
+        res.status(404).json({ message: 'User not found' });
+        return ;
+      }
+      if (user.role === `student`) {
+        res.status(403).json({ message: 'You are not allowed to do this, u are not an employee' });
+        return ;
+      }
+
+      const companyName = user.worker_details?.company;
+      if (!companyName) {
+        res.status(403).json({ message: 'You are not allowed to post an add since u didnt join a company' });
+        return ;
+      }
+
+      const company = await CompanyModel.findOne({ name: companyName });
+      if (!company) {
+        res.status(404).json({ message: 'Company not found' });
+        return;
+      }
+
       const newOffer = new COfferModel(req.body);
+
+      
       const offer = await newOffer.save();
       res.status(201).json(offer);
     } 
