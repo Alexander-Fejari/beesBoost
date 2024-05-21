@@ -63,7 +63,7 @@ const JobList: React.FC = () => {
                 <CardContent className={`flex-grow ${isExpanded ? 'p-4' : ''}`}>
                   <div className="flex flex-wrap space-x-2 mb-4">
                     <Badge variant="outline">{new Date(job.startDate).toLocaleDateString()}</Badge>
-                    <Badge variant="outline">{job.duration} Mois</Badge>
+                    <Badge variant="outline">{job.duration} Moi</Badge>
                     <Badge variant="outline">{job.field}</Badge>
                   </div>
                   <div className="flex space-x-4 mb-4">
