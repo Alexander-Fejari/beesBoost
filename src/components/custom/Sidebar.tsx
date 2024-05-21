@@ -61,7 +61,7 @@ const Sidebar = ({className}: SidebarProps) => {
                             </p>
                         )}
                     </NavLink>
-                    <NavLink to={'/'} className={`flex items-center gap-x-1.5 group md:gap-x-4 ${isToggle ? 'flex' : 'hidden md:flex'}`}>
+                    <NavLink to={'dashboard/jobs'} className={`flex items-center gap-x-1.5 group md:gap-x-4 ${isToggle ? 'flex' : 'hidden md:flex'}`}>
                         <MdOutlineSearch
                             className={'transition ease-in-out delay-150 group-hover:scale-125 group-hover:text-primary'}/>
                         {isToggle && (

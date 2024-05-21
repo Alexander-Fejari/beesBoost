@@ -1,15 +1,12 @@
 import Layout from "@/components/Layout";
 import PostForm from "@/components/custom/PostForm";
-import JobList from "@/components/custom/Jobs";
 
+const PostJobForm = () => {
 
-const DesignSystem = () => {
     return (
         <Layout>
             <PostForm />
-            <JobList />
         </Layout>
     )
 }
-
-export default DesignSystem
+export default PostJobForm
