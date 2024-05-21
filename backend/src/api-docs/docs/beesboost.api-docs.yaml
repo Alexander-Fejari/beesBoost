@@ -1,8 +1,8 @@
 servers:
-  - url: 'http://localhost:5000'
-    description: Local Development Server
   - url: 'https://cinemania.space'
     description: VPS Development Server
+  - url: 'http://localhost:5000'
+    description: Local Development Server
 components:
   securitySchemes:
     BearerAuth:
