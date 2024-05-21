@@ -1,9 +1,10 @@
 import Layout from "@/components/Layout";
+import HeroBanner from "@/components/custom/HeroBanner";
 
 const Dashboard = () => {
     return (
         <Layout>
-           <h1>Dashboard</h1>
+           <HeroBanner />
         </Layout>
     )
 }

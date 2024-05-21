@@ -34,7 +34,8 @@ const LogIn = () => {
       const data = await response.json();
       if (data.accessToken) {
         setToken(data.accessToken);
-        navigate("/dashboard/profile");
+          // TODO: `Changer le path pour la mise en prod
+        navigate("/");
       } else {
         console.log('Échec de la connexion: Token non reçu');
       }

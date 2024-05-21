@@ -1,0 +1,15 @@
+{
+    "dashboard": {
+        "studentButton": "Find a job",
+        "employerButton": "Become a partner",
+        "title": "Your next  website ",
+        "subtitle": {
+            "boost":"boost",
+            "video":"video",
+            "photo":"photo shoot",
+            "site":"website",
+            "blog":"blog post"
+        },
+        "pickUpLine": "Attract more customers with effective communication!"
+    }
+}

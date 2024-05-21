@@ -711,26 +711,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@radix-ui/react-aspect-ratio@npm:^1.0.3":
-  version: 1.0.3
-  resolution: "@radix-ui/react-aspect-ratio@npm:1.0.3"
-  dependencies:
-    "@babel/runtime": "npm:^7.13.10"
-    "@radix-ui/react-primitive": "npm:1.0.3"
-  peerDependencies:
-    "@types/react": "*"
-    "@types/react-dom": "*"
-    react: ^16.8 || ^17.0 || ^18.0
-    react-dom: ^16.8 || ^17.0 || ^18.0
-  peerDependenciesMeta:
-    "@types/react":
-      optional: true
-    "@types/react-dom":
-      optional: true
-  checksum: 10c0/e4d1ac88aa23b26957992f76f2b991e8e1fa0bd1b8e3bbcf871920b087e576ce0b5a35fe9ee4d477536ab07ff50362d42017e2f12ff6f41cba8ef80ae46b0f29
-  languageName: node
-  linkType: hard
-
 "@radix-ui/react-avatar@npm:^1.0.4":
   version: 1.0.4
   resolution: "@radix-ui/react-avatar@npm:1.0.4"
@@ -2079,7 +2059,6 @@ __metadata:
   resolution: "bb-app@workspace:."
   dependencies:
     "@hookform/resolvers": "npm:^3.3.4"
-    "@radix-ui/react-aspect-ratio": "npm:^1.0.3"
     "@radix-ui/react-avatar": "npm:^1.0.4"
     "@radix-ui/react-dialog": "npm:^1.0.5"
     "@radix-ui/react-dropdown-menu": "npm:^2.0.6"
@@ -2569,9 +2548,9 @@ __metadata:
   linkType: hard
 
 "electron-to-chromium@npm:^1.4.668":
-  version: 1.4.773
-  resolution: "electron-to-chromium@npm:1.4.773"
-  checksum: 10c0/eef684e2d64848418080715a76bc4147373d75ade07f65e64a97a3efd52d8c83dd8dd0daadba0d5ca891e3738144f8e97e1b7fe4545de3d15e71cd70ff14b2f1
+  version: 1.4.772
+  resolution: "electron-to-chromium@npm:1.4.772"
+  checksum: 10c0/79ea8f4d41b64e092677e801fd88affe0089e4e76dbbecf78fe2831a66d4b4ef6d0da6ad59be8079eb7b7f03c72d1667e81d13a803e343b8bd4ade3e3f1f7b49
   languageName: node
   linkType: hard
 
@@ -3340,11 +3319,11 @@ __metadata:
   linkType: hard
 
 "i18next-http-backend@npm:^2.5.1":
-  version: 2.5.2
-  resolution: "i18next-http-backend@npm:2.5.2"
+  version: 2.5.1
+  resolution: "i18next-http-backend@npm:2.5.1"
   dependencies:
     cross-fetch: "npm:4.0.0"
-  checksum: 10c0/57cfbeeea40a751134e1521fac89b14b780c9ad87b74a4f7d7168a88a8b603efed9f5df455dddbb408f7e268eae5aa0a6888e47b9f10cb9482d812d4d6997ffa
+  checksum: 10c0/8063619a1c5b26aa10f4d35685f18179cbc5022624b40e55447aaae467fc4942e6e2949fabe460632de02e70709cdf987900d64d238e2a250af78fa732d1d962
   languageName: node
   linkType: hard
 
