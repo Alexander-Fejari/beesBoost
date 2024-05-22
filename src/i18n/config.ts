@@ -4,22 +4,29 @@ import { initReactI18next } from 'react-i18next';
 import commonFR from "../locales/fr/commonFR.json";
 import commonEN from "../locales/en/commonEN.json";
 import commonNL from "../locales/nl/commonNL.json";
-import homeFR from "../locales/fr/homeFR.json";
-import homeEN from "../locales/en/homeEN.json";
-import homeNL from "../locales/nl/homeNL.json";
+import dashboardFR from "../locales/fr/dashboardFR.json";
+import dashboardEN from "../locales/en/dashboardEN.json";
+import dashboardNL from "../locales/nl/dashboardNL.json";
+import dashboardJobsEN from "../locales/en/dashboardJobsEN.json";
+import dashboardJobsFR from "../locales/fr/dashboardJobsFR.json";
+import dashboardJobsNL from "../locales/nl/dashboardJobsNL.json"
+
 
 const resources = {
     fr: {
         common: commonFR,
-        home: homeFR
+        dashboard: dashboardFR,
+        dashboardJobs: dashboardJobsFR
     },
     en: {
         common: commonEN,
-        home: homeEN
+        dashboard: dashboardEN,
+        dashboardJobs: dashboardJobsEN
     },
     nl: {
         common: commonNL,
-        home: homeNL
+        dashboard: dashboardNL,
+        dashboardJobs: dashboardJobsNL
     }
 };
 
@@ -44,7 +51,7 @@ i18n
         },
         fallbackLng: 'fr',
         lng: defaultLanguage, // Utilise la langue par défaut
-        ns: ['common', 'home'],
+        ns: ['common', 'dashboard', 'dashboardJobs'],
         debug: true,
         interpolation: {
             escapeValue: false,

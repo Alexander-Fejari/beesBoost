@@ -3,12 +3,12 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "@/context/AuthContext"; // Ajustez ce chemin selon la structure de votre projet
+import { useAuthStore } from "@/store/Store"; 
 
 const LogOut = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const { setToken } = useAuth();
+  const { setToken } = useAuthStore();
 
   const handleLogout = () => {
     setToken(null);
