@@ -5,16 +5,19 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label.tsx";
 import { loginSchema, LoginValues } from "@/components/formSchema";
 import { useTranslation } from 'react-i18next';
-import {redirect} from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "@/context/AuthContext"; 
 
 const LogIn = () => {
     const { t } = useTranslation();
+    const navigate = useNavigate();
+    const { setToken } = useAuth();
 
     const { register, handleSubmit, formState } = useForm<LoginValues>({
         resolver: zodResolver(loginSchema),
     });
-    
-const onSubmit = async (values: LoginValues): Promise<void> => {
+
+    const onSubmit = async (values: LoginValues): Promise<void> => {
         try {
             const response = await fetch(`${import.meta.env.VITE_APP_API_URL}/auth/signIn`, {
                 method: 'POST',
@@ -23,20 +26,15 @@ const onSubmit = async (values: LoginValues): Promise<void> => {
                 },
                 body: JSON.stringify(values)
             });
-            
+
             if (!response.ok) {
                 throw new Error('Échec de la connexion au serveur');
             }
-            
-            console.log("Succès")
 
             const data = await response.json();
             if (data.accessToken) {
-                localStorage.setItem('token', data.accessToken);
-                localStorage.setItem('username', data.username);
-
-                redirect("/dashboard")
-
+                setToken(data.accessToken); 
+                navigate("/dashboard/profile");
             } else {
                 console.log('Échec de la connexion: Token non reçu');
             }

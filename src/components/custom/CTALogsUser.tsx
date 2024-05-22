@@ -13,12 +13,8 @@ import SignIn from "@/components/custom/SignIn.tsx";
 import LogIn from "@/components/custom/LogIn.tsx";
 import LogOut from "@/components/custom/logOut.tsx";
 import { jwtDecode } from "jwt-decode";
+import { useAuth } from "@/context/AuthContext";
 
-
-
-interface CTALogsUserProps {
-    isLog?: boolean; 
-}
 
 interface DecodedToken {
     username?: string;
@@ -27,35 +23,31 @@ interface DecodedToken {
     [key: string]: any;
 }
 
-const CTALogsUser = ({ isLog: initialIsLog }: CTALogsUserProps) => {
-    const { t } = useTranslation();
-    const [isLog, setIsLog] = useState<boolean>(!!initialIsLog);
-    const [username, setUsername] = useState<string | null>(null);
-
-    useEffect(() => {
-        const token = localStorage.getItem('token');
-        if (token) {
-            try {
-                const decoded: DecodedToken = jwtDecode(token);
-                if (decoded.exp * 1000 > new Date().getTime()) {
-                    setIsLog(true);
-                    setUsername(decoded.username);
-                } else {
-                    console.log('Token expired');
-                    setIsLog(false);
+    const CTALogsUser = () => {
+        const { t } = useTranslation();
+        const { isAuthenticated, setToken, token } = useAuth();
+        const [username, setUsername] = useState<string | null>(null);
+    
+        useEffect(() => {
+            if (token) {
+                try {
+                    const decoded: DecodedToken = jwtDecode<DecodedToken>(token);
+                    if (decoded.exp && decoded.exp * 1000 > new Date().getTime()) {
+                        setUsername(decoded.username ?? null);
+                    } else {
+                        console.log('Token expired');
+                        setToken(null);
+                    }
+                } catch (error) {
+                    console.error("Failed to decode JWT", error);
+                    setToken(null);
                 }
-            } catch (error) {
-                console.error("Failed to decode JWT", error);
-                setIsLog(false);
             }
-        } else {
-            setIsLog(false);
-        }
-    }, []);
+        }, [token, setToken]);
 
     return (
         <>
-            {!isLog && (
+            {!isAuthenticated && (
                 <section className='flex justify-center items-center gap-x-4'>
                     <Dialog>
                         <DialogTrigger asChild>
@@ -93,7 +85,7 @@ const CTALogsUser = ({ isLog: initialIsLog }: CTALogsUserProps) => {
                     </Dialog>
                 </section>
             )}
-            {isLog && (
+            {isAuthenticated && (
                 <section className='flex items-center gap-x-4'>
                     <LogOut />
                     <h3>{t('ctaUser.ctaGreetingUser')} {username}</h3>
