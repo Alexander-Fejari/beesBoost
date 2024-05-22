@@ -13,7 +13,7 @@ const user_route_1 = __importDefault(require("./routes/user.route"));
 const auth_route_1 = __importDefault(require("./routes/auth.route"));
 const company_route_1 = __importDefault(require("./routes/company.route"));
 const companyOffers_route_1 = __importDefault(require("./routes/companyOffers.route"));
-//import mailerRouter from './routes/mailer.route';
+//import mailerRouter from './routes/maile.route';
 dotenv_1.default.config();
 // Initialize
 const app = (0, express_1.default)();

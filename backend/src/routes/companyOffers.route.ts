@@ -8,7 +8,7 @@ const router: Router = express.Router();
 router.post('/addPost', authenticateToken, cOfferController.createOffer); // Swagger à faire + Ajouter protection si éléments manquants
 
 // GET
-router.get('/getPosts', authenticateToken,cOfferController.getOffers); // Swagger à faire 
+router.get('/getPosts', authenticateToken, cOfferController.getOffers); // Swagger à faire 
 
 router.get('/getPostById/:id', authenticateToken, cOfferController.getOfferById); // Swagger à faire 
 
