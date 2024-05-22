@@ -6,6 +6,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const bcrypt_1 = __importDefault(require("bcrypt"));
 const user_model_1 = require("../models/user.model");
 const mongodb_1 = require("mongodb");
+const mailer_service_1 = __importDefault(require("../services/mailer.service"));
+const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 class UserController {
     // UTILS
     async getUserObject(req, res, username_or_id) {
@@ -61,7 +63,7 @@ class UserController {
     // GENERAL
     async addUser(req, res) {
         try {
-            const { username, password, profile_pic, role, lastname, firstname, occupation, location, contact_info } = req.body;
+            const { username, password, profile_pic, role, lastname, firstname, occupation, location, contact_info, prefered_language } = req.body;
             let { email } = req.body;
             email = email.toLowerCase();
             if (!username || !password || !role || !email) {
@@ -84,7 +86,14 @@ class UserController {
                 return;
             }
             const hashedPassword = await bcrypt_1.default.hash(password, 10);
-            const userData = { username, password: hashedPassword, profile_pic, role, email, lastname, firstname, occupation, location, contact_info };
+            const userData = { username, password: hashedPassword, profile_pic, role, email, lastname, firstname, occupation, location, contact_info, prefered_language };
+            if (userData.prefered_language === 'prefered_language') {
+                const validLanguages = ['fr', 'nl', 'en'];
+                if (!validLanguages.includes(userData.prefered_language)) {
+                    res.status(400).json({ message: 'Only fr, nl, or en can be chosen as prefered_language' });
+                    return;
+                }
+            }
             if (role === `student`) {
                 userData.student_details = {};
                 userData.student_details = { ...req.body.student_details };
@@ -94,13 +103,56 @@ class UserController {
                 userData.worker_details = { ...req.body.worker_details };
                 // Ajouter logique pour mettre is_company_admin à true quand c'est le premier de la company 
             }
+            userData.confirmation_token = jsonwebtoken_1.default.sign({ username: userData.username }, process.env.JWT_SECRET_EMAIL_CONFIRM, { expiresIn: '15m' });
+            //mailerService.sendConfirmationEmail(userData.email, userData.username, userData.confirmation_token);
             const newUser = new user_model_1.UserModel(userData);
             await newUser.save();
-            res.status(201).json({ message: `User added successfully`, userId: newUser._id });
+            res.status(201).json({ message: `User added successfully`, user_id: newUser._id });
         }
         catch (error) {
             console.error(`Error adding user:`, error);
             res.status(500).json({ error: `Error adding user` });
+        }
+    }
+    async confirmEmail(req, res) {
+        try {
+            const { token } = req.params;
+            const decoded = jsonwebtoken_1.default.verify(token, process.env.JWT_SECRET_EMAIL_CONFIRM);
+            const user = await user_model_1.UserModel.findOne({ confirmation_token: token });
+            if (!user) {
+                res.status(400).json({ error: 'Token invalide ou expiré.' });
+                return;
+            }
+            user.email_confirmed = true;
+            user.confirmationToken = '';
+            await user.save();
+            res.status(200).json({ message: 'Compte confirmé avec succès !' });
+        }
+        catch (error) {
+            res.status(400).json({ error: 'Token invalide ou expiré.' });
+        }
+    }
+    async resendConfirmationEmail(req, res) {
+        try {
+            const { email } = req.params;
+            const user = await user_model_1.UserModel.findOne({ email });
+            if (!user) {
+                res.status(404).json({ error: `Utilisateur non trouvé.` });
+                return;
+            }
+            if (user.is_confirmed) {
+                res.status(400).json({ error: `Cet utilisateur est déjà confirmé.` });
+                return;
+            }
+            const confirmationToken = jsonwebtoken_1.default.sign({ username: user.username }, process.env.JWT_SECRET_EMAIL_CONFIRM, { expiresIn: '15m' });
+            user.confirmation_token = confirmationToken;
+            await user.save();
+            await mailer_service_1.default.resendConfirmationEmail(user.email, user.username, confirmationToken);
+            res.status(200).json({ message: 'Un nouvel email de confirmation a été envoyé.' });
+        }
+        catch (error) {
+            console.error('Erreur lors de l\'envoi de l\'email de confirmation :', error);
+            res.status(500).json({ error: 'Erreur interne du serveur.' });
         }
     }
     async getAllUsers(req, res) {
@@ -212,12 +264,18 @@ class UserController {
             }
             if (fieldToUpdate == `is_active`) {
                 if (updateData.is_active === false) {
-                    updateData.is_active = false;
                     updateData.deletion_date = Date.now();
                 }
                 else {
                     updateData.is_active = true;
                     updateData.deletion_date = null;
+                }
+            }
+            if (fieldToUpdate === 'prefered_language') {
+                const validLanguages = ['fr', 'nl', 'en'];
+                if (!validLanguages.includes(updateData.prefered_language)) {
+                    res.status(400).json({ message: 'Only fr, nl, or en can be chosen as prefered_language' });
+                    return;
                 }
             }
             const result = await user_model_1.UserModel.updateOne(param.length < 24 ? { username: param } : { _id: param }, updateData);
@@ -239,7 +297,7 @@ class UserController {
             const param = req.params.param;
             const updateData = req.body;
             const allowedFields = [
-                `profile_pic`, `lastname`, `firstname`, `occupation`, `location`,
+                `profile_pic`, `lastname`, `firstname`, `occupation`, `location`, `prefered_language`,
                 `contact_info.phone`, `contact_info.street`, `contact_info.street_number`, `contact_info.box`,
                 `contact_info.city`, `contact_info.country`, `contact_info.postal_code`, `student_details.school`
             ];
@@ -251,6 +309,13 @@ class UserController {
                 if (!allowedFields.includes(field)) {
                     res.status(400).json({ error: `Invalid field in the body, only this can be updated: ${allowedFields.join(', ')}` });
                     return;
+                }
+                if (field === 'prefered_language') {
+                    const validLanguages = ['fr', 'nl', 'en'];
+                    if (!validLanguages.includes(updateData.prefered_language)) {
+                        res.status(400).json({ message: 'Only fr, nl, or en can be chosen as prefered_language' });
+                        return;
+                    }
                 }
                 updateObject[field] = updateData[field];
             }
@@ -486,4 +551,4 @@ class UserController {
         }
     }
 }
-exports.default = UserController;
+exports.default = new UserController;

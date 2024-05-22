@@ -1,8 +1,9 @@
 import { Request, Response } from 'express';
 import bcrypt from 'bcrypt';
 import { UserModel } from '../models/user.model';
-import UserController from './user.controller';
+import userController from './user.controller';
 import jwt from 'jsonwebtoken';
+import mailerService from '../services/mailer.service';
 
 class AuthController {
   async userLogin(req: Request, res: Response): Promise<void> {
@@ -24,8 +25,8 @@ class AuthController {
         return;
       }
 
-      if (user.is_active == false) {
-        res.status(403).json({ error: `This account isnt active`});
+      if (user.is_active == false || user.is_verified == false /*|| user.email_confirmed == false*/) {
+        res.status(403).json({ error: `This account isnt active, verified and/or its email hasnt been confirmed`});
         return ;
       }
 
@@ -41,12 +42,12 @@ class AuthController {
         id: user._id,
         username: user.username,
         role: user.role
-      }, process.env.JWT_SECRET!, { expiresIn: `1h` });
+      }, process.env.JWT_SECRET_AUTH!, { expiresIn: `1h` });
 
       const refreshToken = jwt.sign({
         id: user._id,
         username: user.username
-      }, process.env.REFRESH_TOKEN_SECRET!, { expiresIn: `7d` });
+      }, process.env.JWT_SECRET_REFRESH!, { expiresIn: `7d` });
       
       await UserModel.updateOne(
         { _id: user._id }, 
@@ -139,7 +140,6 @@ class AuthController {
         return ;
       }
 
-      const userController = new UserController();
       const user = await userController.getUserObject(req, res, param);
 
       if (!user) {
@@ -164,6 +164,67 @@ class AuthController {
       res.status(500).json({ error: `Internal server error` });
     }
   }
+
+  async requestPasswordReset(req: Request, res: Response): Promise<void> {
+    try {
+      const { id } = req.body;
+      const user = await UserModel.findOne({ _id: id });
+
+      if (!user) {
+        res.status(404).json({ error: `Utilisateur non trouvé.` });
+        return;
+      }
+
+      const resetToken = jwt.sign({ id: user._id }, process.env.JWT_SECRET_PASS_RESET!, { expiresIn: '30m' });
+
+      user.reset_token_pass = resetToken;
+      await user.save();
+      
+      await mailerService.sendPasswordResetEmail(user.email, user.username, resetToken);
+
+      res.status(200).json({ message: `Email de réinitialisation envoyé.`, resetToken });
+    } 
+    catch (error) {
+      console.error(`Erreur lors de la demande de réinitialisation :`, error);
+      res.status(500).json({ error: `Erreur interne du serveur.` });
+    }
+  }
+
+  async resetPassword(req: Request, res: Response): Promise<void> {
+    try {
+      const { token } = req.params;
+      const { new_password } = req.body;
+
+      if (!new_password || new_password.length < 6) {
+        res.status(400).json({ error: `Le mot de passe doit contenir au moins 6 caractères.` });
+        return;
+      }
+
+      const decoded = jwt.verify(token, process.env.JWT_SECRET_PASS_RESET!) as { id: string };
+      const user = await UserModel.findById(decoded.id);
+
+      if (!user) {
+        res.status(400).json({ error: `Token invalide ou expiré.` });
+        return;
+      }
+
+      const hashedPassword = await bcrypt.hash(new_password, 10);
+      user.password = hashedPassword;
+      user.reset_token_pass = null;
+      await user.save();
+
+      res.status(200).json({ message: `Mot de passe réinitialisé avec succès.` });
+    } 
+    catch (error) {
+      if (error instanceof jwt.TokenExpiredError) {
+        res.status(401).json({ error: `Token expiré.` });
+      } 
+      else {
+        console.error(`Erreur lors de la réinitialisation du mot de passe :`, error);
+        res.status(500).json({ error: `Erreur interne du serveur.` });
+      }
+    }
+  }
 }
 
-export default AuthController;
+export default new AuthController;
