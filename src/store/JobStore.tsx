@@ -8,6 +8,7 @@ interface JobSummary {
   startDate: string;
   duration: string;
   field: string;
+  location: string;
 }
 
 interface JobDetail extends JobSummary {
@@ -48,6 +49,7 @@ const useJobStore = create<JobState>()(devtools((set) => ({
         startDate: job.start_date,
         duration: job.duration,
         field: job.field,
+        location: job.location,
       }));
       set({ jobSummaries, isLoading: { summaries: false } });
     } catch (error) {
@@ -66,6 +68,7 @@ const useJobStore = create<JobState>()(devtools((set) => ({
         startDate: data.start_date,
         duration: data.duration,
         field: data.field,
+        location: data.location,
         avatarUrl: data.avatarUrl,
         applyLink: data.applyLink || 'http://example.com/apply',
         messageLink: data.messageLink || 'http://example.com/message',

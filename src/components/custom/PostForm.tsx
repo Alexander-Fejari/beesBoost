@@ -1,4 +1,5 @@
-import { useForm } from "react-hook-form";
+import { useRef, useEffect } from "react";
+import { useForm, SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -6,23 +7,43 @@ import { Label } from "@/components/ui/label";
 import { postFormSchema, PostValues } from "@/components/formSchema"; // Adjust the import path
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from "react-router-dom";
+import { useAuthStore } from "@/store/Store"; // Adjust the import path
+import Quill from 'quill';
+import 'quill/dist/quill.snow.css';
 
-const PostForm = () => {
+const PostForm: React.FC = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const { token, username } = useAuthStore();
+  const quillRef = useRef<HTMLDivElement | null>(null);
 
-  const { register, handleSubmit, formState, reset } = useForm<PostValues>({
+  const { register, handleSubmit, setValue, formState, reset } = useForm<PostValues>({
     resolver: zodResolver(postFormSchema),
   });
 
-  const onSubmit = async (values: PostValues) => {
+  useEffect(() => {
+    if (quillRef.current) {
+      const quill = new Quill(quillRef.current, {
+        theme: 'snow'
+      });
+
+      quill.on('text-change', () => {
+        setValue("body.description", quill.root.innerHTML);
+      });
+    }
+  }, [setValue]);
+
+  const poster_id = username;
+
+  const onSubmit: SubmitHandler<PostValues> = async (values) => {
     try {
       const transformedValues = {
         ...values,
+        poster_id,
         body: {
           ...values.body,
           requirements: values.body.requirements.split(',').map((item: string) => item.trim()),
-          nice_to_have: values.body.nice_to_have?.split(',').map((item: string) => item.trim()) || [],
+          nice_to_have: values.body.nice_to_have?.split(',').map((item: string) => item.trim()),
           benefits: values.body.benefits.split(',').map((item: string) => item.trim()),
         }
       };
@@ -31,6 +52,7 @@ const PostForm = () => {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'authorization': `Bearer ${token}`
         },
         body: JSON.stringify(transformedValues),
       });
@@ -119,12 +141,7 @@ const PostForm = () => {
       </section>
       <section className="flex flex-col items-start space-y-2">
         <Label htmlFor="description">{t('postForm.description')}</Label>
-        <Input
-          id="description"
-          placeholder="Description"
-          {...register("body.description")}
-          error={formState.errors.body?.description?.message}
-        />
+        <div id="editor" ref={quillRef} />
         {formState.errors.body?.description && <p className="error-message">{formState.errors.body.description.message}</p>}
       </section>
       <section className="flex flex-col items-start space-y-2">
