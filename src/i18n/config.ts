@@ -18,19 +18,19 @@ const resources = {
     fr: {
         common: commonFR,
         dashboard: dashboardFR,
-        dashboardProfile: dashboardProfileFR
+        dashboardProfile: dashboardProfileFR,
         dashboardJobs: dashboardJobsFR
     },
     en: {
         common: commonEN,
         dashboard: dashboardEN,
-        dashboardProfile: dashboardProfileEN
+        dashboardProfile: dashboardProfileEN,
         dashboardJobs: dashboardJobsEN
     },
     nl: {
         common: commonNL,
         dashboard: dashboardNL,
-        dashboardProfile: dashboardProfileNL
+        dashboardProfile: dashboardProfileNL,
         dashboardJobs: dashboardJobsNL
     }
 };
