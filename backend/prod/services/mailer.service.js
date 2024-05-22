@@ -4,6 +4,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const nodemailer_1 = __importDefault(require("nodemailer"));
+// import express, { Router } from 'express';
+// import mailerService from '../services/mailer.service';
+// const router: Router = express.Router();
+// router.get(`/test`, (req, res) => mailerService.sendConfirmationEmail(`clementlequenne1@gmail.com`, `Clément`, `1425`));
+// export default router;
 class MailerService {
     async initMailer() {
         const transporter = nodemailer_1.default.createTransport({
