@@ -9,8 +9,11 @@ import { BsThreeDotsVertical } from "react-icons/bs";
 import { TfiClose } from "react-icons/tfi";
 import { Skeleton } from '@/components/ui/skeleton';
 import useJobStore from '@/store/JobStore';
+import { useTranslation } from 'react-i18next';
+
 
 const JobList: React.FC = () => {
+  const { t } = useTranslation('dashboardJobs');
   const { jobSummaries, fetchJobSummaries, fetchJobDetail, jobDetails, isLoading, expandedJobId, setExpandedJobId } = useJobStore();
   console.log('Job prop:', jobSummaries);
 
@@ -41,7 +44,7 @@ const JobList: React.FC = () => {
           const jobDetail = jobDetails[job.id];
           const isExpanded = expandedJobId === job.id;
 
-          if (expandedJobId && !isExpanded) return null;
+          if (expandedJobId && !isExpanded) return null; 
 
           return (
               <Card key={job.id} className={`transition-all ${isExpanded ? 'w-full h-full overflow-auto' : 'h-auto'}`}>
@@ -63,33 +66,34 @@ const JobList: React.FC = () => {
                 <CardContent className={`flex-grow ${isExpanded ? 'p-4' : ''}`}>
                   <div className="flex flex-wrap space-x-2 mb-4">
                     <Badge variant="outline">{new Date(job.startDate).toLocaleDateString()}</Badge>
-                    <Badge variant="outline">{job.duration} Moi</Badge>
+                    <Badge variant="outline">{job.duration} {t('jobblock.month')}</Badge>
                     <Badge variant="outline">{job.field}</Badge>
+                    <Badge variant="outline">{job.location}</Badge>
                   </div>
                   <div className="flex space-x-4 mb-4">
                     <Popover>
                       <PopoverTrigger asChild>
-                        <Button variant="primary">Postuler</Button>
+                        <Button variant="primary">{t('jobblock.apply')}</Button>
                       </PopoverTrigger>
                       <PopoverContent>
-                        <a href={jobDetail?.applyLink}>Postuler maintenant</a>
+                        <a href={jobDetail?.applyLink}>{t('jobblock.apply')}</a>
                       </PopoverContent>
                     </Popover>
                     <Popover>
                       <PopoverTrigger asChild>
-                        <Button variant="outline">Envoyer un message</Button>
+                        <Button variant="outline">{t('jobblock.message')}</Button>
                       </PopoverTrigger>
                       <PopoverContent>
-                        <a href={jobDetail?.messageLink}>Envoyer un message</a>
+                        <a href={jobDetail?.messageLink}>{t('jobblock.message')}</a>
                       </PopoverContent>
                     </Popover>
                   </div>
                   {isExpanded && jobDetail && (
                       <Tabs defaultValue="description" className="mt-8">
                         <TabsList className="flex justify-center">
-                          <TabsTrigger value="description">Compétences</TabsTrigger>
-                          <TabsTrigger value="experiences">Experiences</TabsTrigger>
-                          <TabsTrigger value="benefits">Benefits</TabsTrigger>
+                          <TabsTrigger value="description">{t('jobblock.skills')}</TabsTrigger>
+                          <TabsTrigger value="experiences">{t('jobblock.experiences')}</TabsTrigger>
+                          <TabsTrigger value="benefits">{t('jobblock.benefits')}</TabsTrigger>
                         </TabsList>
                         <TabsContent value="description" className="mt-4">
                           <ul>

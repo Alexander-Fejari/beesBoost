@@ -1,6 +1,7 @@
 import Layout from "@/components/Layout";
 import PostForm from "@/components/custom/PostForm";
-import JobList from "@/components/custom/Jobs";
+import JobControlList from "@/components/custom/JobsControlDisplay";
+import JobList from "@/components/custom/Jobs"
 
 
 const DesignSystem = () => {
@@ -8,6 +9,7 @@ const DesignSystem = () => {
         <Layout>
             <PostForm />
             <JobList />
+            <JobControlList />
         </Layout>
     )
 }

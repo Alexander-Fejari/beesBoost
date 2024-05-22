@@ -13,7 +13,7 @@ function authenticateToken(req, res, next) {
         res.status(401).json({ error: 'Unauthorized access: No token' });
         return;
     }
-    jsonwebtoken_1.default.verify(token, process.env.JWT_SECRET, async (error, decoded) => {
+    jsonwebtoken_1.default.verify(token, process.env.JWT_SECRET_AUTH, async (error, decoded) => {
         if (error) {
             return res.status(403).json({ error: 'Unauthorized access: Invalid token' });
         }

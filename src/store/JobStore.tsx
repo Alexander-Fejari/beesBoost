@@ -8,6 +8,8 @@ interface JobSummary {
   startDate: string;
   duration: string;
   field: string;
+  location: string;
+  poster_id: string; // Include poster_id in the job summary
 }
 
 interface JobDetail extends JobSummary {
@@ -48,6 +50,8 @@ const useJobStore = create<JobState>()(devtools((set) => ({
         startDate: job.start_date,
         duration: job.duration,
         field: job.field,
+        location: job.location,
+        poster_id: job.poster_id, // Include poster_id in the job summary
       }));
       set({ jobSummaries, isLoading: { summaries: false } });
     } catch (error) {
@@ -66,12 +70,14 @@ const useJobStore = create<JobState>()(devtools((set) => ({
         startDate: data.start_date,
         duration: data.duration,
         field: data.field,
+        location: data.location,
         avatarUrl: data.avatarUrl,
         applyLink: data.applyLink || 'http://example.com/apply',
         messageLink: data.messageLink || 'http://example.com/message',
         nice_to_have: data.body.nice_to_have,
         experiences: data.body.requirements, 
         benefits: data.body.benefits,
+        poster_id: data.poster_id, // Ensure poster_id is included in job detail
       };
       set(state => ({
         jobDetails: { ...state.jobDetails, [jobId]: jobDetail },
