@@ -107,12 +107,16 @@ const IS_DETAILS: { [key in keyof ISDetails]: Record<string, any> } = {
 interface IUser extends Document {
   username: string;
   password: string;
+  reset_token_pass?: string | null;
   profile_pic: string;
   role: string;
   email: string;
+  email_confirmed: boolean;
+  confirmation_token?: string;
   is_verified: boolean;
   is_active: boolean;
   is_connected: boolean;
+  prefered_language: string;
   refresh_token?: string;
   lastname?: string;
   firstname?: string;
@@ -127,16 +131,20 @@ interface IUser extends Document {
   [key: string]: any;
 }
 
-const userSchema = new Schema({
+const UserSchema = new Schema({
   username: { type: String, required: true, unique: true },
   password: { type: String, required: true },
+  reset_token_pass: { type: String },
   profile_pic: { type: String, required: true, default: `https://scontent.fcrl1-1.fna.fbcdn.net/v/t1.6435-9/107209573_3210813778982759_4891830877933540151_n.jpg?_nc_cat=109&ccb=1-7&_nc_sid=5f2048&_nc_ohc=GNNwt0wMw28Q7kNvgFRvakj&_nc_ht=scontent.fcrl1-1.fna&oh=00_AfDE5teHqwAc3S1qdVcqKQ6Z2Dk1ftFbHNqSTkGaPpACBg&oe=665E101A` },
   role: { type: String, required: true },
   email: { type: String, required: true, unique: true },
-  is_verified: { type: Boolean, required: true, default: false }, // A mettre en false pour la production
+  email_confirmed: { type: Boolean, required: true, default: false },
+  confirmation_token: { type: String },
+  is_verified: { type: Boolean, required: true, default: true }, // A mettre en false pour la production
   is_active: { type: Boolean, required: true, default: true },
   is_connected: { type: Boolean, required: true, default: false },
-  refresh_token: { type: String, default: `` },
+  prefered_language: { type: String, required: true, default: `fr` },
+  refresh_token: { type: String },
   lastname: { type: String },
   firstname: { type: String },
   occupation: { type: String },
@@ -194,12 +202,12 @@ const userSchema = new Schema({
   }
 });
 
-userSchema.index({ registered_date: -1 });
+UserSchema.index({ registered_date: -1 });
 
-userSchema.methods.comparePassword = async function(candidatePassword: string): Promise<boolean> {
+UserSchema.methods.comparePassword = async function(candidatePassword: string): Promise<boolean> {
   return bcrypt.compare(candidatePassword, this.password);
 };
 
-const UserModel = model<IUser>('User', userSchema);
+const UserModel = model<IUser>('User', UserSchema);
 
 export { UserModel, IUser, ISDetails, IWDetails, IContactInfo, IS_DETAILS };

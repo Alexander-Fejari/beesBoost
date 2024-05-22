@@ -1,0 +1,26 @@
+servers:
+  - url: 'https://cinemania.space'
+    description: VPS Development Server
+  - url: 'http://localhost:5000'
+    description: Local Development Server
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  schemas: {}
+tags:
+  - name: Auth
+    description: Operations about authentication
+  - name: User
+    description: General operations about users
+  - name: Student
+    description: Operations about students
+  - name: Worker
+    description: Operations about workers
+  - name: Company
+    description: Companies handler
+  - name: Offers
+    description: Company posts/offers handler
+paths: {}

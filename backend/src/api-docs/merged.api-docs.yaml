@@ -1,10 +1,10 @@
 servers:
   -
-    url: 'http://localhost:5000'
-    description: 'Local Development Server'
-  -
     url: 'https://cinemania.space'
     description: 'VPS Development Server'
+  -
+    url: 'http://localhost:5000'
+    description: 'Local Development Server'
 components:
   securitySchemes:
     BearerAuth:
@@ -85,15 +85,6 @@ components:
           $ref: '#/components/schemas/WorkerDetails'
         student_details:
           $ref: '#/components/schemas/StudentDetails'
-    WorkerDetails:
-      type: object
-      properties:
-        company:
-          type: string
-          example: 'Example Company Inc.'
-        is_company_admin:
-          type: boolean
-          example: false
     StudentDetails:
       type: object
       properties:
@@ -196,6 +187,78 @@ components:
               title:
                 type: string
                 example: Achiever
+    WorkerDetails:
+      type: object
+      properties:
+        company:
+          type: string
+          example: 'Example Company Inc.'
+        is_company_admin:
+          type: boolean
+          example: false
+    Company:
+      type: object
+      required:
+        - name
+        - verif_boolean
+      properties:
+        name:
+          type: string
+          unique: true
+        verif_boolean:
+          type: object
+    COffer:
+      type: object
+      properties:
+        poster_id:
+          type: string
+        company_name:
+          type: string
+        field:
+          type: string
+        function:
+          type: string
+        creation_date:
+          type: string
+          format: date-time
+          default: now
+        start_date:
+          type: string
+          format: date-time
+        duration:
+          type: number
+        CV:
+          type: string
+        promoted:
+          type: boolean
+        promotion_expiration:
+          type: string
+          format: date-time
+        title:
+          type: string
+        body:
+          type: object
+          properties:
+            description:
+              type: string
+            requirements:
+              type: array
+              items:
+                type: string
+            nice_to_have:
+              type: array
+              items:
+                type: string
+            benefits:
+              type: array
+              items:
+                type: string
+        taker_id:
+          type: string
+        status:
+          type: string
+        offer_language:
+          type: string
 tags:
   -
     name: Auth
@@ -209,6 +272,12 @@ tags:
   -
     name: Worker
     description: 'Operations about workers'
+  -
+    name: Company
+    description: 'Companies handler'
+  -
+    name: Offers
+    description: 'Company posts/offers handler'
 paths:
   /user/signUp:
     post:
@@ -399,7 +468,7 @@ paths:
                 type: object
                 properties:
                   error: {type: string, example: 'Error retrieving users'}
-  '/user/getUser/{username or id}':
+  '/user/getUser/{param}':
     get:
       summary: 'Retrieve a single user'
       description: 'Fetches a user based on a username or ID provided in the URL path. It requires authentication and returns details if the user is found. It expects a username or an ID less than 24 characters as a parameter; IDs typically fit this condition, and excessive length could imply an erroneous input.'
@@ -498,7 +567,7 @@ paths:
                 type: object
                 properties:
                   error: {type: string, example: 'Error deleting user'}
-  '/user/updateInfos/{username or id}':
+  '/user/updateInfos/{param}':
     put:
       summary: 'Update user information'
       description: 'Updates specified fields for a user, identified by username or ID. The endpoint ensures that only certain fields can be updated, checks user existence, and field validity based on the user''s role.'
@@ -598,7 +667,7 @@ paths:
                 type: object
                 properties:
                   error: {type: string, example: 'Error updating user'}
-  '/user/updateVerified/{username or id}':
+  '/user/updateVerified/{param}':
     put:
       summary: 'Update user verification status'
       description: 'Updates the verification status (`is_verified`) for a specified user. Requires administrator-level permissions.'
@@ -658,7 +727,7 @@ paths:
                 type: object
                 properties:
                   error: {type: string, example: 'Error updating user'}
-  '/user/updateActive/{username or id}':
+  '/user/updateActive/{param}':
     put:
       summary: 'Update user active status'
       description: 'Updates the active status (`is_active`) for a specified user. This endpoint requires administrator-level permissions and will adjust the `deletion_date` based on the active status.'
@@ -718,7 +787,7 @@ paths:
                 type: object
                 properties:
                   error: {type: string, example: 'Error updating user'}
-  '/user/updateConnected/{username or id}':
+  '/user/updateConnected/{param}':
     put:
       summary: 'Update user connection status'
       description: 'Updates the connection status (`is_connected`) for a specified user. Access is restricted to administrators and superAdmins.'
@@ -760,7 +829,7 @@ paths:
           description: 'User not found.'
         '500':
           description: 'Internal server error while updating user information.'
-  '/user/updateUsername/{username or id}':
+  '/user/updateUsername/{param}':
     put:
       summary: 'Update user''s username'
       description: 'Updates the username for a specified user. Access is restricted to administrators and superAdmins.'
@@ -796,7 +865,7 @@ paths:
           description: 'User not found.'
         '500':
           description: 'Internal server error while updating username.'
-  '/user/updatePassword/{username or id}':
+  '/user/updatePassword/{param}':
     put:
       summary: 'Update user''s password'
       description: 'Updates the password for a specified user. Requires user authentication.'
@@ -833,7 +902,7 @@ paths:
           description: 'User not found.'
         '500':
           description: 'Internal server error while updating password.'
-  '/user/updateEmail/{username or id}':
+  '/user/updateEmail/{param}':
     put:
       summary: 'Update user''s email'
       description: 'Updates the email address for a user, identified by a username or ID. This operation ensures the input is correct and checks if the specified email update is valid.'
@@ -1067,7 +1136,7 @@ paths:
                 type: object
                 properties:
                   error: {type: string, example: 'Internal server error'}
-  '/student/getDetails/{username or id}':
+  '/student/getDetails/{param}':
     get:
       summary: 'Retrieve student details'
       description: 'Fetches detailed information for a student based on the provided username or ID. This endpoint ensures the user is identified correctly and fetches student details if available.'
@@ -1143,7 +1212,7 @@ paths:
                 type: object
                 properties:
                   error: {type: string, example: 'Error retrieving students'}
-  '/student/updateSchool/{username or id}':
+  '/student/updateSchool/{param}':
     put:
       summary: 'Update student''s school'
       description: 'Updates the school information for a student identified by username or ID. Ensures the user is a student and updates the specified detail if valid.'
@@ -1211,7 +1280,7 @@ paths:
                 type: object
                 properties:
                   error: {type: string, example: 'Internal server error'}
-  '/student/updateFormation/{username or id}':
+  '/student/updateFormation/{param}':
     put:
       summary: 'Update student''s formation details'
       description: 'Modifies the formation details array for a student, including adding, updating, or removing items, identified by username or ID.'
@@ -1287,7 +1356,7 @@ paths:
                 type: object
                 properties:
                   error: {type: string, example: 'Internal server error'}
-  '/student/updateExperience/{username or id}':
+  '/student/updateExperience/{param}':
     put:
       summary: 'Modify an experience entry from a student''s profile'
       description: 'Adds, updates, or removes a specific experience entry from a student''s profile, identified by username or ID. Ensures that the operation is applicable only to students and validates the existence of the entry to be modified.'
@@ -1359,7 +1428,7 @@ paths:
                 type: object
                 properties:
                   error: {type: string, example: 'Internal server error'}
-  '/student/updateSkill/{username or id}':
+  '/student/updateSkill/{param}':
     put:
       summary: 'Modify skills in a student''s profile'
       description: 'Adds, updates, or removes a skill entry in a student''s profile, depending on the specified action. The operation is only applicable to students and requires specifying the exact change needed.'
@@ -1437,7 +1506,7 @@ paths:
                 type: object
                 properties:
                   error: {type: string, example: 'Internal server error'}
-  '/student/updateCertification/{username or id}':
+  '/student/updateCertification/{param}':
     put:
       summary: 'Modify a certification to a student''s profile'
       description: 'Adds, updates, or removes a certification entry to a student''s profile. This operation is applicable only to students.'
@@ -1490,7 +1559,7 @@ paths:
           description: 'Student not found.'
         '500':
           description: 'Internal server error.'
-  '/student/updateLanguage/{username or id}':
+  '/student/updateLanguage/{param}':
     put:
       summary: 'Modify a language from a student''s profile'
       description: 'Adds, updates, or removes a language entry from a student''s profile. This operation requires the ID of the language entry to identify which one to remove/updated'
@@ -1528,7 +1597,7 @@ paths:
           description: 'Language entry or student not found.'
         '500':
           description: 'Internal server error.'
-  '/student/updateGameInfo/{username or id}':
+  '/student/updateGameInfo/{param}':
     put:
       summary: 'Update game information in a student''s profile'
       description: 'Adds, updates, or removes an existing game info entry in a student''s profile. This operation requires the ID of the game info entry to correctly apply updates or to remove it'
@@ -1574,7 +1643,7 @@ paths:
           description: 'Game info entry or student not found.'
         '500':
           description: 'Internal server error.'
-  '/worker/getDetails/{username or id}':
+  '/worker/getDetails/{param}':
     get:
       summary: 'Retrieve worker details'
       description: 'Fetches detailed information for a worker based on the provided username or ID. This endpoint ensures the user is identified correctly and fetches worker details if available.'
@@ -1623,7 +1692,7 @@ paths:
                 type: object
                 properties:
                   error: {type: string, example: 'Internal server error'}
-  '/worker/updateIsAdmin/{username or id}':
+  '/worker/updateIsAdmin/{param}':
     put:
       summary: 'Update worker''s company admin status'
       description: 'Updates the `is_company_admin` status for a worker. This operation checks if the user is a worker and updates their company admin status.'
@@ -1683,7 +1752,7 @@ paths:
                 type: object
                 properties:
                   error: {type: string, example: 'Error updating worker admin status'}
-  '/worker/updateCompany/{username or id}':
+  '/worker/updateCompany/{param}':
     put:
       summary: 'Update worker''s company detail'
       description: 'Updates a specific detail within the worker''s profile, identified by username or ID. Ensures the user is a worker and updates the specified detail if valid, can also be used with empty string to delete worker''s company'

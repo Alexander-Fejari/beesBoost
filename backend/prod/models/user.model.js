@@ -45,16 +45,20 @@ const IS_DETAILS = {
     }
 };
 exports.IS_DETAILS = IS_DETAILS;
-const userSchema = new mongoose_1.Schema({
+const UserSchema = new mongoose_1.Schema({
     username: { type: String, required: true, unique: true },
     password: { type: String, required: true },
+    reset_token_pass: { type: String },
     profile_pic: { type: String, required: true, default: `https://scontent.fcrl1-1.fna.fbcdn.net/v/t1.6435-9/107209573_3210813778982759_4891830877933540151_n.jpg?_nc_cat=109&ccb=1-7&_nc_sid=5f2048&_nc_ohc=GNNwt0wMw28Q7kNvgFRvakj&_nc_ht=scontent.fcrl1-1.fna&oh=00_AfDE5teHqwAc3S1qdVcqKQ6Z2Dk1ftFbHNqSTkGaPpACBg&oe=665E101A` },
     role: { type: String, required: true },
     email: { type: String, required: true, unique: true },
-    is_verified: { type: Boolean, required: true, default: false }, // A mettre en false pour la production
+    email_confirmed: { type: Boolean, required: true, default: false },
+    confirmation_token: { type: String },
+    is_verified: { type: Boolean, required: true, default: true }, // A mettre en false pour la production
     is_active: { type: Boolean, required: true, default: true },
     is_connected: { type: Boolean, required: true, default: false },
-    refresh_token: { type: String, default: `` },
+    prefered_language: { type: String, required: true, default: `fr` },
+    refresh_token: { type: String },
     lastname: { type: String },
     firstname: { type: String },
     occupation: { type: String },
@@ -111,9 +115,9 @@ const userSchema = new mongoose_1.Schema({
             }],
     }
 });
-userSchema.index({ registered_date: -1 });
-userSchema.methods.comparePassword = async function (candidatePassword) {
+UserSchema.index({ registered_date: -1 });
+UserSchema.methods.comparePassword = async function (candidatePassword) {
     return bcrypt_1.default.compare(candidatePassword, this.password);
 };
-const UserModel = (0, mongoose_1.model)('User', userSchema);
+const UserModel = (0, mongoose_1.model)('User', UserSchema);
 exports.UserModel = UserModel;

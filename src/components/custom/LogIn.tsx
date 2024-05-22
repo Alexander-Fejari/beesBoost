@@ -2,46 +2,47 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label.tsx";
+import { Label } from "@/components/ui/label";
 import { loginSchema, LoginValues } from "@/components/formSchema";
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "@/context/AuthContext"; 
+import { useAuthStore } from "@/store/Store"; // Ajustez ce chemin selon la structure de votre projet
 
 const LogIn = () => {
-    const { t } = useTranslation();
-    const navigate = useNavigate();
-    const { setToken } = useAuth();
+  const { t } = useTranslation();
+  const navigate = useNavigate();
+  const setToken = useAuthStore((state) => state.setToken);
 
-    const { register, handleSubmit, formState } = useForm<LoginValues>({
-        resolver: zodResolver(loginSchema),
-    });
+  const { register, handleSubmit, formState } = useForm<LoginValues>({
+    resolver: zodResolver(loginSchema),
+  });
 
-    const onSubmit = async (values: LoginValues): Promise<void> => {
-        try {
-            const response = await fetch(`${import.meta.env.VITE_APP_API_URL}/auth/signIn`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(values)
-            });
+  const onSubmit = async (values: LoginValues): Promise<void> => {
+    try {
+      const response = await fetch(`${import.meta.env.VITE_APP_API_URL}/auth/signIn`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(values),
+      });
 
-            if (!response.ok) {
-                throw new Error('Échec de la connexion au serveur');
-            }
+      if (!response.ok) {
+        throw new Error('Échec de la connexion au serveur');
+      }
 
-            const data = await response.json();
-            if (data.accessToken) {
-                setToken(data.accessToken); 
-                navigate("/dashboard/profile");
-            } else {
-                console.log('Échec de la connexion: Token non reçu');
-            }
-        } catch (error) {
-            console.error('Erreur de connexion:', error);
-        }
-    };
+      const data = await response.json();
+      if (data.accessToken) {
+        setToken(data.accessToken);
+          // TODO: `Changer le path pour la mise en prod
+        navigate("/");
+      } else {
+        console.log('Échec de la connexion: Token non reçu');
+      }
+    } catch (error) {
+      console.error('Erreur de connexion:', error);
+    }
+  };
 
     return (
         <form onSubmit={handleSubmit(onSubmit)} className="mt-8 space-y-8">
