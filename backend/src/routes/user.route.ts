@@ -61,7 +61,7 @@ router.get(`/student/getAllStudents`, authenticateToken, (req, res) => userContr
 
 router.get(`/student/getDetails/:param`, authenticateToken, (req, res) => userController.getDetails(req, res, `student_details`));
 
-router.get(`/student/getLastRegisteredStudents`, authenticateToken, (req, res) => userController.getLastStudents(req, res, 5));
+router.get(`/student/getLastRegisteredStudents`, (req, res) => userController.getLastStudents(req, res, 5));
 
   // UPDATE STUDENT INFOS
 router.put(`/student/updateSchool/:param`, authenticateToken, (req, res) => userController.updateStudentDetail(req, res, `school`));

@@ -37,7 +37,7 @@ router.put(`/worker/updateCompany/:param`, auth_middleware_1.authenticateToken, 
 // GET STUDENT INFOS
 router.get(`/student/getAllStudents`, auth_middleware_1.authenticateToken, (req, res) => user_controller_1.default.getAllStudents(req, res)); // Pas finie + Swagger à faire
 router.get(`/student/getDetails/:param`, auth_middleware_1.authenticateToken, (req, res) => user_controller_1.default.getDetails(req, res, `student_details`));
-router.get(`/student/getLastRegisteredStudents`, auth_middleware_1.authenticateToken, (req, res) => user_controller_1.default.getLastStudents(req, res, 5));
+router.get(`/student/getLastRegisteredStudents`, (req, res) => user_controller_1.default.getLastStudents(req, res, 5));
 // UPDATE STUDENT INFOS
 router.put(`/student/updateSchool/:param`, auth_middleware_1.authenticateToken, (req, res) => user_controller_1.default.updateStudentDetail(req, res, `school`));
 router.put(`/student/updateFormation/:param`, auth_middleware_1.authenticateToken, (req, res) => user_controller_1.default.updateStudentDetailArray(req, res, `formation`));
