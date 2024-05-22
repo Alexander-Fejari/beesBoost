@@ -41,6 +41,10 @@ class CompanyOfferController {
 
       const newOffer = new COfferModel(req.body);
 
+      if (!req.body.body) {
+        newOffer.body = {};
+      }
+
       newOffer.location = req.body.location ? req.body.location : company.contact_info?.city;
       
       const offer = await newOffer.save();

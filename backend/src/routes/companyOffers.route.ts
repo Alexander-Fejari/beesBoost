@@ -15,7 +15,7 @@ router.get('/getPostById/:id', authenticateToken, cOfferController.getOfferById)
 router.get('/getPostWithCompanyInfo/:id', authenticateToken, cOfferController.getOfferWithCompanyInfo); // Swagger à faire
 
 // PUT
-router.put('/updatePost/:id', authenticateToken, cOfferController.updateOffer); // Swagger à faire 
+router.put('/updatePost/:id', /*authenticateToken,*/ cOfferController.updateOffer); // Swagger à faire 
 
 // DELETE
 router.delete('/deletePost/:id', authenticateToken, cOfferController.deleteOffer); // Swagger à faire 
