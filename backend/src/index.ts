@@ -1,6 +1,6 @@
 import express, { Request, Response } from 'express';
 import swaggerUi from 'swagger-ui-express';
-import swaggerSpec from './config/swagger.config'
+import swaggerSpec from './config/swagger.config';
 import cors from 'cors';
 import dotenv from 'dotenv';
 
