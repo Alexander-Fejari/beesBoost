@@ -8,7 +8,7 @@ const companyOffers_controller_1 = __importDefault(require("../controllers/compa
 const auth_middleware_1 = require("../middlewares/auth.middleware");
 const router = express_1.default.Router();
 // PSOT
-router.post('/addPost', auth_middleware_1.authenticateToken, companyOffers_controller_1.default.createOffer); // Swagger à faire + Ajouter protection si éléments manquants
+router.post('/addPost', /*authenticateToken,*/ companyOffers_controller_1.default.createOffer); // Swagger à faire + Ajouter protection si éléments manquants
 // GET
 router.get('/getPosts', auth_middleware_1.authenticateToken, companyOffers_controller_1.default.getOffers); // Swagger à faire 
 router.get('/getPostById/:id', auth_middleware_1.authenticateToken, companyOffers_controller_1.default.getOfferById); // Swagger à faire 

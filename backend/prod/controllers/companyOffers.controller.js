@@ -3,11 +3,19 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const user_model_1 = require("../models/user.model");
 const company_model_1 = require("../models/company.model");
 const companyOffers_model_1 = require("../models/companyOffers.model");
+const mongoose_1 = require("mongoose");
 class CompanyOfferController {
     // POST
     async createOffer(req, res) {
         try {
-            const user = await user_model_1.UserModel.findOne(req.body.poster_id);
+            let user;
+            if ((0, mongoose_1.isValidObjectId)(req.body.poster_id)) {
+                user = await user_model_1.UserModel.findById(req.body.poster_id);
+            }
+            else {
+                res.status(400).json({ message: 'Invalid user id' });
+                return;
+            }
             if (!user) {
                 res.status(404).json({ message: 'User not found' });
                 return;
@@ -27,6 +35,7 @@ class CompanyOfferController {
                 return;
             }
             const newOffer = new companyOffers_model_1.COfferModel(req.body);
+            newOffer.location = req.body.location ? req.body.location : company.contact_info?.city;
             const offer = await newOffer.save();
             res.status(201).json(offer);
         }

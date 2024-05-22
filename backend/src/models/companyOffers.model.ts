@@ -12,6 +12,7 @@ interface ICOffer extends Document {
   company_name?: string;
   field?: string;
   function?: string;
+  location?: string;
   creation_date?: Date;
   start_date?:  Date;
   duration?: number; // Nombre de jours
@@ -37,6 +38,7 @@ const COfferSchema: Schema = new Schema({
   company_name: { type: String },
   field: { type: String },
   function: { type: String },
+  location: { type: String },
   creation_date: { type: Date, default: Date.now },
   start_date: { type: Date },
   duration: { type: Number },

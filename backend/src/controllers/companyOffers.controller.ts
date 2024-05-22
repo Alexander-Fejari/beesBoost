@@ -2,12 +2,22 @@ import { Request, Response } from 'express';
 import { UserModel } from '../models/user.model';
 import { CompanyModel } from '../models/company.model';
 import { COfferModel } from '../models/companyOffers.model';
+import { isValidObjectId } from 'mongoose';
 
 class CompanyOfferController {
   // POST
   public async createOffer(req: Request, res: Response): Promise<void> {
     try {
-      const user = await UserModel.findOne(req.body.poster_id);
+      let user;
+      
+      if (isValidObjectId(req.body.poster_id)) {
+        user = await UserModel.findById(req.body.poster_id);
+      }
+      else {
+        res.status(400).json({ message: 'Invalid user id' });
+        return ;
+      }
+
       if (!user) {
         res.status(404).json({ message: 'User not found' });
         return ;
@@ -31,6 +41,7 @@ class CompanyOfferController {
 
       const newOffer = new COfferModel(req.body);
 
+      newOffer.location = req.body.location ? req.body.location : company.contact_info?.city;
       
       const offer = await newOffer.save();
       res.status(201).json(offer);
