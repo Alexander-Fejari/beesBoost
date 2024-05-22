@@ -9,7 +9,7 @@ import userRouter from './routes/user.route';
 import authRouter from './routes/auth.route';
 import companyRouter from './routes/company.route';
 import cOffersRouter from './routes/companyOffers.route';
-//import mailerRouter from './routes/mailer.route';
+//import mailerRouter from './routes/maile.route';
 
 dotenv.config();
 
