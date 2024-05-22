@@ -1,18 +1,18 @@
 import i18n from 'i18next';
 import HttpApi from 'i18next-http-backend';
 import { initReactI18next } from 'react-i18next';
-import commonFR from "../locales/fr/commonFR.json";
-import commonEN from "../locales/en/commonEN.json";
-import commonNL from "../locales/nl/commonNL.json";
-import dashboardFR from "../locales/fr/dashboardFR.json";
-import dashboardEN from "../locales/en/dashboardEN.json";
-import dashboardNL from "../locales/nl/dashboardNL.json";
-import dashboardProfileFR from "../locales/fr/dashboardProfileFR.json";
-import dashboardProfileEN from "../locales/en/dashboardProfileEN.json";
-import dashboardProfileNL from "../locales/nl/dashboardProfileNL.json";
-import dashboardJobsEN from "../locales/en/dashboardJobsEN.json";
-import dashboardJobsFR from "../locales/fr/dashboardJobsFR.json";
-import dashboardJobsNL from "../locales/nl/dashboardJobsNL.json"
+import commonFR from "@/locales/fr/commonFR.json";
+import commonEN from "@/locales/en/commonEN.json";
+import commonNL from "@/locales/nl/commonNL.json";
+import dashboardFR from "@/locales/fr/dashboardFR.json";
+import dashboardEN from "@/locales/en/dashboardEN.json";
+import dashboardNL from "@/locales/nl/dashboardNL.json";
+import dashboardProfileFR from "@/locales/fr/dashboardProfileFR.json";
+import dashboardProfileEN from "@/locales/en/dashboardProfileEN.json";
+import dashboardProfileNL from "@/locales/nl/dashboardProfileNL.json";
+import dashboardJobsEN from "@/locales/en/dashboardJobsEN.json";
+import dashboardJobsFR from "@/locales/fr/dashboardJobsFR.json";
+import dashboardJobsNL from "@/locales/nl/dashboardJobsNL.json"
 
 const resources = {
     fr: {
