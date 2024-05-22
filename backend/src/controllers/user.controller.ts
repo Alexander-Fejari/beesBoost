@@ -2,6 +2,8 @@ import { Request, Response } from 'express';
 import bcrypt from 'bcrypt';
 import { UserModel, ISDetails, IWDetails, IS_DETAILS } from '../models/user.model';
 import { ObjectId } from 'mongodb';
+import mailerService from '../services/mailer.service';
+import jwt from 'jsonwebtoken';
 
 class UserController {
   // UTILS
@@ -65,7 +67,7 @@ class UserController {
   // GENERAL
   async addUser(req: Request, res: Response): Promise<void> {
     try {
-      const { username, password, profile_pic, role, lastname, firstname, occupation, location, contact_info } = req.body;
+      const { username, password, profile_pic, role, lastname, firstname, occupation, location, contact_info, prefered_language } = req.body;
       let { email } = req.body;
       
       email = email.toLowerCase();
@@ -97,8 +99,16 @@ class UserController {
 
       const hashedPassword = await bcrypt.hash(password, 10);
 
-      const userData: any = { username, password: hashedPassword, profile_pic, role, email, lastname, firstname, occupation, location, contact_info };
+      const userData: any = { username, password: hashedPassword, profile_pic, role, email, lastname, firstname, occupation, location, contact_info, prefered_language };
      
+      if (userData.prefered_language === 'prefered_language') {
+        const validLanguages = ['fr', 'nl', 'en'];
+        if (!validLanguages.includes(userData.prefered_language)) {
+          res.status(400).json({ message: 'Only fr, nl, or en can be chosen as prefered_language' });
+          return;
+        }
+      }
+
       if (role === `student`) {
         userData.student_details = {};
         userData.student_details = { ...req.body.student_details };
@@ -109,14 +119,74 @@ class UserController {
         // Ajouter logique pour mettre is_company_admin à true quand c'est le premier de la company 
       }
 
+      userData.confirmation_token = jwt.sign({ username: userData.username }, process.env.JWT_SECRET_EMAIL_CONFIRM!, { expiresIn: '15m' });
+
+      //mailerService.sendConfirmationEmail(userData.email, userData.username, userData.confirmation_token);
+
       const newUser = new UserModel(userData);
       await newUser.save();
 
-      res.status(201).json({ message: `User added successfully`, userId: newUser._id });
+      res.status(201).json({ message: `User added successfully`, user_id: newUser._id });
     }
     catch (error) {
       console.error(`Error adding user:`, error);
       res.status(500).json({ error: `Error adding user` });
+    }
+  }
+
+  async confirmEmail(req: Request, res: Response): Promise<void> {
+    try {
+      const { token } = req.params;
+      
+      const decoded = jwt.verify(token, process.env.JWT_SECRET_EMAIL_CONFIRM!) as { username: string };
+      const user = await UserModel.findOne({ confirmation_token: token });
+
+      if (!user) {
+        res.status(400).json({ error: 'Token invalide ou expiré.' });
+        return;
+      }
+
+      user.email_confirmed = true;
+      user.confirmationToken = '';
+      await user.save();
+
+      res.status(200).json({ message: 'Compte confirmé avec succès !' });
+    } catch (error) {
+      res.status(400).json({ error: 'Token invalide ou expiré.' });
+    }
+  }
+
+  async resendConfirmationEmail(req: Request, res: Response): Promise<void> {
+    try {
+      const { email } = req.params;
+      
+      const user = await UserModel.findOne({ email });
+
+      if (!user) {
+        res.status(404).json({ error: `Utilisateur non trouvé.` });
+        return ;
+      }
+
+      if (user.is_confirmed) {
+        res.status(400).json({ error: `Cet utilisateur est déjà confirmé.` });
+        return ;
+      }
+
+      const confirmationToken = jwt.sign(
+        { username: user.username },
+        process.env.JWT_SECRET_EMAIL_CONFIRM!,
+        { expiresIn: '15m' }
+      );
+      user.confirmation_token = confirmationToken;
+
+      await user.save();
+
+      await mailerService.resendConfirmationEmail(user.email, user.username, confirmationToken);
+
+      res.status(200).json({ message: 'Un nouvel email de confirmation a été envoyé.' });
+    } catch (error) {
+      console.error('Erreur lors de l\'envoi de l\'email de confirmation :', error);
+      res.status(500).json({ error: 'Erreur interne du serveur.' });
     }
   }
 
@@ -252,12 +322,19 @@ class UserController {
 
       if (fieldToUpdate == `is_active`) {
         if (updateData.is_active === false) {
-          updateData.is_active = false;
           updateData.deletion_date = Date.now();
         }
         else {
           updateData.is_active = true;
           updateData.deletion_date = null;
+        }
+      }
+
+      if (fieldToUpdate === 'prefered_language') {
+        const validLanguages = ['fr', 'nl', 'en'];
+        if (!validLanguages.includes(updateData.prefered_language)) {
+          res.status(400).json({ message: 'Only fr, nl, or en can be chosen as prefered_language' });
+          return;
         }
       }
 
@@ -284,7 +361,7 @@ class UserController {
       const updateData = req.body;
     
       const allowedFields: string[] = [
-        `profile_pic`, `lastname`, `firstname`, `occupation`, `location`, 
+        `profile_pic`, `lastname`, `firstname`, `occupation`, `location`, `prefered_language`,
         `contact_info.phone`, `contact_info.street`, `contact_info.street_number`, `contact_info.box`,
         `contact_info.city`, `contact_info.country`, `contact_info.postal_code`, `student_details.school`
       ];
@@ -298,6 +375,13 @@ class UserController {
         if (!allowedFields.includes(field)) {
           res.status(400).json({ error: `Invalid field in the body, only this can be updated: ${allowedFields.join(', ')}` });
           return ;
+        }
+        if (field === 'prefered_language') {
+          const validLanguages = ['fr', 'nl', 'en'];
+          if (!validLanguages.includes(updateData.prefered_language)) {
+            res.status(400).json({ message: 'Only fr, nl, or en can be chosen as prefered_language' });
+            return;
+          }
         }
         updateObject[field] = updateData[field];
       }
@@ -579,4 +663,4 @@ class UserController {
   }
 }
 
-export default UserController;
+export default new UserController;

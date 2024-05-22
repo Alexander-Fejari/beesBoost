@@ -6,19 +6,24 @@ import { Label } from "@/components/ui/label";
 import { postFormSchema, PostValues } from "@/components/formSchema"; // Adjust the import path
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from "react-router-dom";
+import { useAuthStore } from "@/store/Store"; // Adjust the import path
 
 const PostForm = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const { token, username } = useAuthStore(); // Get the token from the store
 
   const { register, handleSubmit, formState, reset } = useForm<PostValues>({
     resolver: zodResolver(postFormSchema),
   });
 
+  const poster_id = username;
+
   const onSubmit = async (values: PostValues) => {
     try {
       const transformedValues = {
         ...values,
+        poster_id,
         body: {
           ...values.body,
           requirements: values.body.requirements.split(',').map((item: string) => item.trim()),
@@ -31,6 +36,7 @@ const PostForm = () => {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'authorization': `Bearer ${token}`
         },
         body: JSON.stringify(transformedValues),
       });
@@ -39,8 +45,7 @@ const PostForm = () => {
         throw new Error('Failed to create the post');
       }
 
-      // Navigate to the posts page after successful submission
-      navigate("/posts");
+      navigate("/dashboard/settings");
     } catch (error) {
       console.error('Error creating post:', error);
     }

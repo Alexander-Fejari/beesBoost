@@ -14,11 +14,13 @@ function mergeYAMLFiles(files: string[]): object {
 }
 
 const files: string[] = [
-  './beesboost.api-docs.yaml',
-  './user.api-docs.yaml',
-  './auth.api-docs.yaml',
-  './student.api-docs.yaml',
-  './worker.api-docs.yaml'
+  './docs/beesboost.api-docs.yaml',
+  './docs/user.api-docs.yaml',
+  './docs/auth.api-docs.yaml',
+  './docs/student.api-docs.yaml',
+  './docs/worker.api-docs.yaml',
+  './docs/company.api-docs.yaml',
+  './docs/companyOffers.api-docs.yaml'
 ];
 
 const mergedSpec: object = mergeYAMLFiles(files);

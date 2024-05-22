@@ -1,0 +1,55 @@
+components:
+  schemas:
+    COffer:
+      type: object
+      properties:
+        poster_id:
+          type: string
+        company_name:
+          type: string
+        field:
+          type: string
+        function:
+          type: string
+        creation_date:
+          type: string
+          format: date-time
+          default: 'now'
+        start_date:
+          type: string
+          format: date-time
+        duration:
+          type: number
+        CV:
+          type: string
+        promoted:
+          type: boolean
+        promotion_expiration:
+          type: string
+          format: date-time
+        title:
+          type: string
+        body:
+          type: object
+          properties:
+            description:
+              type: string
+            requirements:
+              type: array
+              items:
+                type: string
+            nice_to_have:
+              type: array
+              items:
+                type: string
+            benefits:
+              type: array
+              items:
+                type: string
+        taker_id:
+          type: string
+        status:
+          type: string
+        offer_language:
+          type: string
+  

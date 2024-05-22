@@ -11,7 +11,7 @@ function authenticateToken(req: Request, res: Response, next: NextFunction): voi
     return;  
   }
 
-  jwt.verify(token, process.env.JWT_SECRET!, async (error, decoded) => {
+  jwt.verify(token, process.env.JWT_SECRET_AUTH!, async (error, decoded) => {
     if (error) {
       return res.status(403).json({ error: 'Unauthorized access: Invalid token' });
     }
