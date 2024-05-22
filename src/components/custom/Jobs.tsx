@@ -44,7 +44,7 @@ const JobList: React.FC = () => {
           const jobDetail = jobDetails[job.id];
           const isExpanded = expandedJobId === job.id;
 
-          if (expandedJobId && !isExpanded) return null;
+          if (expandedJobId && !isExpanded) return null; 
 
           return (
               <Card key={job.id} className={`transition-all ${isExpanded ? 'w-full h-full overflow-auto' : 'h-auto'}`}>
