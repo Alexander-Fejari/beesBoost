@@ -7,19 +7,26 @@ import commonNL from "../locales/nl/commonNL.json";
 import dashboardFR from "../locales/fr/dashboardFR.json";
 import dashboardEN from "../locales/en/dashboardEN.json";
 import dashboardNL from "../locales/nl/dashboardNL.json";
+import dashboardProfileFR from "../locales/fr/dashboardProfileFR.json";
+import dashboardProfileEN from "../locales/en/dashboardProfileEN.json";
+import dashboardProfileNL from "../locales/nl/dashboardProfileNL.json";
 
 const resources = {
     fr: {
         common: commonFR,
-        dashboard: dashboardFR
+        dashboard: dashboardFR,
+        dashboardProfile: dashboardProfileFR
     },
     en: {
         common: commonEN,
-        dashboard: dashboardEN
+        dashboard: dashboardEN,
+        dashboardProfile: dashboardProfileEN
+
     },
     nl: {
         common: commonNL,
-        dashboard: dashboardNL
+        dashboard: dashboardNL,
+        dashboardProfile: dashboardProfileNL
     }
 };
 
@@ -43,8 +50,8 @@ i18n
             caches: ['cookie'],
         },
         fallbackLng: 'fr',
-        lng: defaultLanguage, // Utilise la langue par défaut
-        ns: ['common', 'dashboard'],
+        lng: defaultLanguage,
+        ns: ['common', 'dashboard', 'dashboardProfile'],
         debug: true,
         interpolation: {
             escapeValue: false,
