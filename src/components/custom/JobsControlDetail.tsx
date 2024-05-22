@@ -1,29 +1,57 @@
-import { useForm } from "react-hook-form";
+import React, { useEffect } from 'react';
+import { useForm, SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { postFormSchema, PostValues } from "@/components/formSchema"; // Adjust the import path
 import { useTranslation } from 'react-i18next';
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useAuthStore } from "@/store/Store"; // Adjust the import path
+import useJobStore, { JobDetail } from '@/store/JobStore'; // Adjust the import path
 
-const PostForm = () => {
+const EditPostForm: React.FC = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { token, username } = useAuthStore(); // Get the token from the store
+  const { jobId } = useParams<{ jobId: string }>();
+  const { jobDetails, fetchJobDetail, isLoading } = useJobStore(state => ({
+    jobDetails: state.jobDetails,
+    fetchJobDetail: state.fetchJobDetail,
+    isLoading: state.isLoading,
+  }));
 
-  const { register, handleSubmit, formState, reset } = useForm<PostValues>({
+  const { register, handleSubmit, setValue, formState, reset } = useForm<PostValues>({
     resolver: zodResolver(postFormSchema),
   });
 
-  const poster_id = username;
+  useEffect(() => {
+    if (jobId) {
+      fetchJobDetail(jobId);
+    }
+  }, [jobId, fetchJobDetail]);
 
-  const onSubmit = async (values: PostValues) => {
+  useEffect(() => {
+    if (jobId && jobDetails[jobId]) {
+      const job = jobDetails[jobId] as JobDetail;
+      setValue("field", job.field);
+      setValue("function", job.function);
+      setValue("start_date", job.startDate);
+      setValue("duration", job.duration);
+      setValue("title", job.title);
+      setValue("location", job.location);
+      setValue("body.description", job.descriptionShort);
+      setValue("body.requirements", job.experiences.join(', '));
+      setValue("body.nice_to_have", job.nice_to_have.join(', '));
+      setValue("body.benefits", job.benefits.join(', '));
+    }
+  }, [jobId, jobDetails, setValue]);
+
+  const onSubmit: SubmitHandler<PostValues> = async (values) => {
     try {
       const transformedValues = {
         ...values,
-        poster_id,
+        poster_id: username,
         body: {
           ...values.body,
           requirements: values.body.requirements.split(',').map((item: string) => item.trim()),
@@ -32,8 +60,8 @@ const PostForm = () => {
         }
       };
 
-      const response = await fetch(`${import.meta.env.VITE_APP_API_URL}/post/addPost`, {
-        method: 'POST',
+      const response = await fetch(`${import.meta.env.VITE_APP_API_URL}/post/updatePost/${jobId}`, {
+        method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
           'authorization': `Bearer ${token}`
@@ -42,18 +70,22 @@ const PostForm = () => {
       });
 
       if (!response.ok) {
-        throw new Error('Failed to create the post');
+        throw new Error('Failed to update the post');
       }
 
       navigate("/dashboard/settings");
     } catch (error) {
-      console.error('Error creating post:', error);
+      console.error('Error updating post:', error);
     }
   };
 
   const onReset = () => {
     reset();
   };
+
+  if (isLoading[jobId]) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
@@ -174,4 +206,4 @@ const PostForm = () => {
   );
 };
 
-export default PostForm;
+export default EditPostForm;
