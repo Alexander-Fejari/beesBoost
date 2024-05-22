@@ -11,13 +11,13 @@ import { useAuthStore } from "@/store/Store"; // Adjust the import path
 const PostForm = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const { token, username } = useAuthStore(); // Get the token from the store
+  const { token, id } = useAuthStore(); // Get the token from the store
 
   const { register, handleSubmit, formState, reset } = useForm<PostValues>({
     resolver: zodResolver(postFormSchema),
   });
 
-  const poster_id = username;
+  const poster_id = id;
 
   const onSubmit = async (values: PostValues) => {
     try {
