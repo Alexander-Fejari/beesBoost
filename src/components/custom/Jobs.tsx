@@ -8,18 +8,21 @@ import { Tabs, TabsList, TabsContent, TabsTrigger } from '@/components/ui/tabs';
 import { BsThreeDotsVertical } from "react-icons/bs";
 import { TfiClose } from "react-icons/tfi";
 import { Skeleton } from '@/components/ui/skeleton';
+import { useAuthStore } from '@/store/Store';
 import useJobStore from '@/store/JobStore';
 import { useTranslation } from 'react-i18next';
 
-
 const JobList: React.FC = () => {
   const { t } = useTranslation('dashboardJobs');
+  const { token } = useAuthStore(); // Get token from auth store
   const { jobSummaries, fetchJobSummaries, fetchJobDetail, jobDetails, isLoading, expandedJobId, setExpandedJobId } = useJobStore();
   console.log('Job prop:', jobSummaries);
 
   useEffect(() => {
-    fetchJobSummaries().then(() => {});
-  }, [fetchJobSummaries]);
+    if (token) {
+      fetchJobSummaries(token);
+    }
+  }, [token, fetchJobSummaries]);
 
   if (isLoading.summaries) {
     return (
@@ -33,7 +36,7 @@ const JobList: React.FC = () => {
 
   const handleExpand = (jobId: string) => {
     if (!jobDetails[jobId]) {
-      fetchJobDetail(jobId).then(() => {});
+      fetchJobDetail(jobId, token);
     }
     setExpandedJobId(expandedJobId === jobId ? null : jobId);
   };

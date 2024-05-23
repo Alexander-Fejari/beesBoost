@@ -2,7 +2,7 @@
 import { useTranslation } from 'react-i18next';
 import { Button } from "@/components/ui/button.tsx";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger, } from "@/components/ui/dropdown-menu";
-import { useLanguageStore } from '@/store/languageStore';
+import { useLanguageStore } from '@/store/LanguageStore';
 import flagFR from '@/assets/fr.ico';
 import flagEN from '@/assets/en.ico';
 import flagNL from '@/assets/nl.ico';

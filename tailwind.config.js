@@ -61,6 +61,9 @@ module.exports = {
                 black: '#1A1423',
                 white: '#F0EFF4'
             },
+            boxShadow: {
+                'inverse-lg': '0 10px 15px -3px rgb(255 255 255 / 0.1), 0 4px 6px -4px rgb(255 255 255 / 0.1)'
+            },
             gridTemplateColumns: {
                 lg: 'minmax(200px, 0.3fr) minmax(300px, 1.7fr)',
             },
