@@ -54,7 +54,6 @@ const JobList: React.FC = () => {
         try {
             if (!jobDetails[jobId]) {
                 if (token != null) {
-                    console.log(jobId);
                     await fetchJobDetail(jobId, token);
                 }
             }
