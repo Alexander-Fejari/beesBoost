@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { useNavigate } from 'react-router-dom';
 
 const JobControlList: React.FC = () => {
-  const { username } = useAuthStore();
+  const { id, token } = useAuthStore();
   const { jobSummaries, fetchJobSummaries, isLoading, setExpandedJobId } = useJobStore(state => ({
     jobSummaries: state.jobSummaries,
     fetchJobSummaries: state.fetchJobSummaries,
@@ -16,10 +16,20 @@ const JobControlList: React.FC = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetchJobSummaries();
-  }, [fetchJobSummaries]);
+    const fetchData = async () => {
+      if (token) {
+        try {
+          await fetchJobSummaries(token);
+        } catch (error) {
+          console.error('Error fetching job summaries:', error);
+        }
+      }
+    };
 
-  const filteredJobSummaries = jobSummaries.filter(job => job.poster_id === username);
+    fetchData();
+  }, [fetchJobSummaries, token]);
+
+  const filteredJobSummaries = jobSummaries.filter(job => job.poster_id === id);
 
   if (isLoading) {
     return <div>Loading...</div>;
