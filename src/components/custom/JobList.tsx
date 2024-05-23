@@ -27,9 +27,17 @@ const JobList: React.FC = () => {
     console.log('Job prop:', jobSummaries);
 
     useEffect(() => {
-        if (token) {
-            fetchJobSummaries(token);
-        }
+        const fetchData = async () => {
+            try {
+                if (token) {
+                    await fetchJobSummaries(token);
+                }
+            } catch (error) {
+                console.error('Error fetching job summaries:', error);
+            }
+        };
+
+        fetchData();
     }, [token, fetchJobSummaries]);
 
     if (isLoading.summaries) {
@@ -45,7 +53,9 @@ const JobList: React.FC = () => {
     const handleExpand = async (jobId: string) => {
         try {
             if (!jobDetails[jobId]) {
-                await fetchJobDetail(jobId, token);
+                if (token != null) {
+                    await fetchJobDetail(jobId, token);
+                }
             }
             setExpandedJobId(expandedJobId === jobId ? null : jobId);
         } catch (error) {
@@ -67,7 +77,7 @@ const JobList: React.FC = () => {
                         <CardHeader className="relative flex">
                             <Avatar>
                                 <AvatarImage src={jobDetail?.avatarUrl || ''} alt={job.title}/>
-                                <AvatarFallback>{job.title.charAt(0)}</AvatarFallback>
+                                <AvatarFallback>{job.title ? job.title.charAt(0) : '&'}</AvatarFallback>
                             </Avatar>
                             <div className="ml-4 flex-1">
                                 <CardTitle>{job.title}</CardTitle>

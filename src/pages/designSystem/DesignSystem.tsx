@@ -1,7 +1,7 @@
 import Layout from "@/components/Layout";
 import PostForm from "@/components/custom/PostForm";
 import JobControlList from "@/components/custom/JobsControlDisplay";
-import JobList from "@/components/custom/Jobs"
+import JobList from "@/components/custom/JobList"
 
 
 const DesignSystem = () => {

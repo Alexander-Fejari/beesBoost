@@ -16,10 +16,18 @@ const JobControlList: React.FC = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (token) {
-      fetchJobSummaries(token);
-    }
-  }, [token, fetchJobSummaries]);
+    const fetchData = async () => {
+      if (token) {
+        try {
+          await fetchJobSummaries(token);
+        } catch (error) {
+          console.error('Error fetching job summaries:', error);
+        }
+      }
+    };
+
+    fetchData();
+  }, [fetchJobSummaries, token]);
 
   const filteredJobSummaries = jobSummaries.filter(job => job.poster_id === id);
 

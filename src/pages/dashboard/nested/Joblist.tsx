@@ -1,5 +1,5 @@
 import Layout from "@/components/Layout";
-import JobList from "@/components/custom/Jobs"
+import JobList from "@/components/custom/JobList"
 
 const JobListMain = () => {
 
