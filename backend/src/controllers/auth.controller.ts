@@ -42,7 +42,7 @@ class AuthController {
         id: user._id,
         username: user.username,
         role: user.role
-      }, process.env.JWT_SECRET_AUTH!, { expiresIn: `1h` });
+      }, process.env.JWT_SECRET_AUTH!, { expiresIn: `6h` });
 
       const refreshToken = jwt.sign({
         id: user._id,
