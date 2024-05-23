@@ -1,3 +1,4 @@
+import React, { useState } from 'react';
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/button";
@@ -8,14 +9,32 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from "react-router-dom";
 import { useAuthStore } from "@/store/Store"; // Adjust the import path
 
+const formatDisplayDate = (dateString: string): string => {
+  const date = new Date(dateString);
+  const day = (`0${date.getDate()}`).slice(-2);
+  const month = (`0${date.getMonth() + 1}`).slice(-2);
+  const year = date.getFullYear();
+  return `${day}-${month}-${year}`;
+};
+
+const formatInputDate = (dateString: string): string => {
+  const date = new Date(dateString);
+  const year = date.getFullYear();
+  const month = (`0${date.getMonth() + 1}`).slice(-2);
+  const day = (`0${date.getDate()}`).slice(-2);
+  return `${year}-${month}-${day}`;
+};
+
 const PostForm = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { token, id } = useAuthStore(); // Get the token from the store
 
-  const { register, handleSubmit, formState, reset } = useForm<PostValues>({
+  const { register, handleSubmit, formState, reset, setValue } = useForm<PostValues>({
     resolver: zodResolver(postFormSchema),
   });
+
+  const [displayDate, setDisplayDate] = useState<string>("");
 
   const poster_id = id;
 
@@ -23,6 +42,7 @@ const PostForm = () => {
     try {
       const transformedValues = {
         ...values,
+        start_date: formatInputDate(values.start_date),
         poster_id,
         body: {
           ...values.body,
@@ -55,6 +75,12 @@ const PostForm = () => {
     reset();
   };
 
+  const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const inputDate = e.target.value;
+    setValue("start_date", inputDate); // Mettre à jour la valeur de l'input de type date
+    setDisplayDate(formatDisplayDate(inputDate)); // Mettre à jour la date affichée
+  };
+
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
       <section className="flex flex-col items-start space-y-2">
@@ -80,15 +106,29 @@ const PostForm = () => {
         {formState.errors.function && <p className="error-message">{formState.errors.function.message}</p>}
       </section>
       <section className="flex flex-col items-start space-y-2">
-        <Label htmlFor="start_date">{t('postForm.startDate')}</Label>
-        <Input
-          id="start_date"
-          type="date"
-          {...register("start_date")}
-          error={formState.errors.start_date?.message}
-        />
-        {formState.errors.start_date && <p className="error-message">{formState.errors.start_date.message}</p>}
-      </section>
+  <Label htmlFor="start_date">{t('postForm.startDate')}</Label>
+  <div className="relative w-full">
+    <Input
+      id="display_start_date"
+      type="text"
+      value={displayDate}
+      readOnly
+      placeholder="dd-mm-yyyy" // Placeholder ajouté
+      className="pointer-events-none w-full"
+    />
+    <input
+      id="start_date"
+      type="date"
+      {...register("start_date")}
+      onChange={handleDateChange}
+      className="absolute inset-0 w-full h-full text-black bg-transparent border-none cursor-pointer"
+      style={{
+        clipPath: 'inset(0 0 0 90%)', // Masquer tout sauf l'icône
+      }}
+    />
+  </div>
+  {formState.errors.start_date && <p className="error-message">{formState.errors.start_date.message}</p>}
+</section>
       <section className="flex flex-col items-start space-y-2">
         <Label htmlFor="duration">{t('postForm.duration')}</Label>
         <Input

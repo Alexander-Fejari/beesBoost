@@ -14,7 +14,7 @@ router.post(`/user/signUp`, (req, res) => user_controller_1.default.addUser(req,
 router.get(`/user/getAllUsers`, auth_middleware_1.authenticateToken, (req, res) => user_controller_1.default.getAllUsers(req, res));
 router.get(`/user/getUser/:param`, auth_middleware_1.authenticateToken, (req, res) => user_controller_1.default.getUser(req, res));
 router.get('/user/confirmEmail/:token', (req, res) => user_controller_1.default.confirmEmail(req, res)); // Swagger à faire
-router.get('/user/resendConfirmationEmail/:email', (req, res) => user_controller_1.default.resendConfirmationEmail(req, res)); // Swagger à faire
+router.get(`/user/resendConfirmationEmail/:email`, (req, res) => user_controller_1.default.resendConfirmationEmail(req, res)); // Swagger à faire
 // DELETE GENERAL INFOS
 router.delete(`/user/deleteUser`, auth_middleware_1.authenticateToken, (0, auth_middleware_1.authorizeRoles)(`superAdmin`), (req, res) => user_controller_1.default.deleteUser(req, res)); // Only for superAdmin
 // UPDATE GENERAL INFOS

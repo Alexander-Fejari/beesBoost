@@ -2,10 +2,10 @@ import { create } from 'zustand';
 import { devtools } from 'zustand/middleware';
 
 interface JobSummary {
-  id: string;
+  _id: string;
   title: string;
   descriptionShort: string;
-  startDate: string;
+  start_date: Date;
   duration: string;
   field: string;
   location: string;
@@ -19,6 +19,7 @@ interface JobDetail extends JobSummary {
   nice_to_have: string[];
   experiences: string[];
   benefits: string[];
+  function: string;
 }
 
 interface JobState {
@@ -41,7 +42,7 @@ const useJobStore = create<JobState>()(devtools((set) => ({
   fetchJobSummaries: async (token: string) => {
     set({ isLoading: { summaries: true } });
     try {
-      const response = await fetch('https://cinemania.space/post/getPosts', {
+      const response = await fetch(`${import.meta.env.VITE_APP_API_URL}/post/getPosts`, {
         method: 'GET',
         headers: {
           'authorization': `Bearer ${token}`,
@@ -49,11 +50,12 @@ const useJobStore = create<JobState>()(devtools((set) => ({
         },
       });
       const data = await response.json();
-      const jobSummaries = data.map((job: any) => ({
-        id: job._id,
+
+      const jobSummaries = data.map((job: JobDetail) => ({
+        _id: job._id,
         title: job.title,
-        descriptionShort: job.body.description,
-        startDate: job.start_date,
+        descriptionShort: job.descriptionShort,
+        start_date: job.start_date,
         duration: job.duration,
         field: job.field,
         location: job.location,
@@ -61,13 +63,14 @@ const useJobStore = create<JobState>()(devtools((set) => ({
       }));
       set({ jobSummaries, isLoading: { summaries: false } });
     } catch (error) {
-      set({ errorMessage: 'Failed to fetch job summaries', isLoading: { summaries: false } });
+        console.error('Error fetching job summaries:', error);
+        set({ errorMessage: 'Failed to fetch job summaries', isLoading: { summaries: false } });
     }
   },
   fetchJobDetail: async (jobId: string, token: string) => {
     set(state => ({ isLoading: { ...state.isLoading, [jobId]: true } }));
     try {
-      const response = await fetch(`https://cinemania.space/post/getPostById/${jobId}`, {
+      const response = await fetch(`${import.meta.env.VITE_APP_API_URL}/post/getPostById/${jobId}`, {
         method: 'GET',
         headers: {
           'authorization': `Bearer ${token}`,
@@ -75,21 +78,23 @@ const useJobStore = create<JobState>()(devtools((set) => ({
         },
       });
       const data = await response.json();
-      const jobDetail = {
-        id: data._id,
+
+      const jobDetail: JobDetail = {
+        _id: data._id,
         title: data.title,
         descriptionShort: data.body.description,
-        startDate: data.start_date,
+        start_date: data.start_date,
         duration: data.duration,
         field: data.field,
         location: data.location,
         avatarUrl: data.avatarUrl,
-        applyLink: data.applyLink || 'http://example.com/apply',
-        messageLink: data.messageLink || 'http://example.com/message',
+        applyLink: data.applyLink || 'https://example.com/apply',
+        messageLink: data.messageLink || 'https://example.com/message',
         nice_to_have: data.body.nice_to_have,
         experiences: data.body.requirements,
         benefits: data.body.benefits,
         poster_id: data.poster_id,
+        function: data.function
       };
       set(state => ({
         jobDetails: { ...state.jobDetails, [jobId]: jobDetail },
