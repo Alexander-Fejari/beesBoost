@@ -5,7 +5,7 @@ interface JobSummary {
   _id: string;
   title: string;
   descriptionShort: string;
-  startDate: string;
+  start_date: Date;
   duration: string;
   field: string;
   location: string;
@@ -54,7 +54,7 @@ const useJobStore = create<JobState>()(devtools((set) => ({
         id: job._id,
         title: job.title,
         descriptionShort: job.descriptionShort,
-        startDate: job.startDate,
+        startDate: job.start_date,
         duration: job.duration,
         field: job.field,
         location: job.location,

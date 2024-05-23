@@ -66,8 +66,8 @@ const JobList: React.FC = () => {
     return (
         <div className={`grid ${expandedJobId ? 'grid-cols-1' : 'grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4'}`}>
             {jobSummaries.map(job => {
-                const jobDetail = jobDetails[job.id];
-                const isExpanded = expandedJobId === job.id;
+                const jobDetail = jobDetails[job._id];
+                const isExpanded = expandedJobId === job._id;
 
                 if (expandedJobId && !isExpanded) return null;
 
@@ -84,10 +84,10 @@ const JobList: React.FC = () => {
                                 <CardDescription>{job.descriptionShort}</CardDescription>
                             </div>
                             {isExpanded ? (
-                                <TfiClose onClick={() => handleExpand(job.id)}
+                                <TfiClose onClick={() => handleExpand(job._id)}
                                           className="absolute top-2 right-2 cursor-pointer"/>
                             ) : (
-                                <BsThreeDotsVertical onClick={() => handleExpand(job.id)}
+                                <BsThreeDotsVertical onClick={() => handleExpand(job._id)}
                                                      className="absolute top-2 right-2 cursor-pointer"/>
                             )}
                         </CardHeader>
