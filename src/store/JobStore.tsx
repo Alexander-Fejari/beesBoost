@@ -9,7 +9,7 @@ interface JobSummary {
   duration: string;
   field: string;
   location: string;
-  poster_id: string; // Include poster_id in the job summary
+  poster_id: string;
 }
 
 interface JobDetail extends JobSummary {
@@ -26,10 +26,10 @@ interface JobState {
   jobDetails: { [key: string]: JobDetail | null };
   isLoading: { [key: string]: boolean };
   errorMessage: string | null;
-  expandedJobId: string | null; 
-  fetchJobSummaries: () => Promise<void>;
-  fetchJobDetail: (jobId: string) => Promise<void>;
-  setExpandedJobId: (jobId: string | null) => void; 
+  expandedJobId: string | null;
+  fetchJobSummaries: (token: string) => Promise<void>;
+  fetchJobDetail: (jobId: string, token: string) => Promise<void>;
+  setExpandedJobId: (jobId: string | null) => void;
 }
 
 const useJobStore = create<JobState>()(devtools((set) => ({
@@ -38,10 +38,16 @@ const useJobStore = create<JobState>()(devtools((set) => ({
   isLoading: {},
   errorMessage: null,
   expandedJobId: null,
-  fetchJobSummaries: async () => {
+  fetchJobSummaries: async (token: string) => {
     set({ isLoading: { summaries: true } });
     try {
-      const response = await fetch('https://cinemania.space/post/getPosts'); 
+      const response = await fetch('https://cinemania.space/post/getPosts', {
+        method: 'GET',
+        headers: {
+          'authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+      });
       const data = await response.json();
       const jobSummaries = data.map((job: any) => ({
         id: job._id,
@@ -51,17 +57,23 @@ const useJobStore = create<JobState>()(devtools((set) => ({
         duration: job.duration,
         field: job.field,
         location: job.location,
-        poster_id: job.poster_id, // Include poster_id in the job summary
+        poster_id: job.poster_id,
       }));
       set({ jobSummaries, isLoading: { summaries: false } });
     } catch (error) {
       set({ errorMessage: 'Failed to fetch job summaries', isLoading: { summaries: false } });
     }
   },
-  fetchJobDetail: async (jobId: string) => {
+  fetchJobDetail: async (jobId: string, token: string) => {
     set(state => ({ isLoading: { ...state.isLoading, [jobId]: true } }));
     try {
-      const response = await fetch(`https://cinemania.space/post/getPostById/${jobId}`); 
+      const response = await fetch(`https://cinemania.space/post/getPostById/${jobId}`, {
+        method: 'GET',
+        headers: {
+          'authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+      });
       const data = await response.json();
       const jobDetail = {
         id: data._id,
@@ -72,12 +84,12 @@ const useJobStore = create<JobState>()(devtools((set) => ({
         field: data.field,
         location: data.location,
         avatarUrl: data.avatarUrl,
-        applyLink: data.applyLink || 'http://example.com/apply',
-        messageLink: data.messageLink || 'http://example.com/message',
+        applyLink: data.applyLink || 'https://example.com/apply',
+        messageLink: data.messageLink || 'https://example.com/message',
         nice_to_have: data.body.nice_to_have,
-        experiences: data.body.requirements, 
+        experiences: data.body.requirements,
         benefits: data.body.benefits,
-        poster_id: data.poster_id, // Ensure poster_id is included in job detail
+        poster_id: data.poster_id,
       };
       set(state => ({
         jobDetails: { ...state.jobDetails, [jobId]: jobDetail },

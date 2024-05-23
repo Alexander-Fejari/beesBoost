@@ -23,8 +23,10 @@ export const useAuthStore = create<AuthState>((set) => ({
       const decoded: DecodedToken = jwtDecode<DecodedToken>(token);
       username = decoded.username;
       localStorage.setItem('token', token);
+      localStorage.setItem('username', username);
     } else {
       localStorage.removeItem('token');
+      localStorage.removeItem('username');
     }
 
     set(() => ({
