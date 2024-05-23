@@ -51,10 +51,10 @@ const useJobStore = create<JobState>()(devtools((set) => ({
       });
       const data = await response.json();
       const jobSummaries = data.map((job: JobDetail) => ({
-        id: job._id,
+        _id: job._id,
         title: job.title,
         descriptionShort: job.descriptionShort,
-        startDate: job.start_date,
+        start_date: job.start_date,
         duration: job.duration,
         field: job.field,
         location: job.location,
@@ -80,7 +80,7 @@ const useJobStore = create<JobState>()(devtools((set) => ({
         _id: data._id,
         title: data.title,
         descriptionShort: data.body.description,
-        startDate: data.start_date,
+        start_date: data.start_date,
         duration: data.duration,
         field: data.field,
         location: data.location,

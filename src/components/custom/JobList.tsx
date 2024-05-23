@@ -54,6 +54,7 @@ const JobList: React.FC = () => {
         try {
             if (!jobDetails[jobId]) {
                 if (token != null) {
+                    console.log(jobId);
                     await fetchJobDetail(jobId, token);
                 }
             }
@@ -72,7 +73,7 @@ const JobList: React.FC = () => {
                 if (expandedJobId && !isExpanded) return null;
 
                 return (
-                    <Card key={job.id}
+                    <Card key={job._id}
                           className={`transition-all ${isExpanded ? 'w-full h-full overflow-auto' : 'h-auto'}`}>
                         <CardHeader className="relative flex">
                             <Avatar>
@@ -93,7 +94,7 @@ const JobList: React.FC = () => {
                         </CardHeader>
                         <CardContent className={`flex-grow ${isExpanded ? 'p-4' : ''}`}>
                             <div className="flex flex-wrap space-x-2 mb-4">
-                                <Badge variant="outline">{new Date(job.startDate).toLocaleDateString()}</Badge>
+                                <Badge variant="outline">{new Date(job.start_date).toLocaleDateString()}</Badge>
                                 <Badge variant="outline">{job.duration} {t('jobBlock.month')}</Badge>
                                 <Badge variant="outline">{job.field}</Badge>
                                 <Badge variant="outline">{job.location}</Badge>
