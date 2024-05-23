@@ -27,9 +27,9 @@ const EditPostForm: React.FC = () => {
 
   useEffect(() => {
     if (jobId) {
-      fetchJobDetail(jobId);
+      fetchJobDetail(token, jobId);
     }
-  }, [jobId, fetchJobDetail]);
+  }, [jobId,token, fetchJobDetail]);
 
   useEffect(() => {
     if (jobId && jobDetails[jobId]) {
