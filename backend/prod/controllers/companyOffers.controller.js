@@ -155,8 +155,8 @@ class CompanyOfferController {
                 res.status(400).json({ message: `No changes made to the offer` });
             }
             else {
-                //const updatedOffer = await COfferModel.findById(req.params.id);
-                res.status(200).json('Offer body uptated succesfuly');
+                const updatedOffer = await companyOffers_model_1.COfferModel.findById(req.params.id);
+                res.status(200).json(updatedOffer);
             }
         }
         catch (error) {
