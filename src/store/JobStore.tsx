@@ -50,6 +50,7 @@ const useJobStore = create<JobState>()(devtools((set) => ({
         },
       });
       const data = await response.json();
+
       const jobSummaries = data.map((job: JobDetail) => ({
         _id: job._id,
         title: job.title,
@@ -62,7 +63,8 @@ const useJobStore = create<JobState>()(devtools((set) => ({
       }));
       set({ jobSummaries, isLoading: { summaries: false } });
     } catch (error) {
-      set({ errorMessage: 'Failed to fetch job summaries', isLoading: { summaries: false } });
+        console.error('Error fetching job summaries:', error);
+        set({ errorMessage: 'Failed to fetch job summaries', isLoading: { summaries: false } });
     }
   },
   fetchJobDetail: async (jobId: string, token: string) => {
@@ -76,6 +78,7 @@ const useJobStore = create<JobState>()(devtools((set) => ({
         },
       });
       const data = await response.json();
+
       const jobDetail: JobDetail = {
         _id: data._id,
         title: data.title,

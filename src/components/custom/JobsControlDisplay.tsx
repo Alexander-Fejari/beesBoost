@@ -55,15 +55,15 @@ const JobControlList: React.FC = () => {
       </TableHeader>
       <TableBody>
         {filteredJobSummaries.map((offer) => (
-          <TableRow key={offer.id}>
+          <TableRow key={offer._id}>
             <TableCell>{offer.title}</TableCell>
             <TableCell>{offer.field}</TableCell>
-            <TableCell>{new Date(offer.startDate).toLocaleDateString()}</TableCell>
+            <TableCell>{new Date(offer.start_date).toLocaleDateString(`fr-FR`)}</TableCell>
             <TableCell>{offer.duration}</TableCell>
             <TableCell>{offer.title}</TableCell>
             <TableCell>{offer.descriptionShort}</TableCell>
             <TableCell>
-              <Button onClick={() => handleEditClick(offer.id)}>Edit</Button>
+              <Button onClick={() => handleEditClick(offer._id)}>Edit</Button>
             </TableCell>
           </TableRow>
         ))}
