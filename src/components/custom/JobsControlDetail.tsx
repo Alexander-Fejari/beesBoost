@@ -29,7 +29,7 @@ const formatInputDate = (dateString: string): string => {
 const EditPostForm: React.FC = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const { token, username } = useAuthStore(); // Get the token from the store
+  const { token, id } = useAuthStore(); // Get the token from the store
   const { jobId } = useParams<{ jobId: string }>();
   const { jobDetails, fetchJobDetail, isLoading } = useJobStore(state => ({
     jobDetails: state.jobDetails,
@@ -76,7 +76,7 @@ const EditPostForm: React.FC = () => {
       const transformedValues = {
         ...values,
         start_date: formatInputDate(values.start_date),
-        poster_id: username,
+        poster_id: id,
         body: {
           ...values.body,
           requirements: values.body.requirements.split(',').map((item: string) => item.trim()),
