@@ -24,7 +24,6 @@ const JobList: React.FC = () => {
         expandedJobId,
         setExpandedJobId
     } = useJobStore();
-    console.log('Job prop:', jobSummaries);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -76,7 +75,7 @@ const JobList: React.FC = () => {
                           className={`transition-all ${isExpanded ? 'w-full h-full overflow-auto' : 'h-auto'}`}>
                         <CardHeader className="relative flex">
                             <Avatar>
-                                <AvatarImage src={jobDetail?.avatarUrl || ''} alt={job.title} />
+                                <AvatarImage src={job.avatarUrl} alt={job.title} />
                                 <AvatarFallback>{job.title ? job.title.charAt(0) : '&'}</AvatarFallback>
                             </Avatar>
                             <div className="ml-4 flex-1">

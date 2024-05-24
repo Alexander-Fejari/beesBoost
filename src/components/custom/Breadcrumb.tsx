@@ -19,7 +19,7 @@ const Breadcrumbs = () => {
                     const to = `/${pathnames.slice(0, index + 1).join("/")}`;
 
                     return (
-                        <BreadcrumbItem className="text-xs" key={to}>
+                        <BreadcrumbItem className="text-lg" key={to}>
                             {isLast ? (
                                 <BreadcrumbPage>{path}</BreadcrumbPage>
                             ) : (
