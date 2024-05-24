@@ -495,9 +495,15 @@ class UserController {
         let companyFound = await CompanyModel.findOne({ name: updateData.company });
         if (!companyFound) {
           companyFound = new CompanyModel({ name: updateData.company, admins: [userToUpdate.username], worker: [userToUpdate.username] });
+          if (userToUpdate.worker_details) {
+            userToUpdate.worker_details.is_company_admin = true;
+          }
         }
         else {
           companyFound.worker?.push(userToUpdate.username);
+          if (userToUpdate.worker_details) {
+            userToUpdate.worker_details.is_company_admin = false;
+          }
         }
         await companyFound.save();
       }
