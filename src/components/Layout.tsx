@@ -18,7 +18,7 @@ const Layout = ({ children }: LayoutProps) => {
     const isNestedDashboardRoute = useMatch('/dashboard/*');
 
     return (
-        <section className={'h-dvh p-6 grid grid-rows-sm md:grid-cols-lg md:grid-rows-lg'}>
+        <section className={'h-dvh p-6  grid grid-rows-sm md:grid-cols-lg md:grid-rows-lg'}>
             <Header className="col-span-5" />
             {isAuthenticated && <Sidebar className="w-full col-span-5 row-start-2 md:row-span-3 md:col-span-1" />}
 
