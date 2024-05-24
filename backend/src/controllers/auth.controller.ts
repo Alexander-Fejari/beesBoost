@@ -78,26 +78,26 @@ class AuthController {
   async renewToken(req: Request, res: Response): Promise<void> {
     const { refreshToken } = req.body;
     if (!refreshToken) {
-      res.status(401).send({ error: 'No refresh token provided' });
+      res.status(401).send({ error: `No refresh token provided` });
       return;
     }
 
     const user = await UserModel.findOne({ refresh_token: refreshToken });
     if (!user) {
-      res.status(403).send({ error: 'Refresh token not found or invalid' });
+      res.status(403).send({ error: `Refresh token not found or invalid` });
       return;
     }
 
     jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET!, (error: any, decoded: any) => {
       if (error) {
         if (error instanceof jwt.TokenExpiredError) {
-          res.status(401).send({ message: "Token expired" });
+          res.status(401).send({ message: `Token expired` });
         } 
         else if (error instanceof jwt.JsonWebTokenError) {
-          res.status(403).send({ message: "Token is invalid" });
+          res.status(403).send({ message: `Token is invalid` });
         } 
         else {
-          res.status(500).send({ message: "Failed to authenticate token" });
+          res.status(500).send({ message: `Failed to authenticate token` });
         }
         return;
       }
@@ -107,20 +107,18 @@ class AuthController {
           id: decoded.id,
           username: decoded.username,
           role: user.role
-        }, process.env.JWT_SECRET!, { expiresIn: '1h' });
+        }, process.env.JWT_SECRET!, { expiresIn: `1h` });
 
         res.json({ accessToken: newAccessToken });
       }
       else {
-        res.status(404).send({ error: 'Failed to decode refresh token' });
+        res.status(404).send({ error: `Failed to decode refresh token` });
       }
     });
   }
 
-  async logOut(req: Request, res: Response): Promise<void> {
-    try {
-      // const { refreshToken } = req.body;
-      // if (!refreshToken) {
+   // const { refreshToken } = req.body;
+    // if (!refreshToken) {
       //   res.status(400).json({ error: "No refresh token provided" });
       //   return;
       // }
@@ -134,6 +132,9 @@ class AuthController {
       //   res.status(404).json({ error: "Refresh token not found" });
       //   return;
       // }
+
+  async logOut(req: Request, res: Response): Promise<void> {
+    try {
       const { param } = req.params;
       if (!param) {
         res.status(400).json({ error: `User id/username is required for logout` });

@@ -4,6 +4,7 @@ import { UserModel, ISDetails, IWDetails, IS_DETAILS } from '../models/user.mode
 import { ObjectId } from 'mongodb';
 import mailerService from '../services/mailer.service';
 import jwt from 'jsonwebtoken';
+import { CompanyModel } from '../models/company.model';
 
 class UserController {
   // UTILS
@@ -18,7 +19,7 @@ class UserController {
     }
   }
 
-  protected async checkErrorUpdateField(req: Request, res: Response, param: string, NorD: string): Promise<boolean> {
+  protected async checkErrorUpdateField(req: Request, res: Response, param: string): Promise<boolean> {
     try {
       if (param.length > 24) {
         res.status(404).json({ error: `Wrong username or id: ${param}`});
@@ -138,7 +139,7 @@ class UserController {
     try {
       const { token } = req.params;
       
-      const decoded = jwt.verify(token, process.env.JWT_SECRET_EMAIL_CONFIRM!) as { username: string };
+      jwt.verify(token, process.env.JWT_SECRET_EMAIL_CONFIRM!) as { username: string };
       const user = await UserModel.findOne({ confirmation_token: token });
 
       if (!user) {
@@ -293,7 +294,7 @@ class UserController {
       const param = req.params.param;
       const updateData = req.body;
 
-      if (await this.checkErrorUpdateField(req, res, param, `N`) == true) {
+      if (await this.checkErrorUpdateField(req, res, param) == true) {
         return ;
       }
 
@@ -366,7 +367,7 @@ class UserController {
         `contact_info.city`, `contact_info.country`, `contact_info.postal_code`, `student_details.school`
       ];
 
-      if (await this.checkErrorUpdateField(req, res, param, `N`) === true) {
+      if (await this.checkErrorUpdateField(req, res, param) === true) {
         return ;
       }
 
@@ -490,9 +491,16 @@ class UserController {
         return ;
       }
 
-      // if (updateData[detailKey] === `company`) {
-      //   // Ajouter logique pour vérifier si elle existe déjà ou non, si elle n'existe pas, mettre le worker en admin
-      // }
+      if (updateData.company) {
+        let companyFound = await CompanyModel.findOne({ name: updateData.company });
+        if (!companyFound) {
+          companyFound = new CompanyModel({ name: updateData.company, admins: [userToUpdate.username], worker: [userToUpdate.username] });
+        }
+        else {
+          companyFound.worker?.push(userToUpdate.username);
+        }
+        await companyFound.save();
+      }
 
       const result = await UserModel.updateOne(
         param.length < 24 ? { username: param } : { _id: param },

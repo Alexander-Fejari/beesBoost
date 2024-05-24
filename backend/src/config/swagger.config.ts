@@ -1,5 +1,5 @@
 import swaggerJsdoc from 'swagger-jsdoc';
-import swaggerUi from 'swagger-ui-express';
+//import swaggerUi from 'swagger-ui-express';
 import YAML from 'yamljs';
 
 const baseSwaggerDefinition: object = YAML.load('src/api-docs/merged.api-docs.yaml');

@@ -1,6 +1,6 @@
 import express, { Router } from 'express';
 import cOfferController from '../controllers/companyOffers.controller';
-import { authenticateToken, authorizeRoles } from '../middlewares/auth.middleware'
+import { authenticateToken, /*authorizeRoles*/ } from '../middlewares/auth.middleware'
 
 const router: Router = express.Router();
 

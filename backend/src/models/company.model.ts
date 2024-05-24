@@ -1,5 +1,5 @@
 import { Schema, model, Document } from 'mongoose';
-import { ICOffer } from './companyOffers.model';
+//import { ICOffer } from './companyOffers.model';
 
 interface ICompanyBoolean {
   is_verified: boolean;

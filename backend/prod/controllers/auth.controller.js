@@ -65,24 +65,24 @@ class AuthController {
     async renewToken(req, res) {
         const { refreshToken } = req.body;
         if (!refreshToken) {
-            res.status(401).send({ error: 'No refresh token provided' });
+            res.status(401).send({ error: `No refresh token provided` });
             return;
         }
         const user = await user_model_1.UserModel.findOne({ refresh_token: refreshToken });
         if (!user) {
-            res.status(403).send({ error: 'Refresh token not found or invalid' });
+            res.status(403).send({ error: `Refresh token not found or invalid` });
             return;
         }
         jsonwebtoken_1.default.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, (error, decoded) => {
             if (error) {
                 if (error instanceof jsonwebtoken_1.default.TokenExpiredError) {
-                    res.status(401).send({ message: "Token expired" });
+                    res.status(401).send({ message: `Token expired` });
                 }
                 else if (error instanceof jsonwebtoken_1.default.JsonWebTokenError) {
-                    res.status(403).send({ message: "Token is invalid" });
+                    res.status(403).send({ message: `Token is invalid` });
                 }
                 else {
-                    res.status(500).send({ message: "Failed to authenticate token" });
+                    res.status(500).send({ message: `Failed to authenticate token` });
                 }
                 return;
             }
@@ -91,29 +91,29 @@ class AuthController {
                     id: decoded.id,
                     username: decoded.username,
                     role: user.role
-                }, process.env.JWT_SECRET, { expiresIn: '1h' });
+                }, process.env.JWT_SECRET, { expiresIn: `1h` });
                 res.json({ accessToken: newAccessToken });
             }
             else {
-                res.status(404).send({ error: 'Failed to decode refresh token' });
+                res.status(404).send({ error: `Failed to decode refresh token` });
             }
         });
     }
+    // const { refreshToken } = req.body;
+    // if (!refreshToken) {
+    //   res.status(400).json({ error: "No refresh token provided" });
+    //   return;
+    // }
+    // const result = await UserModel.updateOne(
+    //   { refresh_token: refreshToken },
+    //   { $set: { refresh_token: '', is_connected: false } }
+    // );
+    // if (result.modifiedCount === 0) {
+    //   res.status(404).json({ error: "Refresh token not found" });
+    //   return;
+    // }
     async logOut(req, res) {
         try {
-            // const { refreshToken } = req.body;
-            // if (!refreshToken) {
-            //   res.status(400).json({ error: "No refresh token provided" });
-            //   return;
-            // }
-            // const result = await UserModel.updateOne(
-            //   { refresh_token: refreshToken },
-            //   { $set: { refresh_token: '', is_connected: false } }
-            // );
-            // if (result.modifiedCount === 0) {
-            //   res.status(404).json({ error: "Refresh token not found" });
-            //   return;
-            // }
             const { param } = req.params;
             if (!param) {
                 res.status(400).json({ error: `User id/username is required for logout` });

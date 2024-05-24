@@ -8,6 +8,7 @@ const user_model_1 = require("../models/user.model");
 const mongodb_1 = require("mongodb");
 const mailer_service_1 = __importDefault(require("../services/mailer.service"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
+const company_model_1 = require("../models/company.model");
 class UserController {
     // UTILS
     async getUserObject(req, res, username_or_id) {
@@ -20,7 +21,7 @@ class UserController {
             res.status(500).json({ error: `Error retrieving user` });
         }
     }
-    async checkErrorUpdateField(req, res, param, NorD) {
+    async checkErrorUpdateField(req, res, param) {
         try {
             if (param.length > 24) {
                 res.status(404).json({ error: `Wrong username or id: ${param}` });
@@ -117,7 +118,7 @@ class UserController {
     async confirmEmail(req, res) {
         try {
             const { token } = req.params;
-            const decoded = jsonwebtoken_1.default.verify(token, process.env.JWT_SECRET_EMAIL_CONFIRM);
+            jsonwebtoken_1.default.verify(token, process.env.JWT_SECRET_EMAIL_CONFIRM);
             const user = await user_model_1.UserModel.findOne({ confirmation_token: token });
             if (!user) {
                 res.status(400).json({ error: 'Token invalide ou expiré.' });
@@ -240,7 +241,7 @@ class UserController {
         try {
             const param = req.params.param;
             const updateData = req.body;
-            if (await this.checkErrorUpdateField(req, res, param, `N`) == true) {
+            if (await this.checkErrorUpdateField(req, res, param) == true) {
                 return;
             }
             // Check if there is only one field to update
@@ -301,7 +302,7 @@ class UserController {
                 `contact_info.phone`, `contact_info.street`, `contact_info.street_number`, `contact_info.box`,
                 `contact_info.city`, `contact_info.country`, `contact_info.postal_code`, `student_details.school`
             ];
-            if (await this.checkErrorUpdateField(req, res, param, `N`) === true) {
+            if (await this.checkErrorUpdateField(req, res, param) === true) {
                 return;
             }
             const updateObject = {};
@@ -407,9 +408,16 @@ class UserController {
                 res.status(400).json({ error: `Missing data for ${detailKey}` });
                 return;
             }
-            // if (updateData[detailKey] === `company`) {
-            //   // Ajouter logique pour vérifier si elle existe déjà ou non, si elle n'existe pas, mettre le worker en admin
-            // }
+            if (updateData.company) {
+                let companyFound = await company_model_1.CompanyModel.findOne({ name: updateData.company });
+                if (!companyFound) {
+                    companyFound = new company_model_1.CompanyModel({ name: updateData.company, admins: [userToUpdate.username], worker: [userToUpdate.username] });
+                }
+                else {
+                    companyFound.worker?.push(userToUpdate.username);
+                }
+                await companyFound.save();
+            }
             const result = await user_model_1.UserModel.updateOne(param.length < 24 ? { username: param } : { _id: param }, { $set: { [`worker_details.${detailKey}`]: updateData[detailKey] } });
             if (result.modifiedCount > 0) {
                 res.json({ message: `${detailKey} updated successfully` });
