@@ -1,20 +1,20 @@
-import React, {useEffect} from 'react';
-import {Avatar, AvatarFallback, AvatarImage} from '@/components/ui/avatar';
-import {Button} from '@/components/ui/button';
-import {Card, CardContent, CardDescription, CardHeader, CardTitle} from '@/components/ui/card';
-import {Popover, PopoverContent, PopoverTrigger} from '@/components/ui/popover';
-import {Badge} from '@/components/ui/badge';
-import {Tabs, TabsContent, TabsList, TabsTrigger} from '@/components/ui/tabs';
-import {BsThreeDotsVertical} from "react-icons/bs";
-import {TfiClose} from "react-icons/tfi";
-import {Skeleton} from '@/components/ui/skeleton';
-import {useAuthStore} from '@/store/Store';
+import React, { useEffect } from 'react';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { Badge } from '@/components/ui/badge';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { BsThreeDotsVertical } from "react-icons/bs";
+import { TfiClose } from "react-icons/tfi";
+import { Skeleton } from '@/components/ui/skeleton';
+import { useAuthStore } from '@/store/Store';
 import useJobStore from '@/store/JobStore';
-import {useTranslation} from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 
 const JobList: React.FC = () => {
-    const {t} = useTranslation('dashboardJobs');
-    const {token} = useAuthStore(); // Get token from auth store
+    const { t } = useTranslation('dashboardJobs');
+    const { token } = useAuthStore(); // Get token from auth store
     const {
         jobSummaries,
         fetchJobSummaries,
@@ -24,7 +24,6 @@ const JobList: React.FC = () => {
         expandedJobId,
         setExpandedJobId
     } = useJobStore();
-    console.log('Job prop:', jobSummaries);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -43,8 +42,8 @@ const JobList: React.FC = () => {
     if (isLoading.summaries) {
         return (
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-                {Array.from({length: 3}).map((_, index) => (
-                    <Skeleton key={index} className="w-full h-48"/>
+                {Array.from({ length: 3 }).map((_, index) => (
+                    <Skeleton key={index} className="w-full h-48" />
                 ))}
             </div>
         );
@@ -75,25 +74,25 @@ const JobList: React.FC = () => {
                     <Card key={job._id}
                           className={`transition-all ${isExpanded ? 'w-full h-full overflow-auto' : 'h-auto'}`}>
                         <CardHeader className="relative flex">
-                            <Avatar>
-                                <AvatarImage src={jobDetail?.avatarUrl || ''} alt={job.title}/>
-                                <AvatarFallback>{job.title ? job.title.charAt(0) : '&'}</AvatarFallback>
-                            </Avatar>
-                            <div className="ml-4 flex-1">
+                            <div className="ml-4 flex gap-3 items-center">
+                                <Avatar>
+                                    <AvatarImage src={job.avatarUrl} alt={job.title} />
+                                    <AvatarFallback>{job.title ? job.title.charAt(0) : '&'}</AvatarFallback>
+                                </Avatar>
                                 <CardTitle>{job.title}</CardTitle>
-                                <CardDescription>{job.descriptionShort}</CardDescription>
                             </div>
+                            <CardDescription>{job.descriptionShort}</CardDescription>
                             {isExpanded ? (
                                 <TfiClose onClick={() => handleExpand(job._id)}
-                                          className="absolute top-2 right-2 cursor-pointer"/>
+                                          className="absolute top-2 right-2 cursor-pointer" />
                             ) : (
                                 <BsThreeDotsVertical onClick={() => handleExpand(job._id)}
-                                                     className="absolute top-2 right-2 cursor-pointer"/>
+                                                     className="absolute top-2 right-2 cursor-pointer" />
                             )}
                         </CardHeader>
                         <CardContent className={`flex-grow ${isExpanded ? 'p-4' : ''}`}>
                             <div className="flex flex-wrap space-x-2 mb-4">
-                                <Badge variant="outline">{new Date(job.start_date).toLocaleDateString(`fr-FR`)}</Badge>
+                                <Badge variant="outline">{new Date(job.start_date).toLocaleDateString('fr-FR')}</Badge>
                                 <Badge variant="outline">{job.duration} {t('jobBlock.month')}</Badge>
                                 <Badge variant="outline">{job.field}</Badge>
                                 <Badge variant="outline">{job.location}</Badge>
