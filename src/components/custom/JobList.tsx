@@ -74,14 +74,14 @@ const JobList: React.FC = () => {
                     <Card key={job._id}
                           className={`transition-all ${isExpanded ? 'w-full h-full overflow-auto' : 'h-auto'}`}>
                         <CardHeader className="relative flex">
-                            <Avatar>
-                                <AvatarImage src={job.avatarUrl} alt={job.title} />
-                                <AvatarFallback>{job.title ? job.title.charAt(0) : '&'}</AvatarFallback>
-                            </Avatar>
-                            <div className="ml-4 flex-1">
+                            <div className="ml-4 flex gap-3 items-center">
+                                <Avatar>
+                                    <AvatarImage src={job.avatarUrl} alt={job.title} />
+                                    <AvatarFallback>{job.title ? job.title.charAt(0) : '&'}</AvatarFallback>
+                                </Avatar>
                                 <CardTitle>{job.title}</CardTitle>
-                                <CardDescription>{job.descriptionShort}</CardDescription>
                             </div>
+                            <CardDescription>{job.descriptionShort}</CardDescription>
                             {isExpanded ? (
                                 <TfiClose onClick={() => handleExpand(job._id)}
                                           className="absolute top-2 right-2 cursor-pointer" />
