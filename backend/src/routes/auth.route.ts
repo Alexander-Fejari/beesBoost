@@ -10,8 +10,8 @@ router.post(`/renewToken`, (req, res) => authController.renewToken(req, res));
 
 router.post(`/logOut/:param`, authenticateToken, (req, res) => authController.logOut(req, res));
 
-router.post('/requestPasswordReset', authController.requestPasswordReset); // Swagger à faire
+router.post(`/requestPasswordReset`, authController.requestPasswordReset); // Swagger à faire
 
-router.post('/resetPassword/:token', authController.resetPassword); // Swagger à faire
+router.post(`/resetPassword/:token`, authController.resetPassword); // Swagger à faire
 
 export default router;

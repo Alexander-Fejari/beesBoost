@@ -17,7 +17,7 @@ router.get(`/user/getUser/:param`, authenticateToken, (req, res) => userControll
 
 router.get('/user/confirmEmail/:token', (req, res) => userController.confirmEmail(req, res)); // Swagger à faire
 
-router.get('/user/resendConfirmationEmail/:email', (req, res) => userController.resendConfirmationEmail(req, res)); // Swagger à faire
+router.get(`/user/resendConfirmationEmail/:email`, (req, res) => userController.resendConfirmationEmail(req, res)); // Swagger à faire
  
 
   // DELETE GENERAL INFOS

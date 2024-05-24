@@ -5,6 +5,7 @@ interface IMissionBody {
   requirements?: Array<string>;
   nice_to_have?: Array<string>;
   benefits?: Array<string>;
+  //[key: string]: any;
 }
 
 interface ICOffer extends Document {
@@ -24,6 +25,7 @@ interface ICOffer extends Document {
   taker_id?: string;
   status?: string;
   offer_language?: string;
+  //[key: string]: any;
 }
 
 const MissionBodySchema: Schema = new Schema({

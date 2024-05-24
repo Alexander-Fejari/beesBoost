@@ -1,6 +1,6 @@
 import express, { Request, Response } from 'express';
 import swaggerUi from 'swagger-ui-express';
-import swaggerSpec from './config/swagger.config'
+import swaggerSpec from './config/swagger.config';
 import cors from 'cors';
 import dotenv from 'dotenv';
 
@@ -9,7 +9,7 @@ import userRouter from './routes/user.route';
 import authRouter from './routes/auth.route';
 import companyRouter from './routes/company.route';
 import cOffersRouter from './routes/companyOffers.route';
-//import mailerRouter from './routes/mailer.route';
+//import mailerRouter from './routes/maile.route';
 
 dotenv.config();
 
@@ -22,7 +22,7 @@ app.use(express.json()); // Creates the app
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec)); // Swagger - Documents the app
 
 app.use(cors({
-  origin: [`http://localhost:5000`, `http://localhost:5173`, `http://localhost:5174`, `http://localhost:8000`, `http://127.0.0.1:5173`, `https://cinemania.space`],
+  origin: [`http://localhost:5000`, `http://localhost:5173`, `http://localhost:5174`, `http://localhost:8000`, `http://127.0.0.1:5173`, `https://cinemania.space`, `http://172.21.40.20:5175`],
   
     credentials: true
   })); // cors - Protects the connection with the front

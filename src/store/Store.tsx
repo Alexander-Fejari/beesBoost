@@ -8,7 +8,7 @@ interface DecodedToken {
 
 interface AuthState {
   isAuthenticated: boolean;
-  token: string | null;
+  token: string | null ;
   username: string | null;
   id: string | null; // Add userId to the AuthState interface
   setToken: (token: string | null) => void;
