@@ -5,7 +5,7 @@ const Profile = () => {
 
     return (
         <Layout>
-            <BentoElement size={'h-fit w-fit'}>
+            <BentoElement size={'col-span-4'}>
                 <h1>
                     hello
                 </h1>

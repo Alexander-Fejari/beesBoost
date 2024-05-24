@@ -28,8 +28,10 @@ export const useAuthStore = create<AuthState>((set) => ({
       username = decoded.username;
       id = decoded.id; // Extract userId from the decoded token
       localStorage.setItem('token', token);
+      localStorage.setItem('username', username);
     } else {
       localStorage.removeItem('token');
+      localStorage.removeItem('username');
     }
 
     set(() => ({
