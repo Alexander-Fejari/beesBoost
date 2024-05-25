@@ -118,22 +118,6 @@ class AuthController {
     });
   }
 
-   // const { refreshToken } = req.body;
-    // if (!refreshToken) {
-      //   res.status(400).json({ error: "No refresh token provided" });
-      //   return;
-      // }
-
-      // const result = await UserModel.updateOne(
-      //   { refresh_token: refreshToken },
-      //   { $set: { refresh_token: '', is_connected: false } }
-      // );
-
-      // if (result.modifiedCount === 0) {
-      //   res.status(404).json({ error: "Refresh token not found" });
-      //   return;
-      // }
-
   async logOut(req: Request, res: Response): Promise<void> {
     try {
       const { param } = req.params;
