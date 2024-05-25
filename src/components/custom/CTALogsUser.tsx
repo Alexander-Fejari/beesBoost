@@ -25,25 +25,25 @@ interface DecodedToken {
 
     const CTALogsUser = () => {
         const { t } = useTranslation();
-        const { isAuthenticated, setToken, token } = useAuthStore();
+        const { isAuthenticated, setTokens, accessToken, refreshToken } = useAuthStore();
         const [username, setUsername] = useState<string | null>(null);
     
         useEffect(() => {
-            if (token) {
+            if (accessToken) {
                 try {
-                    const decoded: DecodedToken = jwtDecode<DecodedToken>(token);
+                    const decoded: DecodedToken = jwtDecode<DecodedToken>(accessToken);
                     if (decoded.exp && decoded.exp * 1000 > new Date().getTime()) {
                         setUsername(decoded.username ?? null);
                     } else {
                         console.log('Token expired');
-                        setToken(null);
+                        setTokens(null, refreshToken);
                     }
                 } catch (error) {
                     console.error("Failed to decode JWT", error);
-                    setToken(null);
+                    setTokens(null, refreshToken);
                 }
             }
-        }, [token, setToken]);
+        }, [accessToken, setTokens, refreshToken]);
 
     return (
         <>

@@ -6,7 +6,7 @@ interface BentoGridProps {
 
 const BentoGrid = ({children}: BentoGridProps) => {
     return (
-        <section className="grid grid-rows-subgrid-sm">
+        <section className="grid grid-rows-subgrid-sm gap-4">
             {children}
         </section>
     )

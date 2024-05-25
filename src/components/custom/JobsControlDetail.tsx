@@ -29,7 +29,7 @@ const formatInputDate = (dateString: string): string => {
 const EditPostForm: React.FC = () => {
     const {t} = useTranslation();
     const navigate = useNavigate();
-    const {token, id} = useAuthStore(); // Get the token from the store
+    const {accessToken, id} = useAuthStore(); // Get the token from the store
     const {jobId} = useParams<{ jobId: string }>();
     const {jobDetails, fetchJobDetail, isLoading} = useJobStore(state => ({
         jobDetails: state.jobDetails,
@@ -46,13 +46,13 @@ const EditPostForm: React.FC = () => {
 
     useEffect(() => {
         if (jobId) {
-            if (token) {
-                fetchJobDetail(jobId, token).then(() => {
+            if (accessToken) {
+                fetchJobDetail(jobId, accessToken).then(() => {
                     setIsInitialLoading(false);
                 });
             }
         }
-    }, [isInitialLoading, jobId, token, fetchJobDetail]);
+    }, [isInitialLoading, jobId, accessToken, fetchJobDetail]);
 
     useEffect(() => {
         if (jobId && jobDetails[jobId]) {
@@ -89,7 +89,7 @@ const EditPostForm: React.FC = () => {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
-                    'authorization': `Bearer ${token}`
+                    'authorization': `Bearer ${accessToken}`
                 },
                 body: JSON.stringify(transformedValues),
             });

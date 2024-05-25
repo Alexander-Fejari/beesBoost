@@ -28,7 +28,7 @@ const formatInputDate = (dateString: string): string => {
 const PostForm = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const { token, id } = useAuthStore(); // Get the token from the store
+  const { accessToken, id } = useAuthStore(); // Get the token from the store
 
   const { register, handleSubmit, formState, reset, setValue } = useForm<PostValues>({
     resolver: zodResolver(postFormSchema),
@@ -56,7 +56,7 @@ const PostForm = () => {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'authorization': `Bearer ${token}`
+          'authorization': `Bearer ${accessToken}`
         },
         body: JSON.stringify(transformedValues),
       });
