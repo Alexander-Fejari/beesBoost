@@ -39,7 +39,7 @@ class AuthController {
                 id: user._id,
                 username: user.username,
                 role: user.role
-            }, process.env.JWT_SECRET_AUTH, { expiresIn: `6h` });
+            }, process.env.JWT_SECRET_AUTH, { expiresIn: `1m` });
             const refreshToken = jsonwebtoken_1.default.sign({
                 id: user._id,
                 username: user.username

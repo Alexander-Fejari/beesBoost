@@ -40,7 +40,9 @@ class CompanyOfferController {
             }
             newOffer.location = req.body.location ? req.body.location : company.contact_info?.city;
             const offer = await newOffer.save();
-            res.status(201).json(offer);
+            company.offers?.push(offer._id);
+            await company.save();
+            res.status(201).json({ message: `Offer created successfully`, offer });
         }
         catch (error) {
             if (error instanceof Error) {
