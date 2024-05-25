@@ -42,7 +42,7 @@ class AuthController {
         id: user._id,
         username: user.username,
         role: user.role
-      }, process.env.JWT_SECRET_AUTH!, { expiresIn: `1m` });
+      }, process.env.JWT_SECRET_AUTH!, { expiresIn: `10s` });
 
       const refreshToken = jwt.sign({
         id: user._id,
@@ -79,13 +79,13 @@ class AuthController {
     const { refreshToken } = req.body;
     if (!refreshToken) {
       res.status(401).send({ error: `No refresh token provided` });
-      return;
+      return ;
     }
 
     const user = await UserModel.findOne({ refresh_token: refreshToken });
     if (!user) {
       res.status(403).send({ error: `Refresh token not found or invalid` });
-      return;
+      return ;
     }
 
     jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET!, (error: any, decoded: any) => {
@@ -99,7 +99,7 @@ class AuthController {
         else {
           res.status(500).send({ message: `Failed to authenticate token` });
         }
-        return;
+        return ;
       }
 
       if (decoded) {
@@ -111,7 +111,8 @@ class AuthController {
 
         res.json({ accessToken: newAccessToken });
       }
-      else {
+      else
+       {
         res.status(404).send({ error: `Failed to decode refresh token` });
       }
     });

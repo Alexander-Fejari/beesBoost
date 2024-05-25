@@ -6,7 +6,7 @@ const router: Router = express.Router();
 
 router.post(`/signIn`, (req, res) => authController.userLogin(req, res));
 
-router.post(`/renewToken`, (req, res) => authController.renewToken(req, res));
+router.post(`/renewToken`, /*authenticateToken,*/ (req, res) => authController.renewToken(req, res));
 
 router.post(`/logOut/:param`, authenticateToken, (req, res) => authController.logOut(req, res));
 
