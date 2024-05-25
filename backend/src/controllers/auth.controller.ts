@@ -88,7 +88,7 @@ class AuthController {
       return ;
     }
 
-    jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET!, (error: any, decoded: any) => {
+    jwt.verify(refreshToken, process.env.JWT_SECRET_REFRESH!, (error: any, decoded: any) => {
       if (error) {
         if (error instanceof jwt.TokenExpiredError) {
           res.status(401).send({ message: `Token expired` });

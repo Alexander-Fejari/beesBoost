@@ -73,7 +73,7 @@ class AuthController {
             res.status(403).send({ error: `Refresh token not found or invalid` });
             return;
         }
-        jsonwebtoken_1.default.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, (error, decoded) => {
+        jsonwebtoken_1.default.verify(refreshToken, process.env.JWT_SECRET_REFRESH, (error, decoded) => {
             if (error) {
                 if (error instanceof jsonwebtoken_1.default.TokenExpiredError) {
                     res.status(401).send({ message: `Token expired` });

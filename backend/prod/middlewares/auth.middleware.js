@@ -26,21 +26,21 @@ function authenticateToken(req, res, next) {
             try {
                 const check_user = await user_model_1.UserModel.findOne({ _id: req.user.id });
                 if (!check_user) {
-                    return res.status(401).json({ error: 'Unauthorized access: User not found' });
+                    return res.status(401).json({ error: `Unauthorized access: User not found` });
                 }
                 if (!check_user.is_active) {
-                    return res.status(403).json({ error: 'Unauthorized access: User account is disabled' });
+                    return res.status(403).json({ error: `Unauthorized access: User account is disabled` });
                 }
                 next();
             }
             catch (error) {
-                console.error('Database error during token authentication:', error);
-                res.status(500).json({ error: 'Internal server error' });
+                console.error(`Database error during token authentication:`, error);
+                res.status(500).json({ error: `Internal server error` });
                 return;
             }
         }
         else {
-            res.status(403).json({ error: 'Invalid token structure' });
+            res.status(403).json({ error: `Invalid token structure` });
         }
     });
 }
