@@ -59,7 +59,7 @@ class AuthController {
         }
       );
       
-      res.status(200).json({ message: `Login successful`, accessToken/*, refreshToken*/ });
+      res.status(200).json({ message: `Login successful`, accessToken, refreshToken });
 
      // Set a timer to change the value of the is_connected variable to false after one hour
       setTimeout(async () => {
