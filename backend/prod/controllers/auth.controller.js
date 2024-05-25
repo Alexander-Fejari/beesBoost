@@ -91,7 +91,7 @@ class AuthController {
                     id: decoded.id,
                     username: decoded.username,
                     role: user.role
-                }, process.env.JWT_SECRET_AUTH, { expiresIn: `15s` });
+                }, process.env.JWT_SECRET_AUTH, { expiresIn: `10s` });
                 res.json({ accessToken: newAccessToken });
             }
             else {
@@ -99,19 +99,6 @@ class AuthController {
             }
         });
     }
-    // const { refreshToken } = req.body;
-    // if (!refreshToken) {
-    //   res.status(400).json({ error: "No refresh token provided" });
-    //   return;
-    // }
-    // const result = await UserModel.updateOne(
-    //   { refresh_token: refreshToken },
-    //   { $set: { refresh_token: '', is_connected: false } }
-    // );
-    // if (result.modifiedCount === 0) {
-    //   res.status(404).json({ error: "Refresh token not found" });
-    //   return;
-    // }
     async logOut(req, res) {
         try {
             const { param } = req.params;

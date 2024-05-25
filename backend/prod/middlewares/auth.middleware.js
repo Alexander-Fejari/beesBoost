@@ -15,6 +15,7 @@ function authenticateToken(req, res, next) {
     }
     jsonwebtoken_1.default.verify(token, process.env.JWT_SECRET_AUTH, async (error, decoded) => {
         if (error) {
+            console.log(error);
             return res.status(403).json({ error: 'Unauthorized access: Invalid token' });
         }
         if (typeof decoded === 'object' && decoded !== null && 'id' in decoded && 'username' in decoded && 'role' in decoded) {

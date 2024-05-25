@@ -107,7 +107,7 @@ class AuthController {
           id: decoded.id,
           username: decoded.username,
           role: user.role
-        }, process.env.JWT_SECRET_AUTH!, { expiresIn: `15s` });
+        }, process.env.JWT_SECRET_AUTH!, { expiresIn: `10s` });
 
         res.json({ accessToken: newAccessToken });
       }
