@@ -45,6 +45,10 @@ components:
           type: string
         location:
           type: string
+        pick_up_line:
+          type: string
+        description:
+          type: string
         registration_date:
           type: string
           format: date-time
@@ -457,9 +461,14 @@ paths:
                   example: "New York"
                 pick_up_line:
                   type: string
-                  description: "Profil pick up line to get other people's attention"
-                  example: "Hi i'd like a super cool job"
+                  description: "Profil pick up line to get other people's attention."
+                  example: "Hi i'd like a super cool job."
                   maxLength: 120
+                description:
+                  type: string
+                  description: "Description of the user."
+                  example: "Hi im super cool and i'd like a super cool coding Job"
+                  maxLength: 240
                 contact_info.phone:
                   type: string
                   example: "123-456-7890"

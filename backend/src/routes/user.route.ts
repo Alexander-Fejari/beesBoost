@@ -24,7 +24,7 @@ router.get(`/user/resendConfirmationEmail/:email`, (req, res) => userController.
 router.delete(`/user/deleteUser`, authenticateToken, authorizeRoles(`superAdmin`), (req, res) => userController.deleteUser(req, res)); // Only for superAdmin
 
   // UPDATE GENERAL INFOS
-router.put(`/user/updateInfos/:param`, authenticateToken, (req, res) => userController.updateFields(req, res)); // Swagger à Modifier
+router.put(`/user/updateInfos/:param`, /*authenticateToken,*/ (req, res) => userController.updateFields(req, res)); // Swagger à Modifier
 
 router.put(`/user/updateVerified/:param`, authenticateToken, authorizeRoles(`admin`, `superAdmin`), (req, res) => userController.updateField(req, res, `is_verified`));
 

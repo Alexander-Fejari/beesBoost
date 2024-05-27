@@ -65,6 +65,21 @@ class UserController {
     return ObjectId.isValid(id) && new ObjectId(id).toString() === id;
   }
 
+  protected async responseUpdatedroutes(req: Request, res: Response, param: string, fieldToShow: string): Promise<void> {
+    const updatedUser = await this.getUserObject(req, res, param);
+    switch (fieldToShow) {
+      case `wd`: {
+        res.json(updatedUser!.worker_details);
+        break ;
+      }
+      case `sd`: {
+        res.json(updatedUser!.student_details);
+        break ;
+      }
+      default: res.json(updatedUser);
+    }
+  }
+
   // GENERAL
   async addUser(req: Request, res: Response): Promise<void> {
     try {
@@ -117,7 +132,6 @@ class UserController {
       else if (role === `worker`) {
         userData.worker_details = {};
         userData.worker_details = { ...req.body.worker_details };
-        // Ajouter logique pour mettre is_company_admin à true quand c'est le premier de la company 
       }
 
       userData.confirmation_token = jwt.sign({ username: userData.username }, process.env.JWT_SECRET_EMAIL_CONFIRM!, { expiresIn: '15m' });
@@ -127,7 +141,7 @@ class UserController {
       const newUser = new UserModel(userData);
       await newUser.save();
 
-      res.status(201).json({ message: `User added successfully`, user_id: newUser._id });
+      res.status(201).json(newUser);
     }
     catch (error) {
       console.error(`Error adding user:`, error);
@@ -318,7 +332,6 @@ class UserController {
         const hashedPassword = await bcrypt.hash(updateData.password, 10);
       
         updateData.password = hashedPassword;
-        // Mettre logique mailer
       }
 
       if (fieldToUpdate == `is_active`) {
@@ -341,10 +354,8 @@ class UserController {
 
       const result = await UserModel.updateOne(param.length < 24 ? { username: param } : { _id: param } , updateData);
 
-      // Mettre la logique du mailer plus tard
-
       if (result.modifiedCount > 0) {
-        res.json({ message: `User ${fieldToUpdate} updated successfully` });
+        return this.responseUpdatedroutes(req, res, param, 'n');
       } 
       else {
         res.status(404).json({ error: `No changes have been made, same info as before has been given` });
@@ -392,7 +403,7 @@ class UserController {
       
       const result = await UserModel.updateOne(userToUpdate, { $set: updateObject });
       if (result.modifiedCount > 0) {
-        res.json({ message: `User's infos have been updated successfully` });
+        return this.responseUpdatedroutes(req, res, param, 'n');
       } 
       else {
         res.status(404).json({ error: `No changes have been made, same infos as before have been given` });
@@ -455,12 +466,17 @@ class UserController {
         res.status(400).json({ error: `User is not a worker` });
         return ;
       }
-  
-      user.worker_details.is_company_admin = changeAdminPerm;
-      await user.save();
-  
-      res.json({ message: `Worker admin status updated successfully` });
-    } catch (error) {
+
+      if (user.worker_details.is_company_admin != changeAdminPerm) {
+        user.worker_details.is_company_admin = changeAdminPerm;
+        await user.save();
+        res.json(user.worker_details);
+      }
+      else {
+        res.status(400).json({ error: `User is already ${changeAdminPerm ? 'an admin' : 'not an admin' } ` });
+      }
+    } 
+    catch (error) {
       console.error(`Error updating worker admin status: ${error}`);
       res.status(500).json({ error: `Error updating worker admin status` });
     }
@@ -492,7 +508,7 @@ class UserController {
         return ;
       }
 
-      if (updateData.company) {
+      if (updateData.company && updateData.company != userToUpdate.worker_details?.company) {
         let companyFound = await CompanyModel.findOne({ name: updateData.company });
         if (!companyFound) {
           companyFound = new CompanyModel({ name: updateData.company, admins: [userToUpdate.username], worker: [userToUpdate.username] });
@@ -508,18 +524,13 @@ class UserController {
         }
         await companyFound.save();
       }
-
-      const result = await UserModel.updateOne(
-        param.length < 24 ? { username: param } : { _id: param },
-        { $set: { [`worker_details.${detailKey}`]: updateData[detailKey] } }
-      );
-
-      if (result.modifiedCount > 0) {
-        res.json({ message: `${detailKey} updated successfully` });
-      } 
       else {
-        res.status(404).json({ error: `No changes made or worker not found` });
+        res.status(400).json(`Worker cant rejoin the same company`);
+        return ;
       }
+
+      await userToUpdate.save();
+      res.json(userToUpdate.worker_details);
     } 
     catch (error) {
       console.error(`Error updating worker's ${detailKey}:`, error);
@@ -554,17 +565,19 @@ class UserController {
         return ;
       }
 
-      const result = await UserModel.updateOne(
-        param.length < 24 ? { username: param } : { _id: param },
-        { $set: { [`student_details.${detailKey}`]: updateData[detailKey] } }
-      );
-
-      if (result.modifiedCount > 0) {
-        res.json({ message: `${detailKey} updated successfully` });
-      } 
-      else {
-        res.status(404).json({ error: `No changes made or student not found` });
+      if (!userToUpdate.student_details) {
+        userToUpdate.student_details = {} as ISDetails;
       }
+  
+      if (updateData[detailKey] === userToUpdate.student_details[detailKey]) {
+        res.status(400).json({ error: `The provided value for ${detailKey} is the same as the current value` });
+        return;
+      }
+  
+      userToUpdate.student_details[detailKey] = updateData[detailKey];
+      await userToUpdate.save();
+  
+      res.json(userToUpdate.student_details);
     } catch (error) {
       console.error(`Error updating student's ${detailKey}:`, error);
       res.status(500).json({ error: `Internal server error` });
@@ -652,7 +665,7 @@ class UserController {
       );
 
       if (result.modifiedCount > 0) {
-        res.json({ message: `${detailKey} details updated successfully` });
+        return this.responseUpdatedroutes(req, res, param, 'sd');
       } 
       else {
         res.status(404).json({ error: `No changes made or user not found` });

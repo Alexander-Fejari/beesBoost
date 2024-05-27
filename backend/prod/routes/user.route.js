@@ -18,7 +18,7 @@ router.get(`/user/resendConfirmationEmail/:email`, (req, res) => user_controller
 // DELETE GENERAL INFOS
 router.delete(`/user/deleteUser`, auth_middleware_1.authenticateToken, (0, auth_middleware_1.authorizeRoles)(`superAdmin`), (req, res) => user_controller_1.default.deleteUser(req, res)); // Only for superAdmin
 // UPDATE GENERAL INFOS
-router.put(`/user/updateInfos/:param`, auth_middleware_1.authenticateToken, (req, res) => user_controller_1.default.updateFields(req, res)); // Swagger à Modifier
+router.put(`/user/updateInfos/:param`, /*authenticateToken,*/ (req, res) => user_controller_1.default.updateFields(req, res)); // Swagger à Modifier
 router.put(`/user/updateVerified/:param`, auth_middleware_1.authenticateToken, (0, auth_middleware_1.authorizeRoles)(`admin`, `superAdmin`), (req, res) => user_controller_1.default.updateField(req, res, `is_verified`));
 router.put(`/user/updateActive/:param`, auth_middleware_1.authenticateToken, (req, res) => user_controller_1.default.updateField(req, res, `is_active`));
 router.put(`/user/updateConnected/:param`, auth_middleware_1.authenticateToken, (0, auth_middleware_1.authorizeRoles)(`admin`, `superAdmin`), (req, res) => user_controller_1.default.updateField(req, res, `is_connected`));

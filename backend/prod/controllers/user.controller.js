@@ -61,6 +61,20 @@ class UserController {
     async isValidObjectId(id) {
         return mongodb_1.ObjectId.isValid(id) && new mongodb_1.ObjectId(id).toString() === id;
     }
+    async responseUpdatedroutes(req, res, param, fieldToShow) {
+        const updatedUser = await this.getUserObject(req, res, param);
+        switch (fieldToShow) {
+            case `wd`: {
+                res.json(updatedUser.worker_details);
+                break;
+            }
+            case `sd`: {
+                res.json(updatedUser.student_details);
+                break;
+            }
+            default: res.json(updatedUser);
+        }
+    }
     // GENERAL
     async addUser(req, res) {
         try {
@@ -102,13 +116,12 @@ class UserController {
             else if (role === `worker`) {
                 userData.worker_details = {};
                 userData.worker_details = { ...req.body.worker_details };
-                // Ajouter logique pour mettre is_company_admin à true quand c'est le premier de la company 
             }
             userData.confirmation_token = jsonwebtoken_1.default.sign({ username: userData.username }, process.env.JWT_SECRET_EMAIL_CONFIRM, { expiresIn: '15m' });
             //mailerService.sendConfirmationEmail(userData.email, userData.username, userData.confirmation_token);
             const newUser = new user_model_1.UserModel(userData);
             await newUser.save();
-            res.status(201).json({ message: `User added successfully`, user_id: newUser._id });
+            res.status(201).json(newUser);
         }
         catch (error) {
             console.error(`Error adding user:`, error);
@@ -261,7 +274,6 @@ class UserController {
             if (fieldToUpdate == `password`) {
                 const hashedPassword = await bcrypt_1.default.hash(updateData.password, 10);
                 updateData.password = hashedPassword;
-                // Mettre logique mailer
             }
             if (fieldToUpdate == `is_active`) {
                 if (updateData.is_active === false) {
@@ -280,9 +292,8 @@ class UserController {
                 }
             }
             const result = await user_model_1.UserModel.updateOne(param.length < 24 ? { username: param } : { _id: param }, updateData);
-            // Mettre la logique du mailer plus tard
             if (result.modifiedCount > 0) {
-                res.json({ message: `User ${fieldToUpdate} updated successfully` });
+                return this.responseUpdatedroutes(req, res, param, 'n');
             }
             else {
                 res.status(404).json({ error: `No changes have been made, same info as before has been given` });
@@ -324,7 +335,7 @@ class UserController {
             const userToUpdate = { [param.length < 24 ? `username` : `_id`]: param };
             const result = await user_model_1.UserModel.updateOne(userToUpdate, { $set: updateObject });
             if (result.modifiedCount > 0) {
-                res.json({ message: `User's infos have been updated successfully` });
+                return this.responseUpdatedroutes(req, res, param, 'n');
             }
             else {
                 res.status(404).json({ error: `No changes have been made, same infos as before have been given` });
@@ -378,9 +389,14 @@ class UserController {
                 res.status(400).json({ error: `User is not a worker` });
                 return;
             }
-            user.worker_details.is_company_admin = changeAdminPerm;
-            await user.save();
-            res.json({ message: `Worker admin status updated successfully` });
+            if (user.worker_details.is_company_admin != changeAdminPerm) {
+                user.worker_details.is_company_admin = changeAdminPerm;
+                await user.save();
+                res.json(user.worker_details);
+            }
+            else {
+                res.status(400).json({ error: `User is already ${changeAdminPerm ? 'an admin' : 'not an admin'} ` });
+            }
         }
         catch (error) {
             console.error(`Error updating worker admin status: ${error}`);
@@ -409,7 +425,7 @@ class UserController {
                 res.status(400).json({ error: `Missing data for ${detailKey}` });
                 return;
             }
-            if (updateData.company) {
+            if (updateData.company && updateData.company != userToUpdate.worker_details?.company) {
                 let companyFound = await company_model_1.CompanyModel.findOne({ name: updateData.company });
                 if (!companyFound) {
                     companyFound = new company_model_1.CompanyModel({ name: updateData.company, admins: [userToUpdate.username], worker: [userToUpdate.username] });
@@ -425,13 +441,12 @@ class UserController {
                 }
                 await companyFound.save();
             }
-            const result = await user_model_1.UserModel.updateOne(param.length < 24 ? { username: param } : { _id: param }, { $set: { [`worker_details.${detailKey}`]: updateData[detailKey] } });
-            if (result.modifiedCount > 0) {
-                res.json({ message: `${detailKey} updated successfully` });
-            }
             else {
-                res.status(404).json({ error: `No changes made or worker not found` });
+                res.status(400).json(`Worker cant rejoin the same company`);
+                return;
             }
+            await userToUpdate.save();
+            res.json(userToUpdate.worker_details);
         }
         catch (error) {
             console.error(`Error updating worker's ${detailKey}:`, error);
@@ -461,13 +476,16 @@ class UserController {
                 res.status(400).json({ error: `Missing data for ${detailKey}` });
                 return;
             }
-            const result = await user_model_1.UserModel.updateOne(param.length < 24 ? { username: param } : { _id: param }, { $set: { [`student_details.${detailKey}`]: updateData[detailKey] } });
-            if (result.modifiedCount > 0) {
-                res.json({ message: `${detailKey} updated successfully` });
+            if (!userToUpdate.student_details) {
+                userToUpdate.student_details = {};
             }
-            else {
-                res.status(404).json({ error: `No changes made or student not found` });
+            if (updateData[detailKey] === userToUpdate.student_details[detailKey]) {
+                res.status(400).json({ error: `The provided value for ${detailKey} is the same as the current value` });
+                return;
             }
+            userToUpdate.student_details[detailKey] = updateData[detailKey];
+            await userToUpdate.save();
+            res.json(userToUpdate.student_details);
         }
         catch (error) {
             console.error(`Error updating student's ${detailKey}:`, error);
@@ -541,7 +559,7 @@ class UserController {
                 arrayFilters: [{ 'elem._id': updateData.id }],
             });
             if (result.modifiedCount > 0) {
-                res.json({ message: `${detailKey} details updated successfully` });
+                return this.responseUpdatedroutes(req, res, param, 'sd');
             }
             else {
                 res.status(404).json({ error: `No changes made or user not found` });
