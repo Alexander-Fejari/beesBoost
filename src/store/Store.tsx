@@ -75,7 +75,6 @@ export const useAuthStore = create<AuthState>((set, get) => ({
 }));
 
 const storedAccessToken = localStorage.getItem('accessToken');
-console.log(storedAccessToken)
 const storedRefreshToken = localStorage.getItem('refreshToken');
 
 if (storedAccessToken && storedRefreshToken) {

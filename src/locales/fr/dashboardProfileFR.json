@@ -1,3 +1,6 @@
 {
-    "test": "test"
+    "resume": {
+        "message": "Message",
+        "connect": "Follow"
+    }
 }

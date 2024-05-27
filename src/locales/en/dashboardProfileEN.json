@@ -1,10 +1,6 @@
 {
-    "jobblock": {
-        "apply": "Postuler",
-        "message": "Envoyer un message",
-        "month": "Mois",
-        "skills": "Compétences",
-        "experiences": "Expériences",
-        "benefits": "Avantages"
+    "resume": {
+        "message": "Message",
+        "connect": "Follow"
     }
 }

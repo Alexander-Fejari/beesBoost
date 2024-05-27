@@ -2,7 +2,7 @@ import {useCallback, useEffect} from "react";
 import {useAuthStore} from "@/store/Store";
 import {useUserDetailsStore} from "@/store/UserDetailsStore";
 import Layout from "@/components/Layout";
-import BentoElement from "@/components/custom/BentoElement";
+import CardProfileResume from "@/components/custom/Profile/CardProfileResume";
 
 const Profile = () => {
     const userId = useAuthStore((state) => state.id);
@@ -16,7 +16,7 @@ const Profile = () => {
 
     const fetchData = useCallback(async () => {
         if (userId && token) {
-            await fetchUserDetails(userId, token);
+            await fetchUserDetails(userId);
         }
     }, [userId, token, fetchUserDetails]);
 
@@ -38,11 +38,7 @@ const Profile = () => {
     if (userDetails) {
         return (
             <Layout>
-                <BentoElement size={'col-span-4'}>
-                    <h1>
-                        hello {userDetails.username}
-                    </h1>
-                </BentoElement>
+                <CardProfileResume userDetails={userDetails}/>
             </Layout>
         );
     }
