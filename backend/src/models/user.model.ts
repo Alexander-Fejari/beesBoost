@@ -122,6 +122,8 @@ interface IUser extends Document {
   firstname?: string;
   occupation?: string;
   location?: string;
+  pick_up_line?: string;
+  description?: string;
   registration_date?: Date;
   deletion_date?: Date;
   contact_info?: IContactInfo;
@@ -149,6 +151,8 @@ const UserSchema = new Schema({
   firstname: { type: String },
   occupation: { type: String },
   location: { type: String },
+  pick_up_line: { type: String, maxlength: 120 },
+  description: { type: String, maxlength: 240 },
   registration_date: { type: Date, default: Date.now },
   deletion_date: { type: Date },
   contact_info: {

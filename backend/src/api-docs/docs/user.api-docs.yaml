@@ -455,6 +455,11 @@ paths:
                   type: string
                   description: "New location of the user."
                   example: "New York"
+                pick_up_line:
+                  type: string
+                  description: "Profil pick up line to get other people's attention"
+                  example: "Hi i'd like a super cool job"
+                  maxLength: 120
                 contact_info.phone:
                   type: string
                   example: "123-456-7890"

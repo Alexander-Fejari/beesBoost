@@ -63,6 +63,8 @@ const UserSchema = new mongoose_1.Schema({
     firstname: { type: String },
     occupation: { type: String },
     location: { type: String },
+    pick_up_line: { type: String, maxlength: 120 },
+    description: { type: String, maxlength: 240 },
     registration_date: { type: Date, default: Date.now },
     deletion_date: { type: Date },
     contact_info: {

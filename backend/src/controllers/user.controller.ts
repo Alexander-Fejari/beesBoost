@@ -364,7 +364,8 @@ class UserController {
       const allowedFields: string[] = [
         `profile_pic`, `lastname`, `firstname`, `occupation`, `location`, `prefered_language`,
         `contact_info.phone`, `contact_info.street`, `contact_info.street_number`, `contact_info.box`,
-        `contact_info.city`, `contact_info.country`, `contact_info.postal_code`, `student_details.school`
+        `contact_info.city`, `contact_info.country`, `contact_info.postal_code`, `student_details.school`,
+        `description`, `pick_up_line`
       ];
 
       if (await this.checkErrorUpdateField(req, res, param) === true) {
@@ -519,7 +520,8 @@ class UserController {
       else {
         res.status(404).json({ error: `No changes made or worker not found` });
       }
-    } catch (error) {
+    } 
+    catch (error) {
       console.error(`Error updating worker's ${detailKey}:`, error);
       res.status(500).json({ error: `Internal server error` });
     }
