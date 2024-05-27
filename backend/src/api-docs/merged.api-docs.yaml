@@ -46,6 +46,12 @@ components:
         is_connected:
           type: boolean
           default: false
+        prefered_language:
+          type: string
+          enum:
+            - fr
+            - nl
+            - en
         refresh_token:
           type: string
           default: ""
@@ -210,8 +216,69 @@ components:
           type: string
           unique: true
         verif_boolean:
-          type: object
-    COffer:
+          allOf:
+            -
+              type: object
+              properties:
+                is_verified:
+                  type: boolean
+                  default: true
+                is_active:
+                  type: boolean
+                  default: true
+        profile_pic:
+          type: string
+        contact_info:
+          allOf:
+            -
+              type: object
+              properties:
+                email:
+                  type: string
+                phone:
+                  type: string
+                street:
+                  type: string
+                street_number:
+                  type: number
+                box:
+                  type: string
+                city:
+                  type: string
+                postal_code:
+                  type: number
+                country:
+                  type: string
+        fields:
+          type: array
+          items:
+            type: string
+        creation_date:
+          type: string
+          format: date-time
+        creator_username:
+          type: string
+        admins:
+          type: array
+          items:
+            type: string
+        worker:
+          type: array
+          items:
+            type: string
+        registration_date:
+          type: string
+          format: date-time
+        deletion_date:
+          type: string
+          format: date-time
+        offers:
+          type: array
+          items:
+            type: string
+        n_finished_contracts:
+          type: number
+    CompanyOffer:
       type: object
       properties:
         poster_id:
@@ -222,10 +289,12 @@ components:
           type: string
         function:
           type: string
+        location:
+          type: string
         creation_date:
           type: string
           format: date-time
-          default: now
+          default: Date.now
         start_date:
           type: string
           format: date-time
@@ -241,22 +310,21 @@ components:
         title:
           type: string
         body:
-          type: object
-          properties:
-            description:
-              type: string
-            requirements:
-              type: array
-              items:
-                type: string
-            nice_to_have:
-              type: array
-              items:
-                type: string
-            benefits:
-              type: array
-              items:
-                type: string
+          allOf:
+            -
+              type: object
+              properties:
+                description:
+                  type: string
+                requirements:
+                  type: array
+                  items: {type: string}
+                nice_to_have:
+                  type: array
+                  items: {type: string}
+                benefits:
+                  type: array
+                  items: {type: string}
         taker_id:
           type: string
         status:
@@ -280,13 +348,13 @@ tags:
     name: Company
     description: 'Companies handler'
   -
-    name: Offers
+    name: CompanyOffers
     description: 'Company posts/offers handler'
 paths:
   /user/signUp:
     post:
       summary: 'Sign up a new user'
-      description: 'Creates a new user with provided details. Validates required fields and roles, checks for existing users, hashes password, and stores the user'
+      description: 'Creates a new user with provided details. Validates required fields and roles, checks for existing users, hashes password, and stores the user and sends a confirmation email'
       operationId: addUser
       tags:
         - User
@@ -319,6 +387,9 @@ paths:
                 email:
                   type: string
                   example: user@example.com
+                prefered_language:
+                  type: string
+                  example: 'fr nl or en'
                 lastname:
                   type: string
                   example: Doe
@@ -331,6 +402,14 @@ paths:
                 location:
                   type: string
                   example: 'New York'
+                pick_up_line:
+                  type: string
+                  example: 'Les étoiles brillent dans la nuit, illuminant les rêves de ceux qui contemplent le ciel.'
+                  maxLength: 120
+                description:
+                  type: string
+                  maxLength: 240
+                  example: 'Le vent souffle doucement à travers les arbres, portant avec lui les secrets murmurés des anciens. Les feuilles dansent au rythme de la brise, créant une mélodie apaisante qui invite à la réflexion et à la tranquillité.'
                 registration_date:
                   type: string
                   format: date-time
@@ -356,12 +435,19 @@ paths:
                   message: {type: string, example: 'User added successfully'}
                   userId: {type: string, example: 5e5df7fc8953ad317845f0f9}
           '400':
-            description: 'Bad request. Missing required fields or invalid role.'
+            description: 'Bad request. Missing required fields or invalid role. Or same data''s as before sent'
             content:
               application/json:
                 schema:
                   type: object
                   properties: {error: {type: string, example: 'Bad request: username, password, role, and email are required fields.'}}
+          '404':
+            description: 'User not found or no changes needed (input same as existing data).'
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties: {error: {type: string, example: 'No changes have been made, same infos as before have been given'}}
           '409': null
           '500': null
           description: 'Conflict. A user with the same username or email already exists.'
@@ -511,6 +597,96 @@ paths:
                 type: object
                 properties:
                   error: {type: string, example: 'Error retrieving user'}
+  '/user/confirmEmail/{token}':
+    get:
+      summary: 'Confirm user''s email'
+      description: 'Confirms the user''s email address using the token provided.'
+      operationId: confirmEmail
+      tags:
+        - User
+      parameters:
+        -
+          in: path
+          name: token
+          required: true
+          schema:
+            type: string
+            description: 'The token used to confirm the user''s email.'
+            example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+      responses:
+        '200':
+          description: 'Email confirmed successfully.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message: {type: string, example: 'Compte confirmé avec succès !'}
+        '400':
+          description: 'Invalid or expired token.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error: {type: string, example: 'Token invalide ou expiré.'}
+        '500':
+          description: 'Internal server error.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error: {type: string, example: 'Erreur interne du serveur.'}
+  '/user/resendConfirmationEmail/{email}':
+    get:
+      summary: 'Resend confirmation email'
+      description: 'Resends the confirmation email to the user.'
+      operationId: resendConfirmationEmail
+      tags:
+        - User
+      parameters:
+        -
+          in: path
+          name: email
+          required: true
+          schema:
+            type: string
+            description: 'The email address of the user to resend the confirmation email to.'
+            example: user@example.com
+      responses:
+        '200':
+          description: 'A new confirmation email has been sent.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message: {type: string, example: 'Un nouvel email de confirmation a été envoyé.'}
+        '400':
+          description: 'User already confirmed or invalid request.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error: {type: string, example: 'Cet utilisateur est déjà confirmé.'}
+        '404':
+          description: 'User not found.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error: {type: string, example: 'Utilisateur non trouvé.'}
+        '500':
+          description: 'Internal server error.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error: {type: string, example: 'Erreur interne du serveur.'}
   /user/deleteUser:
     delete:
       summary: 'Delete a user'
@@ -598,6 +774,10 @@ paths:
                   type: string
                   description: 'New URL of the user''s profile picture.'
                   example: 'https://example.com/new-profile.jpg'
+                prefered_language:
+                  type: string
+                  description: 'language the user''s gonna use'
+                  example: 'fr, nl or en'
                 lastname:
                   type: string
                   description: 'New last name of the user.'
@@ -658,7 +838,7 @@ paths:
                 properties:
                   message: {type: string, example: 'User''s infos have been updated successfully'}
         '400':
-          description: 'Bad request due to invalid input fields or improper field updates based on user role.'
+          description: 'Bad request due to invalid input fields or improper field updates based on user role. Or no data has changed since last update'
           content:
             application/json:
               schema:
@@ -977,6 +1157,66 @@ paths:
                 type: object
                 properties:
                   error: {type: string, example: 'Error updating user'}
+  '/user/updatePreferedLanguage/{param}':
+    put:
+      summary: 'Update user''s preferred language'
+      description: 'Updates the preferred language for a user, identified by username or ID. Ensures that only valid languages (''fr'', ''nl'', ''en'') are chosen.'
+      operationId: updateUserPreferredLanguage
+      tags:
+        - User
+      parameters:
+        -
+          in: path
+          name: param
+          required: true
+          schema:
+            type: string
+            description: 'Username or ID of the user whose preferred language is to be updated.'
+            example: johndoe
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                prefered_language:
+                  type: string
+                  description: 'The new preferred language of the user. Must be ''fr'', ''nl'', or ''en''.'
+                  example: en
+      responses:
+        '200':
+          description: 'Preferred language updated successfully.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message: {type: string, example: 'User''s preferred language updated successfully'}
+        '400':
+          description: 'Bad request due to invalid input or attempt to update multiple fields.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error: {type: string, example: 'Only fr, nl, or en can be chosen as preferred_language'}
+        '404':
+          description: 'User not found or no changes made, possibly due to incorrect or unchanged input data.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error: {type: string, example: 'No changes have been made, same info as before has been given'}
+        '500':
+          description: 'Internal server error while updating user information.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error: {type: string, example: 'Error updating user'}
   /auth/signIn:
     post:
       summary: 'User login'
@@ -1150,6 +1390,110 @@ paths:
                 type: object
                 properties:
                   error: {type: string, example: 'Internal server error'}
+  /auth/requestPasswordReset:
+    post:
+      summary: 'Request a password reset'
+      description: 'Sends a password reset email to the user identified by their ID.'
+      operationId: requestPasswordReset
+      tags:
+        - Auth
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: string
+                  description: 'The user''s ID.'
+                  example: 60d0fe4f5311236168a109ca
+      responses:
+        '200':
+          description: 'Password reset email sent successfully.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message: {type: string, example: 'Email de réinitialisation envoyé.'}
+                  resetToken: {type: string, example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...}
+        '404':
+          description: 'User not found.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error: {type: string, example: 'Utilisateur non trouvé.'}
+        '500':
+          description: 'Internal server error.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error: {type: string, example: 'Erreur interne du serveur.'}
+  '/auth/resetPassword/{token}':
+    post:
+      summary: 'Reset the user''s password'
+      description: 'Resets the password for the user identified by the reset token.'
+      operationId: resetPassword
+      tags:
+        - Auth
+      parameters:
+        -
+          in: path
+          name: token
+          required: true
+          schema:
+            type: string
+            description: 'The password reset token.'
+            example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                new_password:
+                  type: string
+                  description: 'The new password for the user.'
+                  example: newpassword123
+      responses:
+        '200':
+          description: 'Password reset successfully.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message: {type: string, example: 'Mot de passe réinitialisé avec succès.'}
+        '400':
+          description: 'Bad request due to invalid input or expired/invalid token.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error: {type: string, examples: {invalid_token: {value: 'Token invalide ou expiré.'}, short_password: {value: 'Le mot de passe doit contenir au moins 6 caractères.'}}}
+        '401':
+          description: 'Unauthorized request due to expired token.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error: {type: string, example: 'Token expiré.'}
+        '500':
+          description: 'Internal server error.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error: {type: string, example: 'Erreur interne du serveur.'}
   '/student/getDetails/{param}':
     get:
       summary: 'Retrieve student details'
@@ -1828,6 +2172,657 @@ paths:
                   error: {type: string, example: 'No changes made or worker not found'}
         '500':
           description: 'Internal server error while updating worker information.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error: {type: string, example: 'Internal server error'}
+  /addCompany:
+    post:
+      summary: 'Add a new company'
+      description: 'Creates a new company record in the system.'
+      operationId: createCompany
+      tags:
+        - Company
+      security:
+        -
+          BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Company'
+      responses:
+        '201':
+          description: 'Company created successfully.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Company'
+        '400':
+          description: 'Bad request due to invalid input.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error: {type: string, example: 'Invalid input data'}
+        '401':
+          description: 'Unauthorized request.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error: {type: string, example: Unauthorized}
+        '500':
+          description: 'Internal server error.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error: {type: string, example: 'Internal server error'}
+  /getCompanies:
+    get:
+      summary: 'Get a list of companies'
+      description: 'Retrieves a list of companies based on query parameters.'
+      operationId: getCompanies
+      tags:
+        - Company
+      parameters:
+        -
+          in: query
+          name: options
+          schema:
+            type: object
+            additionalProperties: true
+          description: 'Query parameters to filter companies.'
+      responses:
+        '200':
+          description: 'List of companies retrieved successfully.'
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Company'
+        '400':
+          description: 'Bad request due to invalid input or an unknown error.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error: {type: string, example: 'An unknown error occurred'}
+        '500':
+          description: 'Internal server error.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error: {type: string, example: 'Internal server error'}
+  '/getCompany/{param}':
+    get:
+      summary: 'Get detailed company information'
+      description: 'Retrieves detailed information for a specific company identified by its ID or name.'
+      operationId: getCompany
+      tags:
+        - Company
+      parameters:
+        -
+          in: path
+          name: param
+          required: true
+          schema:
+            type: string
+            description: 'ID or name of the company.'
+            example: 60d0fe4f5311236168a109ca
+      responses:
+        '200':
+          description: 'Company details retrieved successfully.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Company'
+        '400':
+          description: 'Bad request due to invalid input or an unknown error.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error: {type: string, example: 'An unknown error occurred'}
+        '404':
+          description: 'Company not found.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message: {type: string, example: 'Company not found'}
+        '500':
+          description: 'Internal server error.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error: {type: string, example: 'Internal server error'}
+  '/getCompanyBasicInfo/{param}':
+    get:
+      summary: 'Get basic company information'
+      description: 'Retrieves basic information (ID, name, profile picture) for a specific company identified by its ID or name.'
+      operationId: getCompanyBasicInfo
+      tags:
+        - Company
+      parameters:
+        -
+          in: path
+          name: param
+          required: true
+          schema:
+            type: string
+            description: 'ID or name of the company.'
+            example: 60d0fe4f5311236168a109ca
+      responses:
+        '200':
+          description: 'Basic company information retrieved successfully.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  _id: {type: string, example: 60d0fe4f5311236168a109ca}
+                  name: {type: string, example: 'Example Company'}
+                  profile_pic: {type: string, example: 'https://example.com/profile-pic.jpg'}
+        '400':
+          description: 'Bad request due to invalid input or an unknown error.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error: {type: string, example: 'Invalid parameter length'}
+        '404':
+          description: 'Company not found.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message: {type: string, example: 'Company not found'}
+        '500':
+          description: 'Internal server error.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error: {type: string, example: 'Internal server error'}
+  '/updateCompany/{param}':
+    put:
+      summary: 'Update company information'
+      description: 'Updates the information of a specific company identified by its ID or name.'
+      operationId: updateCompany
+      tags:
+        - Company
+      parameters:
+        -
+          in: path
+          name: param
+          required: true
+          schema:
+            type: string
+            description: 'ID or name of the company to update.'
+            example: 60d0fe4f5311236168a109ca
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Company'
+      responses:
+        '200':
+          description: 'Company information updated successfully.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Company'
+        '400':
+          description: 'Bad request due to invalid input or an unknown error.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error: {type: string, example: 'Invalid parameter length'}
+        '404':
+          description: 'Company not found.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message: {type: string, example: 'Company not found'}
+        '500':
+          description: 'Internal server error.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error: {type: string, example: 'Internal server error'}
+  '/deleteCompany/{id}':
+    delete:
+      summary: 'Delete a company'
+      description: 'Deletes a specific company identified by its ID.'
+      operationId: deleteCompany
+      tags:
+        - Company
+      parameters:
+        -
+          in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            description: 'ID of the company to delete.'
+            example: 60d0fe4f5311236168a109ca
+      responses:
+        '200':
+          description: 'Company deleted successfully.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message: {type: string, example: 'Company deleted successfully'}
+        '400':
+          description: 'Bad request due to invalid input or an unknown error.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error: {type: string, example: 'An unknown error occurred'}
+        '404':
+          description: 'Company not found.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message: {type: string, example: 'Company not found'}
+        '500':
+          description: 'Internal server error.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error: {type: string, example: 'Internal server error'}
+  /addPost:
+    post:
+      summary: 'Add a new company offer'
+      description: 'Creates a new company offer in the system.'
+      operationId: createOffer
+      tags:
+        - CompanyOffers
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CompanyOffer'
+      responses:
+        '201':
+          description: 'Company offer created successfully.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message: {type: string, example: 'Offer created successfully'}
+                  offer: {$ref: '#/components/schemas/CompanyOffer'}
+        '400':
+          description: 'Bad request due to invalid input or user ID.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message: {type: string, example: 'Invalid user id'}
+                  error: {type: string, example: 'Invalid input data'}
+        '403':
+          description: 'Forbidden due to user not being an employee or not belonging to a company.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message: {type: string, example: 'You are not allowed to post an add since u didnt join a company'}
+        '404':
+          description: 'User or company not found.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message: {type: string, example: 'User not found'}
+        '500':
+          description: 'Internal server error.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error: {type: string, example: 'Internal server error'}
+  /getPosts:
+    get:
+      summary: 'Get a list of company offers'
+      description: 'Retrieves a list of company offers based on query parameters.'
+      operationId: getOffers
+      tags:
+        - CompanyOffers
+      parameters:
+        -
+          in: query
+          name: options
+          schema:
+            type: object
+            additionalProperties: true
+          description: 'Query parameters to filter offers.'
+      responses:
+        '200':
+          description: 'List of offers retrieved successfully.'
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CompanyOffer'
+        '400':
+          description: 'Bad request due to invalid input or an unknown error.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error: {type: string, example: 'An unknown error occurred'}
+        '500':
+          description: 'Internal server error.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error: {type: string, example: 'Internal server error'}
+  '/getPostById/{id}':
+    get:
+      summary: 'Get detailed offer information by ID'
+      description: 'Retrieves detailed information for a specific offer identified by its ID.'
+      operationId: getOfferById
+      tags:
+        - CompanyOffers
+      parameters:
+        -
+          in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            description: 'ID of the offer.'
+            example: 60d0fe4f5311236168a109ca
+      responses:
+        '200':
+          description: 'Offer details retrieved successfully.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CompanyOffer'
+        '400':
+          description: 'Bad request due to invalid input or an unknown error.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error: {type: string, example: 'An unknown error occurred'}
+        '404':
+          description: 'Offer not found.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message: {type: string, example: 'Offer not found'}
+        '500':
+          description: 'Internal server error.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error: {type: string, example: 'Internal server error'}
+  '/getPostWithCompanyInfo/{id}':
+    get:
+      summary: 'Get offer and associated company information'
+      description: 'Retrieves detailed information for a specific offer and the associated company identified by the offer''s ID.'
+      operationId: getOfferWithCompanyInfo
+      tags:
+        - CompanyOffers
+      parameters:
+        -
+          in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            description: 'ID of the offer.'
+            example: 60d0fe4f5311236168a109ca
+      responses:
+        '200':
+          description: 'Offer and company details retrieved successfully.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  offer: {$ref: '#/components/schemas/CompanyOffer'}
+                  company: {$ref: '#/components/schemas/Company'}
+        '400':
+          description: 'Bad request due to invalid input or an unknown error.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error: {type: string, example: 'An unknown error occurred'}
+        '404':
+          description: 'Offer or company not found.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message: {type: string, example: 'Offer not found'}
+        '500':
+          description: 'Internal server error.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error: {type: string, example: 'Internal server error'}
+  '/updatePost/{id}':
+    put:
+      summary: 'Update a company offer'
+      description: 'Updates the information of a specific company offer identified by its ID.'
+      operationId: updateOffer
+      tags:
+        - CompanyOffers
+      parameters:
+        -
+          in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            description: 'ID of the offer to update.'
+            example: 60d0fe4f5311236168a109ca
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CompanyOffer'
+      responses:
+        '200':
+          description: 'Company offer updated successfully.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CompanyOffer'
+        '400':
+          description: 'Bad request due to invalid input or an unknown error.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error: {type: string, example: 'Invalid offer ID'}
+        '404':
+          description: 'Offer not found.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message: {type: string, example: 'Offer not found'}
+        '500':
+          description: 'Internal server error.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error: {type: string, example: 'Internal server error'}
+  '/updatePostBody/{id}':
+    put:
+      summary: 'Update the body of a company offer'
+      description: 'Updates the body information (description, requirements, nice_to_have, benefits) of a specific company offer identified by its ID.'
+      operationId: updateOfferBody
+      tags:
+        - CompanyOffers
+      parameters:
+        -
+          in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            description: 'ID of the offer to update.'
+            example: 60d0fe4f5311236168a109ca
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                description:
+                  type: string
+                  example: 'Updated description'
+                requirements:
+                  type: array
+                  items: {type: string}
+                  example: ['Requirement 1', 'Requirement 2']
+                nice_to_have:
+                  type: array
+                  items: {type: string}
+                  example: ['Nice to have 1', 'Nice to have 2']
+                benefits:
+                  type: array
+                  items: {type: string}
+                  example: ['Benefit 1', 'Benefit 2']
+      responses:
+        '200':
+          description: 'Company offer body updated successfully.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CompanyOffer'
+        '400':
+          description: 'Bad request due to invalid input or an unknown error.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error: {type: string, example: 'Invalid offer ID'}
+        '404':
+          description: 'Offer not found.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message: {type: string, example: 'Offer not found'}
+        '500':
+          description: 'Internal server error.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error: {type: string, example: 'Internal server error'}
+  '/deletePost/{id}':
+    delete:
+      summary: 'Delete a company offer'
+      description: 'Deletes a specific company offer identified by its ID.'
+      operationId: deleteOffer
+      tags:
+        - CompanyOffers
+      parameters:
+        -
+          in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            description: 'ID of the offer to delete.'
+            example: 60d0fe4f5311236168a109ca
+      responses:
+        '200':
+          description: 'Company offer deleted successfully.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message: {type: string, example: 'Offer deleted successfully'}
+        '400':
+          description: 'Bad request due to invalid input or an unknown error.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error: {type: string, example: 'Invalid offer ID'}
+        '404':
+          description: 'Offer not found.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message: {type: string, example: 'Offer not found'}
+        '500':
+          description: 'Internal server error.'
           content:
             application/json:
               schema:

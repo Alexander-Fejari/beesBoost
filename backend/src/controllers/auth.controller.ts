@@ -6,6 +6,23 @@ import jwt from 'jsonwebtoken';
 import mailerService from '../services/mailer.service';
 
 class AuthController {
+  static userTimers: Map<string, NodeJS.Timeout> = new Map();
+  // Utils
+  static async resetUserTimer(user_id: string) {
+    if (AuthController.userTimers.has(user_id)) {
+      clearTimeout(AuthController.userTimers.get(user_id)!);
+    }
+
+    const timer = setTimeout(async () => {
+      await UserModel.updateOne(
+        { _id: user_id },
+        { $set: { is_connected: false } }
+      );
+    }, 60 * 60 * 1000); // 60 minute(s)
+
+    AuthController.userTimers.set(user_id, timer);
+  }
+  // Routes
   async userLogin(req: Request, res: Response): Promise<void> {
     try {
       const { username, password } = req.body;
@@ -37,7 +54,6 @@ class AuthController {
         return ;
       }
 
-      // We create the identification token for the user
       const accessToken = jwt.sign({
         id: user._id,
         username: user.username,
@@ -58,16 +74,10 @@ class AuthController {
           } 
         }
       );
+
+      AuthController.resetUserTimer(user._id.toString());
       
       res.status(200).json({ message: `Login successful`, accessToken, refreshToken });
-
-     // Set a timer to change the value of the is_connected variable to false after one hour
-      setTimeout(async () => {
-        await UserModel.updateOne(
-          { _id: user._id }, 
-          { $set: { is_connected: false } 
-        });
-      }, 60 * 60 * 1000); // 60 minute(s)
     } 
     catch (error) {
       console.error('Login error:', error);
@@ -213,4 +223,4 @@ class AuthController {
   }
 }
 
-export default new AuthController;
+export default AuthController;

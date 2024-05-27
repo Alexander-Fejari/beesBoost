@@ -21,6 +21,6 @@ tags:
     description: Operations about workers
   - name: Company
     description: Companies handler
-  - name: Offers
+  - name: CompanyOffers
     description: Company posts/offers handler
 paths: {}

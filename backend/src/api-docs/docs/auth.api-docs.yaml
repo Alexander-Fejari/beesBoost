@@ -207,7 +207,128 @@ paths:
                   error:
                     type: string
                     example: "Internal server error"
-
-
+  /auth/requestPasswordReset:
+    post:
+      summary: "Request a password reset"
+      description: "Sends a password reset email to the user identified by their ID."
+      operationId: "requestPasswordReset"
+      tags:
+        - "Auth"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: string
+                  description: "The user's ID."
+                  example: "60d0fe4f5311236168a109ca"
+      responses:
+        '200':
+          description: "Password reset email sent successfully."
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Email de réinitialisation envoyé."
+                  resetToken:
+                    type: string
+                    example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+        '404':
+          description: "User not found."
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Utilisateur non trouvé."
+        '500':
+          description: "Internal server error."
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Erreur interne du serveur."
+  /auth/resetPassword/{token}:
+    post:
+      summary: "Reset the user's password"
+      description: "Resets the password for the user identified by the reset token."
+      operationId: "resetPassword"
+      tags:
+        - "Auth"
+      parameters:
+        - in: path
+          name: token
+          required: true
+          schema:
+            type: string
+            description: "The password reset token."
+            example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                new_password:
+                  type: string
+                  description: "The new password for the user."
+                  example: "newpassword123"
+      responses:
+        '200':
+          description: "Password reset successfully."
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Mot de passe réinitialisé avec succès."
+        '400':
+          description: "Bad request due to invalid input or expired/invalid token."
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    examples:
+                      invalid_token:
+                        value: "Token invalide ou expiré."
+                      short_password:
+                        value: "Le mot de passe doit contenir au moins 6 caractères."
+        '401':
+          description: "Unauthorized request due to expired token."
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Token expiré."
+        '500':
+          description: "Internal server error."
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Erreur interne du serveur."
 
 

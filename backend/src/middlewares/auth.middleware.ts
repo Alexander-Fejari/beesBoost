@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import { UserModel } from '../models/user.model';
 import jwt from 'jsonwebtoken';
+import AuthController from '../controllers/auth.controller';
 
 function authenticateToken(req: Request, res: Response, next: NextFunction): void {
   const authHeader = req.headers['authorization'];
@@ -31,6 +32,9 @@ function authenticateToken(req: Request, res: Response, next: NextFunction): voi
         if (!check_user.is_active) {
           return res.status(403).json({ error: `Unauthorized access: User account is disabled` });
         }
+
+        await AuthController.resetUserTimer(req.user.id);
+
         next();
       } 
       catch (error) {

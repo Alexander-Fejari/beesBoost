@@ -9,6 +9,18 @@ const user_controller_1 = __importDefault(require("./user.controller"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const mailer_service_1 = __importDefault(require("../services/mailer.service"));
 class AuthController {
+    static userTimers = new Map();
+    // Utils
+    static async resetUserTimer(user_id) {
+        if (AuthController.userTimers.has(user_id)) {
+            clearTimeout(AuthController.userTimers.get(user_id));
+        }
+        const timer = setTimeout(async () => {
+            await user_model_1.UserModel.updateOne({ _id: user_id }, { $set: { is_connected: false } });
+        }, 60 * 60 * 1000); // 60 minute(s)
+        AuthController.userTimers.set(user_id, timer);
+    }
+    // Routes
     async userLogin(req, res) {
         try {
             const { username, password } = req.body;
@@ -34,7 +46,6 @@ class AuthController {
                 res.status(401).json({ message: `Login failed : Bad password` });
                 return;
             }
-            // We create the identification token for the user
             const accessToken = jsonwebtoken_1.default.sign({
                 id: user._id,
                 username: user.username,
@@ -50,12 +61,8 @@ class AuthController {
                     refresh_token: refreshToken
                 }
             });
+            AuthController.resetUserTimer(user._id.toString());
             res.status(200).json({ message: `Login successful`, accessToken, refreshToken });
-            // Set a timer to change the value of the is_connected variable to false after one hour
-            setTimeout(async () => {
-                await user_model_1.UserModel.updateOne({ _id: user._id }, { $set: { is_connected: false }
-                });
-            }, 60 * 60 * 1000); // 60 minute(s)
         }
         catch (error) {
             console.error('Login error:', error);
@@ -173,4 +180,4 @@ class AuthController {
         }
     }
 }
-exports.default = new AuthController;
+exports.default = AuthController;

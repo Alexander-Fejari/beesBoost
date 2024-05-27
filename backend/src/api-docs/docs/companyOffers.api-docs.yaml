@@ -1,6 +1,6 @@
 components:
   schemas:
-    COffer:
+    CompanyOffer:
       type: object
       properties:
         poster_id:
@@ -11,10 +11,12 @@ components:
           type: string
         function:
           type: string
+        location:
+          type: string
         creation_date:
           type: string
           format: date-time
-          default: 'now'
+          default: Date.now
         start_date:
           type: string
           format: date-time
@@ -30,26 +32,469 @@ components:
         title:
           type: string
         body:
-          type: object
-          properties:
-            description:
-              type: string
-            requirements:
-              type: array
-              items:
-                type: string
-            nice_to_have:
-              type: array
-              items:
-                type: string
-            benefits:
-              type: array
-              items:
-                type: string
+          allOf:
+            - type: object
+              properties:
+                description:
+                  type: string
+                requirements:
+                  type: array
+                  items:
+                    type: string
+                nice_to_have:
+                  type: array
+                  items:
+                    type: string
+                benefits:
+                  type: array
+                  items:
+                    type: string
         taker_id:
           type: string
         status:
           type: string
         offer_language:
           type: string
-  
+paths:
+  # POST
+  /addPost:
+    post:
+      summary: "Add a new company offer"
+      description: "Creates a new company offer in the system."
+      operationId: "createOffer"
+      tags:
+        - "CompanyOffers"
+      # Uncomment the following line if authentication is required
+      # security:
+      #   - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CompanyOffer'
+      responses:
+        '201':
+          description: "Company offer created successfully."
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Offer created successfully"
+                  offer:
+                    $ref: '#/components/schemas/CompanyOffer'
+        '400':
+          description: "Bad request due to invalid input or user ID."
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Invalid user id"
+                  error:
+                    type: string
+                    example: "Invalid input data"
+        '403':
+          description: "Forbidden due to user not being an employee or not belonging to a company."
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "You are not allowed to post an add since u didnt join a company"
+        '404':
+          description: "User or company not found."
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "User not found"
+        '500':
+          description: "Internal server error."
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Internal server error"
+  # GET
+  /getPosts:
+    get:
+      summary: "Get a list of company offers"
+      description: "Retrieves a list of company offers based on query parameters."
+      operationId: "getOffers"
+      tags:
+        - "CompanyOffers"
+      # Uncomment the following line if authentication is required
+      # security:
+      #   - BearerAuth: []
+      parameters:
+        - in: query
+          name: options
+          schema:
+            type: object
+            additionalProperties: true
+          description: "Query parameters to filter offers."
+      responses:
+        '200':
+          description: "List of offers retrieved successfully."
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CompanyOffer'
+        '400':
+          description: "Bad request due to invalid input or an unknown error."
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "An unknown error occurred"
+        '500':
+          description: "Internal server error."
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Internal server error"
+  /getPostById/{id}:
+    get:
+      summary: "Get detailed offer information by ID"
+      description: "Retrieves detailed information for a specific offer identified by its ID."
+      operationId: "getOfferById"
+      tags:
+        - "CompanyOffers"
+      # Uncomment the following line if authentication is required
+      # security:
+      #   - BearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            description: "ID of the offer."
+            example: "60d0fe4f5311236168a109ca"
+      responses:
+        '200':
+          description: "Offer details retrieved successfully."
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CompanyOffer'
+        '400':
+          description: "Bad request due to invalid input or an unknown error."
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "An unknown error occurred"
+        '404':
+          description: "Offer not found."
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Offer not found"
+        '500':
+          description: "Internal server error."
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Internal server error"
+  /getPostWithCompanyInfo/{id}:
+    get:
+      summary: "Get offer and associated company information"
+      description: "Retrieves detailed information for a specific offer and the associated company identified by the offer's ID."
+      operationId: "getOfferWithCompanyInfo"
+      tags:
+        - "CompanyOffers"
+      # Uncomment the following line if authentication is required
+      # security:
+      #   - BearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            description: "ID of the offer."
+            example: "60d0fe4f5311236168a109ca"
+      responses:
+        '200':
+          description: "Offer and company details retrieved successfully."
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  offer:
+                    $ref: '#/components/schemas/CompanyOffer'
+                  company:
+                    $ref: '#/components/schemas/Company'
+        '400':
+          description: "Bad request due to invalid input or an unknown error."
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "An unknown error occurred"
+        '404':
+          description: "Offer or company not found."
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Offer not found"
+        '500':
+          description: "Internal server error."
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Internal server error"
+  # PUT
+  /updatePost/{id}:
+    put:
+      summary: "Update a company offer"
+      description: "Updates the information of a specific company offer identified by its ID."
+      operationId: "updateOffer"
+      tags:
+        - "CompanyOffers"
+      # Uncomment the following line if authentication is required
+      # security:
+      #   - BearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            description: "ID of the offer to update."
+            example: "60d0fe4f5311236168a109ca"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CompanyOffer'
+      responses:
+        '200':
+          description: "Company offer updated successfully."
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CompanyOffer'
+        '400':
+          description: "Bad request due to invalid input or an unknown error."
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Invalid offer ID"
+        '404':
+          description: "Offer not found."
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Offer not found"
+        '500':
+          description: "Internal server error."
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Internal server error"
+  /updatePostBody/{id}:
+    put:
+      summary: "Update the body of a company offer"
+      description: "Updates the body information (description, requirements, nice_to_have, benefits) of a specific company offer identified by its ID."
+      operationId: "updateOfferBody"
+      tags:
+        - "CompanyOffers"
+      # Uncomment the following line if authentication is required
+      # security:
+      #   - BearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            description: "ID of the offer to update."
+            example: "60d0fe4f5311236168a109ca"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                description:
+                  type: string
+                  example: "Updated description"
+                requirements:
+                  type: array
+                  items:
+                    type: string
+                  example: ["Requirement 1", "Requirement 2"]
+                nice_to_have:
+                  type: array
+                  items:
+                    type: string
+                  example: ["Nice to have 1", "Nice to have 2"]
+                benefits:
+                  type: array
+                  items:
+                    type: string
+                  example: ["Benefit 1", "Benefit 2"]
+      responses:
+        '200':
+          description: "Company offer body updated successfully."
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CompanyOffer'
+        '400':
+          description: "Bad request due to invalid input or an unknown error."
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Invalid offer ID"
+        '404':
+          description: "Offer not found."
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Offer not found"
+        '500':
+          description: "Internal server error."
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Internal server error"
+  # DELETE
+  /deletePost/{id}:
+    delete:
+      summary: "Delete a company offer"
+      description: "Deletes a specific company offer identified by its ID."
+      operationId: "deleteOffer"
+      tags:
+        - "CompanyOffers"
+      # Uncomment the following line if authentication is required
+      # security:
+      #   - BearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            description: "ID of the offer to delete."
+            example: "60d0fe4f5311236168a109ca"
+      responses:
+        '200':
+          description: "Company offer deleted successfully."
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Offer deleted successfully"
+        '400':
+          description: "Bad request due to invalid input or an unknown error."
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Invalid offer ID"
+        '404':
+          description: "Offer not found."
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Offer not found"
+        '500':
+          description: "Internal server error."
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Internal server error"
+ 
+
+
+
+

@@ -23,7 +23,12 @@ class CompanyController {
                 res.status(400).json({ error: `Name and creator_username are required` });
                 return;
             }
-            const newCompany = new company_model_1.CompanyModel(req.body);
+            let newCompany = await company_model_1.CompanyModel.findOne({ name: name });
+            if (newCompany) {
+                res.status(400).json({ error: `Company with this name already exists` });
+                return;
+            }
+            newCompany = new company_model_1.CompanyModel(req.body);
             const company = await newCompany.save();
             res.status(201).json(company);
         }

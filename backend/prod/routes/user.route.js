@@ -9,23 +9,23 @@ const auth_middleware_1 = require("../middlewares/auth.middleware");
 const router = express_1.default.Router();
 // ----------------------------------------------------------- GENERAL -----------------------------------------------------------
 // POST GENERAL INFOS
-router.post(`/user/signUp`, (req, res) => user_controller_1.default.addUser(req, res)); // Swagger à modifier (mailer + prefered_language)
+router.post(`/user/signUp`, (req, res) => user_controller_1.default.addUser(req, res));
 // GET GENERAL INFOS
 router.get(`/user/getAllUsers`, auth_middleware_1.authenticateToken, (req, res) => user_controller_1.default.getAllUsers(req, res));
 router.get(`/user/getUser/:param`, auth_middleware_1.authenticateToken, (req, res) => user_controller_1.default.getUser(req, res));
-router.get('/user/confirmEmail/:token', (req, res) => user_controller_1.default.confirmEmail(req, res)); // Swagger à faire
-router.get(`/user/resendConfirmationEmail/:email`, (req, res) => user_controller_1.default.resendConfirmationEmail(req, res)); // Swagger à faire
+router.get('/user/confirmEmail/:token', (req, res) => user_controller_1.default.confirmEmail(req, res));
+router.get(`/user/resendConfirmationEmail/:email`, (req, res) => user_controller_1.default.resendConfirmationEmail(req, res));
 // DELETE GENERAL INFOS
 router.delete(`/user/deleteUser`, auth_middleware_1.authenticateToken, (0, auth_middleware_1.authorizeRoles)(`superAdmin`), (req, res) => user_controller_1.default.deleteUser(req, res)); // Only for superAdmin
 // UPDATE GENERAL INFOS
-router.put(`/user/updateInfos/:param`, /* authenticateToken, */ (req, res) => user_controller_1.default.updateFields(req, res)); // Swagger à Modifier
+router.put(`/user/updateInfos/:param`, /* authenticateToken, */ (req, res) => user_controller_1.default.updateFields(req, res));
 router.put(`/user/updateVerified/:param`, auth_middleware_1.authenticateToken, (0, auth_middleware_1.authorizeRoles)(`admin`, `superAdmin`), (req, res) => user_controller_1.default.updateField(req, res, `is_verified`));
 router.put(`/user/updateActive/:param`, auth_middleware_1.authenticateToken, (req, res) => user_controller_1.default.updateField(req, res, `is_active`));
 router.put(`/user/updateConnected/:param`, auth_middleware_1.authenticateToken, (0, auth_middleware_1.authorizeRoles)(`admin`, `superAdmin`), (req, res) => user_controller_1.default.updateField(req, res, `is_connected`));
 router.put(`/user/updateUsername/:param`, auth_middleware_1.authenticateToken, (0, auth_middleware_1.authorizeRoles)(`admin`, `superAdmin`), (req, res) => user_controller_1.default.updateField(req, res, `username`)); // pas nécéssaire à priori sauf si l'admin doit pouvoir le changer dans la vérif
 router.put(`/user/updatePassword/:param`, auth_middleware_1.authenticateToken, (req, res) => user_controller_1.default.updateField(req, res, `password`));
 router.put(`/user/updateEmail/:param`, auth_middleware_1.authenticateToken, (req, res) => user_controller_1.default.updateField(req, res, `email`));
-router.put(`/user/updatePreferedLanguage/:param`, /* authenticateToken, */ (req, res) => user_controller_1.default.updateField(req, res, `prefered_language`)); // Swagger à faire
+router.put(`/user/updatePreferedLanguage/:param`, /* authenticateToken, */ (req, res) => user_controller_1.default.updateField(req, res, `prefered_language`));
 // ----------------------------------------------------------- WORKER -----------------------------------------------------------
 // GET WORKER INFOS
 //router.get(`worker/getAllWorkers`, (req, res) => userController.getAllWorkers(req, res)); // Pas finie + Swagger à faire

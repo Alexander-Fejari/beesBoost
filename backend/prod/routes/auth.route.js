@@ -7,9 +7,10 @@ const express_1 = __importDefault(require("express"));
 const auth_controller_1 = __importDefault(require("../controllers/auth.controller"));
 const auth_middleware_1 = require("../middlewares/auth.middleware");
 const router = express_1.default.Router();
-router.post(`/signIn`, (req, res) => auth_controller_1.default.userLogin(req, res));
-router.post(`/renewToken`, /*authenticateToken,*/ (req, res) => auth_controller_1.default.renewToken(req, res));
-router.post(`/logOut/:param`, auth_middleware_1.authenticateToken, (req, res) => auth_controller_1.default.logOut(req, res));
-router.post(`/requestPasswordReset`, auth_controller_1.default.requestPasswordReset); // Swagger à faire
-router.post(`/resetPassword/:token`, auth_controller_1.default.resetPassword); // Swagger à faire
+const authController = new auth_controller_1.default();
+router.post(`/signIn`, (req, res) => authController.userLogin(req, res));
+router.post(`/renewToken`, /*authenticateToken,*/ (req, res) => authController.renewToken(req, res));
+router.post(`/logOut/:param`, auth_middleware_1.authenticateToken, (req, res) => authController.logOut(req, res));
+router.post(`/requestPasswordReset`, authController.requestPasswordReset);
+router.post(`/resetPassword/:token`, authController.resetPassword);
 exports.default = router;
