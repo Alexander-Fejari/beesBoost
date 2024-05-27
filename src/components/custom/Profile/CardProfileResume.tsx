@@ -1,7 +1,7 @@
 import BentoElement from "@/components/custom/BentoElement";
 import UserDetails from "@/store/UserDetailsStore"
 import {Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle,} from "@/components/ui/card"
-import CardProfileEdit from "@/components/custom/Profile/CardProfileEdit";
+import CardProfileEdit from "@/components/custom/Profile/customHook/useCardProfileEdit";
 import CTACardResume from "@/components/custom/Profile/CTACardResume";
 
 interface CardProfileResumeProps {
@@ -29,9 +29,10 @@ const CardProfileResume = ({userId, userDetails,updateUserDetails,submitUserDeta
                     <CTACardResume/>
                 </CardFooter>
             </Card>
+            {/* ajouter condition verifie id */}
             <section className="absolute top-2 right-2">
                 <CardProfileEdit
-                    userId={userId}
+                    userId={userId!}
                     userDetails={userDetails}
                     updateUserDetails={updateUserDetails}
                     submitUserDetails={submitUserDetails}

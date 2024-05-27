@@ -17,10 +17,10 @@ interface UserDetailsState {
     error: Error | null;
     fetchUserDetails: (userId: string) => void;
     updateUserDetails: (details: Partial<UserDetails>) => void;
-    submitUserDetails: (userId:string, details: Partial<UserDetails>) => Promise<void>;
+    submitUserDetails: (userId: string, details: Partial<UserDetails>) => Promise<void>;
 }
 
-export const useUserDetailsStore = create<UserDetailsState>((set) => ({
+export const useUserDetailsStore = create<UserDetailsState>((set, get) => ({
     userDetails: null,
     isLoading: false,
     error: null,
@@ -38,27 +38,25 @@ export const useUserDetailsStore = create<UserDetailsState>((set) => ({
         }
     },
     updateUserDetails: (details: Partial<UserDetails>) => set((state) => ({
-        userDetails: state.userDetails ? { ...state.userDetails, ...details } : null,
+        userDetails: state.userDetails ? {...state.userDetails, ...details} : null,
     })),
-    submitUserDetails: async (userId: string, details:Partial<UserDetails>) => {
+    submitUserDetails: async (userId: string, details: Partial<UserDetails>) => {
         set({isLoading: true, error: null});
         try {
             const response = await fetchWithToken(`${import.meta.env.VITE_APP_API_URL}/user/updateInfos/${userId}`, {
                 method: 'PUT',
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
                 },
                 body: JSON.stringify(details),
             });
             if (!response.ok) {
-                throw new Error('Failed to update user details')
+                throw new Error('Failed to update user details');
             }
-            const data = await response.json();
-            set({userDetails:data, isLoading:false});
+            // Refetch user details after successful update
+            await get().fetchUserDetails(userId);
         } catch (error) {
             set({isLoading: false, error: error instanceof Error ? error : new Error('Failed to update user details')});
-
         }
-
-    }
+    },
 }));

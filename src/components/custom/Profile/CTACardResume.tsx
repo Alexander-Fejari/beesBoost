@@ -12,7 +12,7 @@ const CTACardResume = () => {
                 <SlUserFollow className="mr-2 h-4 w-4" /> {t('resume.connect')}
             </Button>
             <Button variant="outline">
-                <MdOutlineMessage className="mr-2 h-4 w-4" />  {t('resume.message')}
+                <MdOutlineMessage className="mr-2 h-4 w-4" /> {t('resume.message')}
             </Button>
         </>
     )
