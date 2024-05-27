@@ -3,7 +3,7 @@ import {jwtDecode} from "jwt-decode";
 
 interface DecodedToken {
     username: string;
-    id: string; // Add userId to the DecodedToken interface
+    id: string;
 }
 
 interface AuthState {
@@ -11,7 +11,7 @@ interface AuthState {
     accessToken: string | null;
     refreshToken: string | null;
     username: string | null;
-    id: string | null; // Add userId to the AuthState interface
+    id: string | null;
     setTokens: (accessToken: string | null, refreshToken: string | null) => void;
     renewToken: () => Promise<void>;
 }

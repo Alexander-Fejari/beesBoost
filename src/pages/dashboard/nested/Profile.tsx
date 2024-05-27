@@ -7,11 +7,20 @@ import CardProfileResume from "@/components/custom/Profile/CardProfileResume";
 const Profile = () => {
     const userId = useAuthStore((state) => state.id);
     const token = useAuthStore((state) => state.accessToken);
-    const {userDetails, isLoading, error, fetchUserDetails} = useUserDetailsStore(state => ({
+    const {
+        userDetails,
+        isLoading,
+        error,
+        fetchUserDetails,
+        updateUserDetails,
+        submitUserDetails
+    } = useUserDetailsStore(state => ({
         userDetails: state.userDetails,
         isLoading: state.isLoading,
         error: state.error,
         fetchUserDetails: state.fetchUserDetails,
+        updateUserDetails: state.updateUserDetails,
+        submitUserDetails: state.submitUserDetails,
     }));
 
     const fetchData = useCallback(async () => {
@@ -38,7 +47,12 @@ const Profile = () => {
     if (userDetails) {
         return (
             <Layout>
-                <CardProfileResume userDetails={userDetails}/>
+                <CardProfileResume
+                    userId={userId}
+                    userDetails={userDetails}
+                    updateUserDetails={updateUserDetails}
+                    submitUserDetails={submitUserDetails}
+                />
             </Layout>
         );
     }

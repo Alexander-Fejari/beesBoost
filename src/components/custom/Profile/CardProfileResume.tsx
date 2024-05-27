@@ -5,10 +5,13 @@ import CardProfileEdit from "@/components/custom/Profile/CardProfileEdit";
 import CTACardResume from "@/components/custom/Profile/CTACardResume";
 
 interface CardProfileResumeProps {
+    userId: string | null;
     userDetails: UserDetails;
+    updateUserDetails: (details: Partial<UserDetails>) => void;
+    submitUserDetails: (userId: string, details: Partial<UserDetails>) => Promise<void>;
 }
 
-const CardProfileResume = ({userDetails}: CardProfileResumeProps) => {
+const CardProfileResume = ({userId, userDetails,updateUserDetails,submitUserDetails}: CardProfileResumeProps) => {
     return (
         <BentoElement size={'col-span-4'} className={'relative'}>
             <Card className={'bg-transparent border-none'}>
@@ -27,7 +30,12 @@ const CardProfileResume = ({userDetails}: CardProfileResumeProps) => {
                 </CardFooter>
             </Card>
             <section className="absolute top-2 right-2">
-                <CardProfileEdit/>
+                <CardProfileEdit
+                    userId={userId}
+                    userDetails={userDetails}
+                    updateUserDetails={updateUserDetails}
+                    submitUserDetails={submitUserDetails}
+                />
             </section>
         </BentoElement>
     )
