@@ -24,7 +24,7 @@ router.get(`/user/resendConfirmationEmail/:email`, (req, res) => userController.
 router.delete(`/user/deleteUser`, authenticateToken, authorizeRoles(`superAdmin`), (req, res) => userController.deleteUser(req, res)); // Only for superAdmin
 
   // UPDATE GENERAL INFOS
-router.put(`/user/updateInfos/:param`, /*authenticateToken,*/ (req, res) => userController.updateFields(req, res)); // Swagger à Modifier
+router.put(`/user/updateInfos/:param`, /* authenticateToken, */ (req, res) => userController.updateFields(req, res)); // Swagger à Modifier
 
 router.put(`/user/updateVerified/:param`, authenticateToken, authorizeRoles(`admin`, `superAdmin`), (req, res) => userController.updateField(req, res, `is_verified`));
 
@@ -38,7 +38,7 @@ router.put(`/user/updatePassword/:param`, authenticateToken, (req, res) => userC
 
 router.put(`/user/updateEmail/:param`, authenticateToken, (req, res) => userController.updateField(req, res, `email`));
 
-router.put(`/user/updatePreferedLanguage/:param`, authenticateToken, (req, res) => userController.updateField(req, res, `prefered_language`)); // Swagger à faire
+router.put(`/user/updatePreferedLanguage/:param`, /* authenticateToken, */ (req, res) => userController.updateField(req, res, `prefered_language`)); // Swagger à faire
 
 
 // ----------------------------------------------------------- WORKER -----------------------------------------------------------
@@ -49,9 +49,9 @@ router.put(`/user/updatePreferedLanguage/:param`, authenticateToken, (req, res) 
 router.get(`/worker/getDetails/:param`, authenticateToken, (req, res) => userController.getDetails(req, res, `worker_details`));
 
   // UPDATE WORKER INFOS
-router.put(`/worker/updateIsAdmin/:param`, authenticateToken, (req, res) => userController.updateWorkerIsAdmin(req, res));
+router.put(`/worker/updateIsAdmin/:param`, /* authenticateToken, */ (req, res) => userController.updateWorkerIsAdmin(req, res));
 
-router.put(`/worker/updateCompany/:param`, authenticateToken, (req, res) => userController.updateWorkerDetail(req, res, `company`));
+router.put(`/worker/updateCompany/:param`, /* authenticateToken, */ (req, res) => userController.updateWorkerDetail(req, res, `company`));
 
 
 // ----------------------------------------------------------- STUDENT -----------------------------------------------------------
@@ -64,9 +64,9 @@ router.get(`/student/getDetails/:param`, authenticateToken, (req, res) => userCo
 router.get(`/student/getLastRegisteredStudents`, (req, res) => userController.getLastStudents(req, res, 5));
 
   // UPDATE STUDENT INFOS
-router.put(`/student/updateSchool/:param`, authenticateToken, (req, res) => userController.updateStudentDetail(req, res, `school`));
+router.put(`/student/updateSchool/:param`, /* authenticateToken, */ (req, res) => userController.updateStudentDetail(req, res, `school`));
 
-router.put(`/student/updateFormation/:param`, authenticateToken, (req, res) => userController.updateStudentDetailArray(req, res, `formation`));
+router.put(`/student/updateFormation/:param`, /* authenticateToken, */ (req, res) => userController.updateStudentDetailArray(req, res, `formation`));
 
 router.put(`/student/updateExperience/:param`, authenticateToken, (req, res) => userController.updateStudentDetailArray(req, res, `experience`));
 
