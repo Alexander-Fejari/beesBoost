@@ -1,5 +1,6 @@
 import {create} from 'zustand';
 import {devtools} from 'zustand/middleware';
+import {fetchWithToken} from "@/store/Store";
 
 interface JobSummary {
     avatarUrl: string;
@@ -71,7 +72,7 @@ const useJobStore = create<JobState>()(devtools((set) => ({
     fetchJobDetail: async (jobId: string, token: string) => {
         set(state => ({isLoading: {...state.isLoading, [jobId]: true}}));
         try {
-            const response = await fetch(`${import.meta.env.VITE_APP_API_URL}/post/getPostById/${jobId}`, {
+            const response = await fetchWithToken(`${import.meta.env.VITE_APP_API_URL}/post/getPostById/${jobId}`, {
                 method: 'GET',
                 headers: {
                     'authorization': `Bearer ${token}`,

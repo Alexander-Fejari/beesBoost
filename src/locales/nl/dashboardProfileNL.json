@@ -1,10 +1,15 @@
 {
-    "jobblock": {
-        "apply": "Postuler",
-        "message": "Envoyer un message",
-        "month": "Mois",
-        "skills": "Compétences",
-        "experiences": "Expériences",
-        "benefits": "Avantages"
+    "resume": {
+        "title": "Edit Profil",
+        "desc": "Make changes to your profile here. Click save when you're done.",
+        "message": "Bericht",
+        "connect": "Se connecter",
+        "firstname": "Firstname:",
+        "lastname": "Lastname:",
+        "occupation": "Occupation:",
+        "pickUpLine": "Pick up line: "
+    },
+    "edit": {
+        "cta": "Save changes"
     }
 }
