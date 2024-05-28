@@ -1,6 +1,10 @@
 {
-    "name": "fr",
-    "version": "1.0.0",
-    "dependencies": {
+    "jobblock": {
+        "apply": "Postuler",
+        "message": "Envoyer un message",
+        "month": "Mois",
+        "skills": "Compétences",
+        "experiences": "Expériences",
+        "benefits": "Avantages"
     }
 }
