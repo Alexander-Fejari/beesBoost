@@ -14,7 +14,7 @@ import { useTranslation } from 'react-i18next';
 
 const JobList: React.FC = () => {
     const { t } = useTranslation('dashboardJobs');
-    const { token } = useAuthStore(); // Get token from auth store
+    const { accessToken } = useAuthStore(); // Get token from auth store
     const {
         jobSummaries,
         fetchJobSummaries,
@@ -28,8 +28,8 @@ const JobList: React.FC = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                if (token) {
-                    await fetchJobSummaries(token);
+                if (accessToken) {
+                    await fetchJobSummaries(accessToken);
                 }
             } catch (error) {
                 console.error('Error fetching job summaries:', error);
@@ -37,7 +37,7 @@ const JobList: React.FC = () => {
         };
 
         fetchData();
-    }, [token, fetchJobSummaries]);
+    }, [accessToken, fetchJobSummaries]);
 
     if (isLoading.summaries) {
         return (
@@ -52,8 +52,8 @@ const JobList: React.FC = () => {
     const handleExpand = async (jobId: string) => {
         try {
             if (!jobDetails[jobId]) {
-                if (token != null) {
-                    await fetchJobDetail(jobId, token);
+                if (accessToken != null) {
+                    await fetchJobDetail(jobId, accessToken);
                 }
             }
             setExpandedJobId(expandedJobId === jobId ? null : jobId);

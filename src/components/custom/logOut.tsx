@@ -8,10 +8,10 @@ import { useAuthStore } from "@/store/Store";
 const LogOut = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const { setToken } = useAuthStore();
+  const { setTokens } = useAuthStore();
 
   const handleLogout = () => {
-    setToken(null);
+    setTokens(null, null);
     navigate("/");
   };
 

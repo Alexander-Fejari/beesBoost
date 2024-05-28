@@ -1,3 +1,15 @@
 {
-    "test": "test"
+    "resume": {
+        "title": "Modifier le profile",
+        "desc": "Faites les changements sur votre profile et sauvegarde en cliquant sur le bouton",
+        "message": "Message",
+        "connect": "Follow",
+        "firstname": "Prénom:",
+        "lastname": "Nom:",
+        "occupation": "Poste:",
+        "pickUpLine": "Bio: "
+    },
+    "edit": {
+        "cta": "Sauvegarder"
+    }
 }
