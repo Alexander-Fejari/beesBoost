@@ -8,5 +8,8 @@
         "lastname": "Nom:",
         "occupation": "Poste:",
         "pickUpLine": "Bio: "
+    },
+    "edit": {
+        "cta": "Sauvegarder"
     }
 }

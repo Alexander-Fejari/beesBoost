@@ -25,7 +25,7 @@ const Profile = () => {
 
     const fetchData = useCallback(async () => {
         if (userId && token) {
-            await fetchUserDetails(userId);
+            fetchUserDetails(userId);
         }
     }, [userId, token, fetchUserDetails]);
 

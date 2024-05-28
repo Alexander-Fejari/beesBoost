@@ -3,6 +3,7 @@ import UserDetails from "@/store/UserDetailsStore"
 import {Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle,} from "@/components/ui/card"
 import CardProfileEdit from "@/components/custom/Profile/customHook/useCardProfileEdit";
 import CTACardResume from "@/components/custom/Profile/CTACardResume";
+import {useAuthStore} from "@/store/Store.tsx";
 
 interface CardProfileResumeProps {
     userId: string | null;
@@ -12,6 +13,7 @@ interface CardProfileResumeProps {
 }
 
 const CardProfileResume = ({userId, userDetails,updateUserDetails,submitUserDetails}: CardProfileResumeProps) => {
+    const currentUserId = useAuthStore((state) => state.id);
     return (
         <BentoElement size={'col-span-4'} className={'relative'}>
             <Card className={'bg-transparent border-none'}>
@@ -29,15 +31,16 @@ const CardProfileResume = ({userId, userDetails,updateUserDetails,submitUserDeta
                     <CTACardResume/>
                 </CardFooter>
             </Card>
-            {/* ajouter condition verifie id */}
-            <section className="absolute top-2 right-2">
-                <CardProfileEdit
-                    userId={userId!}
-                    userDetails={userDetails}
-                    updateUserDetails={updateUserDetails}
-                    submitUserDetails={submitUserDetails}
-                />
-            </section>
+            {userId === currentUserId && (
+                <section className="absolute top-2 right-2">
+                    <CardProfileEdit
+                        userId={userId!}
+                        userDetails={userDetails}
+                        updateUserDetails={updateUserDetails}
+                        submitUserDetails={submitUserDetails}
+                    />
+                </section>
+            )}
         </BentoElement>
     )
 }
