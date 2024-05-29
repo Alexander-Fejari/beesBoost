@@ -1,6 +1,7 @@
 import express, { Router } from 'express';
 import userController from '../controllers/user.controller';
 import { authenticateToken, authorizeRoles } from '../middlewares/auth.middleware'
+import uploadMiddleware from '../middlewares/multer.middleware';
 
 const router: Router = express.Router();
 
@@ -39,6 +40,8 @@ router.put(`/user/updatePassword/:param`, authenticateToken, (req, res) => userC
 router.put(`/user/updateEmail/:param`, authenticateToken, (req, res) => userController.updateField(req, res, `email`));
 
 router.put(`/user/updatePreferedLanguage/:param`, /* authenticateToken, */ (req, res) => userController.updateField(req, res, `prefered_language`));
+
+router.put(`/user/updateProfilePicture/:param`, uploadMiddleware, /* authenticateToken, */ (req, res) => userController.updateProfilePic(req, res));
 
 
 // ----------------------------------------------------------- WORKER -----------------------------------------------------------

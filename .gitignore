@@ -14,6 +14,7 @@ dist
 dist-ssr
 *.local
 .pnp.*
+uploaded_pp
 
 
 # Editor directories and files

@@ -1,4 +1,4 @@
-import { Request, Response } from 'express';
+import { NextFunction, Request, Response } from 'express';
 import bcrypt from 'bcrypt';
 import { UserModel, ISDetails, IWDetails, IS_DETAILS } from '../models/user.model';
 import { ObjectId } from 'mongodb';
@@ -400,6 +400,40 @@ class UserController {
     catch (error) {
       console.error(`Error updating user's infos:`, error);
       res.status(500).json({ error: `Error updating user` });
+    }
+  }
+
+  async updateProfilePic(req: Request, res: Response): Promise<void> {
+    try {
+      const param = req.params.param;
+      const file = req.file;
+      const { link } = req.body;
+
+      const user = await this.getUserObject(req, res, param);
+
+      if (!user) {
+        res.status(404).json({ error: `User not found` });
+        return;
+      }
+
+      if (file) {
+        user.profile_pic = file.path;
+      } 
+      else if (link) {
+        user.profile_pic = link;
+      } 
+      else {
+        res.status(400).json({ error: `No file or link provided` });
+        return ;
+      }
+
+      await user.save();
+
+      res.json({ message: `Profile picture updated successfully`, profile_pic: user.profile_pic });
+    } 
+    catch (error) {
+      console.error(`Error updating profile picture:`, error);
+      res.status(500).json({ error: `Internal server error` });
     }
   }
 

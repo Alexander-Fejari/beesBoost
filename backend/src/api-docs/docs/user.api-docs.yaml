@@ -1068,7 +1068,80 @@ paths:
                   error:
                     type: string
                     example: "Error updating user"
-  
-
+  /user/updateProfilePicture/{param}:
+    put:
+      summary: "Update User Profile Picture"
+      description: "Updates the profile picture of the user identified by username or ID. The profile picture can be updated via file upload or a direct link."
+      operationId: "updateProfilePic"
+      tags:
+        - "User"
+      #security:
+      #  - BearerAuth: []
+      parameters:
+        - in: path
+          name: param
+          required: true
+          schema:
+            type: string
+            description: "Username or ID of the user whose profile picture is to be updated."
+            example: "johndoe"
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                profile_pic:
+                  type: string
+                  format: binary
+                  description: "New profile picture file to be uploaded."
+                link:
+                  type: string
+                  description: "Link to the new profile picture."
+      responses:
+        '200':
+          description: "Profile picture updated successfully."
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Profile picture updated successfully"
+                  profile_pic:
+                    type: string
+                    example: "/uploads/profile_pic.jpg"
+        '400':
+          description: "Bad request due to no file or link provided."
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "No file or link provided"
+        '404':
+          description: "User not found."
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "User not found"
+        '500':
+          description: "Internal server error while updating profile picture."
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Internal server error"
   
 

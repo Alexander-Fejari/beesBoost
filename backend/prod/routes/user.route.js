@@ -6,6 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const user_controller_1 = __importDefault(require("../controllers/user.controller"));
 const auth_middleware_1 = require("../middlewares/auth.middleware");
+const multer_middleware_1 = __importDefault(require("../middlewares/multer.middleware"));
 const router = express_1.default.Router();
 // ----------------------------------------------------------- GENERAL -----------------------------------------------------------
 // POST GENERAL INFOS
@@ -26,6 +27,7 @@ router.put(`/user/updateUsername/:param`, auth_middleware_1.authenticateToken, (
 router.put(`/user/updatePassword/:param`, auth_middleware_1.authenticateToken, (req, res) => user_controller_1.default.updateField(req, res, `password`));
 router.put(`/user/updateEmail/:param`, auth_middleware_1.authenticateToken, (req, res) => user_controller_1.default.updateField(req, res, `email`));
 router.put(`/user/updatePreferedLanguage/:param`, /* authenticateToken, */ (req, res) => user_controller_1.default.updateField(req, res, `prefered_language`));
+router.put(`/user/updateProfilePicture/:param`, multer_middleware_1.default, /* authenticateToken, */ (req, res) => user_controller_1.default.updateProfilePic(req, res));
 // ----------------------------------------------------------- WORKER -----------------------------------------------------------
 // GET WORKER INFOS
 //router.get(`worker/getAllWorkers`, (req, res) => userController.getAllWorkers(req, res)); // Pas finie + Swagger à faire
