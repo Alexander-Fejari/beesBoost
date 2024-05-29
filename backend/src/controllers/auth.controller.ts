@@ -58,7 +58,7 @@ class AuthController {
         id: user._id,
         username: user.username,
         role: user.role
-      }, process.env.JWT_SECRET_AUTH!, { expiresIn: `10s` });
+      }, process.env.JWT_SECRET_AUTH!, { expiresIn: `1h` });
 
       const refreshToken = jwt.sign({
         id: user._id,
@@ -117,7 +117,7 @@ class AuthController {
           id: decoded.id,
           username: decoded.username,
           role: user.role
-        }, process.env.JWT_SECRET_AUTH!, { expiresIn: `10s` });
+        }, process.env.JWT_SECRET_AUTH!, { expiresIn: `1h` });
 
         res.json({ accessToken: newAccessToken });
       }
