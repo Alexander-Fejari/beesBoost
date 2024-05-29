@@ -1,7 +1,7 @@
 import BentoElement from "@/components/custom/BentoElement";
 import UserDetails from "@/store/UserDetailsStore"
 import {Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle,} from "@/components/ui/card"
-import CardProfileEdit from "@/components/custom/Profile/customHook/useCardProfileResumeEdit.tsx";
+import CardProfileEdit from "@/components/custom/Profile/customHook/useCardProfileAboutEdit.tsx";
 import CTACardResume from "@/components/custom/Profile/CTACardResume";
 import {useAuthStore} from "@/store/Store.tsx";
 
