@@ -3,6 +3,7 @@ import {useAuthStore} from "@/store/Store";
 import {useUserDetailsStore} from "@/store/UserDetailsStore";
 import Layout from "@/components/Layout";
 import CardProfileResume from "@/components/custom/Profile/CardProfileResume";
+import CardProfileAbout from "@/components/custom/Profile/CardProfileAbout.tsx";
 
 const Profile = () => {
     const userId = useAuthStore((state) => state.id);
@@ -30,8 +31,8 @@ const Profile = () => {
     }, [userId, token, fetchUserDetails]);
 
     useEffect(() => {
-        fetchData().catch((err) => {
-            console.error('Failed to fetch user details:', err.message);
+        fetchData().catch((error) => {
+            console.error('Failed to fetch user details:', error.message);
         });
     }, [fetchData]);
 
@@ -48,6 +49,12 @@ const Profile = () => {
         return (
             <Layout>
                 <CardProfileResume
+                    userId={userId}
+                    userDetails={userDetails}
+                    updateUserDetails={updateUserDetails}
+                    submitUserDetails={submitUserDetails}
+                />
+                <CardProfileAbout
                     userId={userId}
                     userDetails={userDetails}
                     updateUserDetails={updateUserDetails}

@@ -6,12 +6,14 @@ import Sidebar from '@/components/custom/Sidebar';
 import { useAuthStore } from '@/store/Store';
 import BentoGrid from '@/components/custom/BentoGrid';
 import Breadcrumbs from "@/components/custom/Breadcrumb.tsx";
+import useRenewTokenOnRouteChange from '@/components/useHook/useRenewTokenOnRouteChange';
 
 interface LayoutProps {
     children?: React.ReactNode;
 }
 
 const Layout = ({ children }: LayoutProps) => {
+    useRenewTokenOnRouteChange();
     const { isAuthenticated } = useAuthStore();
 
     // Vérifie si la route est une route imbriquée de dashboard (ex: /dashboard/*)
