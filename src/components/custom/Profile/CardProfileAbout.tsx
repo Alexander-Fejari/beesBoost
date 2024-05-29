@@ -1,6 +1,6 @@
 import BentoElement from "@/components/custom/BentoElement.tsx";
 import {Card, CardContent, CardHeader, CardTitle} from "@/components/ui/card.tsx";
-import CardProfileEdit from "@/components/custom/Profile/customHook/useCardProfileAboutEdit.tsx";
+import CardProfileAboutEdit from "@/components/custom/Profile/customHook/useCardProfileAboutEdit.tsx";
 import UserDetails from "@/store/UserDetailsStore.tsx";
 import {useAuthStore} from "@/store/Store.tsx";
 import {useTranslation} from "react-i18next";
@@ -28,7 +28,7 @@ const CardProfileAbout = ({userId, userDetails, updateUserDetails, submitUserDet
             </Card>
             {userId === currentUserId && (
                 <section className="absolute top-2 right-2">
-                    <CardProfileEdit
+                    <CardProfileAboutEdit
                         userId={userId!}
                         userDetails={userDetails}
                         updateUserDetails={updateUserDetails}
