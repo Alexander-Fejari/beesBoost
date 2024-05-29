@@ -1,9 +1,18 @@
 import multer from 'multer';
+import path from 'path';
+import fs from 'fs';
 import { Request, Response, NextFunction } from 'express';
+
+
+const uploadDir = path.join(__dirname, '../../uploaded_pp');
+
+if (!fs.existsSync(uploadDir)) {
+  fs.mkdirSync(uploadDir, { recursive: true });
+}
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, `../../uploaded_pp/`);
+    cb(null, uploadDir);
   },
   filename: (req, file, cb) => {
     cb(null, `${Date.now()}-${file.originalname}`);
