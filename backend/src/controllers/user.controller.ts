@@ -32,18 +32,6 @@ class UserController {
         return true;
       }
 
-      // if (NorD == `D`) {
-      //   if ((req.body.is_company_admin || req.body.company) && user.role == `student`) {
-      //     res.status(404).json({ error: `Cant update worker_details on student profile` });
-      //     return true;
-      //   }
-      //   else if (req.body.string && user.role == `worker`) {
-      //     res.status(404).json({ error: `Cant update student_details on worker profile` });
-      //     return true;
-      //   }
-      //   if (req)
-      // }
-
       return false;
     }
       catch (error) {
