@@ -33,7 +33,7 @@ function authenticateToken(req: Request, res: Response, next: NextFunction): voi
           return res.status(403).json({ error: `Unauthorized access: User account is disabled` });
         }
 
-        await AuthController.resetUserTimer(req.user.id);
+        //await AuthController.resetUserTimer(req.user.id);
 
         next();
       } 

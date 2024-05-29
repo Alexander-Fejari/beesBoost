@@ -6,7 +6,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.authorizeRoles = exports.authenticateToken = void 0;
 const user_model_1 = require("../models/user.model");
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
-const auth_controller_1 = __importDefault(require("../controllers/auth.controller"));
 function authenticateToken(req, res, next) {
     const authHeader = req.headers['authorization'];
     const token = authHeader && authHeader.split(' ')[1]; // Bearer TOKEN
@@ -32,7 +31,7 @@ function authenticateToken(req, res, next) {
                 if (!check_user.is_active) {
                     return res.status(403).json({ error: `Unauthorized access: User account is disabled` });
                 }
-                await auth_controller_1.default.resetUserTimer(req.user.id);
+                //await AuthController.resetUserTimer(req.user.id);
                 next();
             }
             catch (error) {
