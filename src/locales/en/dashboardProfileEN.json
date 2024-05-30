@@ -7,7 +7,11 @@
         "firstname": "Firstname:",
         "lastname": "Lastname:",
         "occupation": "Occupation:",
-        "pickUpLine": "Pick up line: "
+        "pickUpLine": "Pick up line: ",
+        "description": "Description: "
+    },
+    "about": {
+        "title": "About me"
     },
     "edit": {
         "cta": "Save changes"

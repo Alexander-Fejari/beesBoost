@@ -7,7 +7,11 @@
         "firstname": "Prénom:",
         "lastname": "Nom:",
         "occupation": "Poste:",
-        "pickUpLine": "Bio: "
+        "pickUpLine": "Bio: ",
+        "description": "Description: "
+    },
+    "about": {
+        "title": "À propos"
     },
     "edit": {
         "cta": "Sauvegarder"

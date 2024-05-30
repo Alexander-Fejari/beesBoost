@@ -16,14 +16,14 @@ import UserDetails from "@/store/UserDetailsStore";
 import { useState, useEffect, useCallback } from "react";
 import { useTranslation } from "react-i18next";
 
-interface CardProfileEditProps {
+interface CardProfileResumeEdit {
     userId: string;
     userDetails: UserDetails;
     updateUserDetails: (details: Partial<UserDetails>) => void;
     submitUserDetails: (userId: string, details: Partial<UserDetails>) => Promise<void>;
 }
 
-const useCardProfileEdit = ({ userId, userDetails, updateUserDetails, submitUserDetails }: CardProfileEditProps) => {
+const useCardProfileResumeEdit = ({ userId, userDetails, updateUserDetails, submitUserDetails }: CardProfileResumeEdit) => {
     const { t } = useTranslation('dashboardProfile');
 
     const [newFirstname, setNewFirstname] = useState(userDetails.firstname);
@@ -115,4 +115,4 @@ const useCardProfileEdit = ({ userId, userDetails, updateUserDetails, submitUser
     );
 };
 
-export default useCardProfileEdit;
+export default useCardProfileResumeEdit;

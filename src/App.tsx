@@ -20,7 +20,6 @@ const router = createBrowserRouter(
             <Route path="dashboard/post" element={<ProtectedRoute><PostJobForm /></ProtectedRoute>} />
             <Route path="dashboard/jobs" element={<ProtectedRoute><JobListMain /></ProtectedRoute>} />
             <Route path="/edit/:jobId" element={<ProtectedRoute><EditPostForm /></ProtectedRoute>} />
-            
         </Route>
     )
 );
