@@ -144,6 +144,40 @@ class CompanyController {
     }
   }
 
+  public async updateProfilePic(req: Request, res: Response): Promise<void> {
+    try {
+      const param = req.params.param;
+      const file = req.file;
+      const { link } = req.body;
+
+      const company = await CompanyModel.findOne({ param });
+
+      if (!company) {
+        res.status(404).json({ error: `company not found` });
+        return;
+      }
+
+      if (file) {
+        company.profile_pic = file.path;
+      } 
+      else if (link) {
+        company.profile_pic = link;
+      } 
+      else {
+        res.status(400).json({ error: `No file or link provided` });
+        return ;
+      }
+
+      await company.save();
+
+      res.json({ message: `company's profile picture updated successfully`, profile_pic: company.profile_pic });
+    } 
+    catch (error) {
+      console.error(`Error updating company's profile picture:`, error);
+      res.status(500).json({ error: `Internal server error` });
+    }
+  }
+
   // DELETE
   public async deleteCompany(req: Request, res: Response): Promise<void> {
     try {

@@ -1,6 +1,7 @@
 import express, { Router } from 'express';
 import companyController from '../controllers/company.controller';
 import { authenticateToken, authorizeRoles } from '../middlewares/auth.middleware'
+import uploadMiddleware from '../middlewares/multer.middleware';
 
 const router: Router = express.Router();
 
@@ -16,6 +17,8 @@ router.get(`/getCompanyBasicInfo/:param`, authenticateToken, companyController.g
 
 // PUT
 router.put(`/updateCompany/:param`, authenticateToken, companyController.updateCompany); // Surement à modifier
+
+router.put(`/updateProfilePicture/:param`, uploadMiddleware, /* authenticateToken, */ (req, res) => companyController.updateProfilePic(req, res));
 
 // DELETE
 router.delete(`/deleteCompany/:id`, authenticateToken, authorizeRoles(`superAdmin`), companyController.deleteCompany);

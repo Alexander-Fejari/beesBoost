@@ -443,6 +443,7 @@ class UserController {
                 return;
             }
             if (updateData.company && updateData.company != userToUpdate.worker_details?.company) {
+                const oldCompanyName = userToUpdate.worker_details?.company;
                 let companyFound = await company_model_1.CompanyModel.findOne({ name: updateData.company });
                 if (!companyFound) {
                     companyFound = new company_model_1.CompanyModel({ name: updateData.company, admins: [userToUpdate.username], worker: [userToUpdate.username] });
@@ -456,12 +457,21 @@ class UserController {
                         userToUpdate.worker_details.is_company_admin = false;
                     }
                 }
+                if (oldCompanyName) {
+                    const oldCompany = await company_model_1.CompanyModel.findOne({ name: oldCompanyName });
+                    if (oldCompany) {
+                        oldCompany.worker = oldCompany.worker?.filter(worker => worker !== userToUpdate.username) || [];
+                        oldCompany.admins = oldCompany.admins?.filter(admin => admin !== userToUpdate.username) || [];
+                        await oldCompany.save();
+                    }
+                }
                 await companyFound.save();
             }
             else {
                 res.status(400).json(`Worker cant rejoin the same company`);
                 return;
             }
+            userToUpdate.worker_details = { ...userToUpdate.worker_details, ...updateData };
             await userToUpdate.save();
             res.json(userToUpdate.worker_details);
         }
