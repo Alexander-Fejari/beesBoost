@@ -1,6 +1,6 @@
-import {create} from 'zustand';
-import {devtools} from 'zustand/middleware';
-import {fetchWithToken} from "@/store/Store";
+import { create } from 'zustand';
+import { devtools } from 'zustand/middleware';
+import { fetchWithToken } from "@/store/Store";
 
 interface JobSummary {
     avatarUrl: string;
@@ -35,14 +35,17 @@ interface JobState {
     setExpandedJobId: (jobId: string | null) => void;
 }
 
-const useJobStore = create<JobState>()(devtools((set) => ({
+const useJobStore = create<JobState>()(devtools((set, get) => ({
     jobSummaries: [],
     jobDetails: {},
     isLoading: {},
     errorMessage: null,
     expandedJobId: null,
     fetchJobSummaries: async (token: string) => {
-        set({isLoading: {summaries: true}});
+        const { jobSummaries } = get();
+        if (jobSummaries.length > 0) return; // Vérifie si les données sont déjà présentes
+
+        set({ isLoading: { summaries: true } });
         try {
             const response = await fetch(`${import.meta.env.VITE_APP_API_URL}/post/getPosts`, {
                 method: 'GET',
@@ -63,14 +66,17 @@ const useJobStore = create<JobState>()(devtools((set) => ({
                 location: job.location,
                 poster_id: job.poster_id,
             }));
-            set({jobSummaries, isLoading: {summaries: false}});
+            set({ jobSummaries, isLoading: { summaries: false } });
         } catch (error) {
             console.error('Error fetching job summaries:', error);
-            set({errorMessage: 'Failed to fetch job summaries', isLoading: {summaries: false}});
+            set({ errorMessage: 'Failed to fetch job summaries', isLoading: { summaries: false } });
         }
     },
     fetchJobDetail: async (jobId: string, token: string) => {
-        set(state => ({isLoading: {...state.isLoading, [jobId]: true}}));
+        const { jobDetails } = get();
+        if (jobDetails[jobId]) return; // Vérifie si les détails du job sont déjà présents
+
+        set(state => ({ isLoading: { ...state.isLoading, [jobId]: true } }));
         try {
             const response = await fetchWithToken(`${import.meta.env.VITE_APP_API_URL}/post/getPostById/${jobId}`, {
                 method: 'GET',
@@ -99,17 +105,17 @@ const useJobStore = create<JobState>()(devtools((set) => ({
                 function: data.function
             };
             set(state => ({
-                jobDetails: {...state.jobDetails, [jobId]: jobDetail},
-                isLoading: {...state.isLoading, [jobId]: false}
+                jobDetails: { ...state.jobDetails, [jobId]: jobDetail },
+                isLoading: { ...state.isLoading, [jobId]: false }
             }));
         } catch (error) {
             set(state => ({
                 errorMessage: `Failed to fetch job detail for job id: ${jobId}`,
-                isLoading: {...state.isLoading, [jobId]: false}
+                isLoading: { ...state.isLoading, [jobId]: false }
             }));
         }
     },
-    setExpandedJobId: (jobId: string | null) => set({expandedJobId: jobId}),
+    setExpandedJobId: (jobId: string | null) => set({ expandedJobId: jobId }),
 })));
 
 export default useJobStore;
