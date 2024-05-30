@@ -66,7 +66,7 @@ const useCardProfileAboutEdit = ({ userId, userDetails, updateUserDetails, submi
                     </DialogDescription>
                 </DialogHeader>
                 <section>
-                    <div className="grid gap-4 py-4">
+                    <div className="grid gap-4 py-4 h-full">
                         <div className="grid grid-cols-4 items-center gap-4">
                             <Label htmlFor="description" className="break-normal w-full ">
                                 {t('resume.description')}

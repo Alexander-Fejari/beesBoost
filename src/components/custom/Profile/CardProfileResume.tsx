@@ -1,8 +1,8 @@
 import BentoElement from "@/components/custom/BentoElement";
 import UserDetails from "@/store/UserDetailsStore"
 import {Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle,} from "@/components/ui/card"
-import CardProfileEdit from "@/components/custom/Profile/customHook/useCardProfileAboutEdit.tsx";
-import CTACardResume from "@/components/custom/Profile/CTACardResume";
+import CardProfileResumeEdit from "@/components/custom/Profile/customHook/useCardProfileResumeEdit.tsx";
+import CTACardResume from "@/components/custom/Profile/features/CTACardResume";
 import {useAuthStore} from "@/store/Store.tsx";
 
 interface CardProfileResumeProps {
@@ -33,7 +33,7 @@ const CardProfileResume = ({userId, userDetails,updateUserDetails,submitUserDeta
             </Card>
             {userId === currentUserId && (
                 <section className="absolute top-2 right-2">
-                    <CardProfileEdit
+                    <CardProfileResumeEdit
                         userId={userId!}
                         userDetails={userDetails}
                         updateUserDetails={updateUserDetails}
