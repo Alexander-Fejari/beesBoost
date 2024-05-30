@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
-import UserDetails from "@/store/UserDetailsStore";
 import { useTranslation } from "react-i18next";
+import { useStudentDetailsStore, StudentDetails } from "@/store/StudentDetailsStore"; // Assurez-vous d'importer correctement le store
 import {
     Dialog,
     DialogContent,
@@ -15,26 +15,30 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { MdEdit } from "react-icons/md";
 
-interface CardProfileAboutEditProps {
+interface CardProfileExperienceEditProps {
     userId: string;
-    userDetails: UserDetails;
-    updateUserDetails: (details: Partial<UserDetails>) => void;
-    submitUserDetails: (userId: string, details: Partial<UserDetails>) => Promise<void>;
+    studentDetails: StudentDetails;
 }
 
-const useCardProfileAboutEdit = ({ userId, userDetails, updateUserDetails, submitUserDetails }: CardProfileAboutEditProps) => {
+const useCardProfileExperienceEdit = ({ userId, studentDetails }: CardProfileExperienceEditProps) => {
     const { t } = useTranslation('dashboardProfile');
     const [isModified, setIsModified] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');
+    const [newTitle, setNewTitle] = useState(
+        studentDetails.experience && studentDetails.experience.length > 0
+            ? studentDetails.experience[0].title
+            : ''
+    );
 
-    const [newDescription, setNewDescription] = useState(userDetails.description);
+    const updateExperience = useStudentDetailsStore((state) => state.updateExperience);
+    const submitStudentDetails = useStudentDetailsStore((state) => state.submitStudentDetails);
 
     const checkIfModified = useCallback(() => {
         const modified = (
-            newDescription !== userDetails.description
+            newTitle !== (studentDetails.experience && studentDetails.experience.length > 0 ? studentDetails.experience[0].title : '')
         );
         setIsModified(modified);
-    }, [newDescription, userDetails]);
+    }, [newTitle, studentDetails]);
 
     useEffect(() => {
         checkIfModified();
@@ -46,10 +50,10 @@ const useCardProfileAboutEdit = ({ userId, userDetails, updateUserDetails, submi
             return;
         }
         const updatedDetails = {
-            description: newDescription,
+            experience: [{ ...studentDetails.experience[0], title: newTitle }]
         };
-        updateUserDetails(updatedDetails);
-        await submitUserDetails(userId, updatedDetails);
+        updateExperience(studentDetails.experience[0]._id, { title: newTitle });
+        await submitStudentDetails(userId, updatedDetails);
         setErrorMessage(''); // Clear error message on successful save
     };
 
@@ -68,10 +72,10 @@ const useCardProfileAboutEdit = ({ userId, userDetails, updateUserDetails, submi
                 <section>
                     <div className="grid gap-4 py-4 h-full">
                         <div className="grid grid-cols-4 items-center gap-4">
-                            <Label htmlFor="description" className="break-normal w-full ">
-                                {t('resume.description')}
+                            <Label htmlFor="title" className="break-normal w-full ">
+                                {t('resume.title')}
                             </Label>
-                            <Textarea id="description" value={newDescription} onChange={(e) => setNewDescription(e.target.value)} className="col-span-3" />
+                            <Textarea id="title" value={newTitle} onChange={(e) => setNewTitle(e.target.value)} className="col-span-3" />
                         </div>
                     </div>
                 </section>
@@ -86,4 +90,4 @@ const useCardProfileAboutEdit = ({ userId, userDetails, updateUserDetails, submi
     );
 };
 
-export default useCardProfileAboutEdit;
+export default useCardProfileExperienceEdit;

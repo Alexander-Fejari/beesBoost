@@ -2,7 +2,6 @@ import {create} from 'zustand';
 import {fetchWithToken} from "@/store/Store";
 
 export default interface UserDetails {
-
     firstname: string;
     lastname: string;
     username: string

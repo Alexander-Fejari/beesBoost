@@ -1,3 +1,6 @@
+import UserDetails from "@/store/UserDetailsStore";
+import { useState, useEffect, useCallback } from "react";
+import { useTranslation } from "react-i18next";
 import {
     Dialog,
     DialogContent,
@@ -12,18 +15,15 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { MdEdit } from "react-icons/md";
-import UserDetails from "@/store/UserDetailsStore";
-import { useState, useEffect, useCallback } from "react";
-import { useTranslation } from "react-i18next";
 
-interface CardProfileResumeEdit {
+interface CardProfileResumeEditProps {
     userId: string;
     userDetails: UserDetails;
     updateUserDetails: (details: Partial<UserDetails>) => void;
     submitUserDetails: (userId: string, details: Partial<UserDetails>) => Promise<void>;
 }
 
-const useCardProfileResumeEdit = ({ userId, userDetails, updateUserDetails, submitUserDetails }: CardProfileResumeEdit) => {
+const useCardProfileResumeEdit = ({ userId, userDetails, updateUserDetails, submitUserDetails }: CardProfileResumeEditProps) => {
     const { t } = useTranslation('dashboardProfile');
 
     const [newFirstname, setNewFirstname] = useState(userDetails.firstname);
