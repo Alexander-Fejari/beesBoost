@@ -2,7 +2,7 @@ import BentoElement from "@/components/custom/BentoElement";
 import UserDetails from "@/store/UserDetailsStore"
 import {Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle,} from "@/components/ui/card"
 import CardProfileResumeEdit from "@/components/custom/Profile/customHook/useCardProfileResumeEdit.tsx";
-import CTACardResume from "@/components/custom/Profile/CTACardResume";
+import CTACardResume from "@/components/custom/Profile/features/CTACardResume";
 import {useAuthStore} from "@/store/Store.tsx";
 
 interface CardProfileResumeProps {
