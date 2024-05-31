@@ -20,11 +20,12 @@ interface UserDetailsState {
     submitUserDetails: (userId: string, details: Partial<UserDetails>) => Promise<void>;
 }
 
-export const useUserDetailsStore = create<UserDetailsState>((set, get) => ({
+export const useUserDetailsStore = create<UserDetailsState>((set: any, get: any) => ({
     userDetails: null,
     isLoading: false,
     error: null,
     fetchUserDetails: async (userId: string) => {
+        console.log('fetchUserDetails called')
         set({isLoading: true, error: null});
         try {
             const response = await fetchWithToken(`${import.meta.env.VITE_APP_API_URL}/user/getUser/${userId}`, {
@@ -37,7 +38,7 @@ export const useUserDetailsStore = create<UserDetailsState>((set, get) => ({
             set({isLoading: false, error: error instanceof Error ? error : new Error('Failed to fetch user details')});
         }
     },
-    updateUserDetails: (details: Partial<UserDetails>) => set((state) => ({
+    updateUserDetails: (details: Partial<UserDetails>) => set((state: any) => ({
         userDetails: state.userDetails ? {...state.userDetails, ...details} : null,
     })),
     submitUserDetails: async (userId: string, details: Partial<UserDetails>) => {

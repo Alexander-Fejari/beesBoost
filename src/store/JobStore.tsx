@@ -41,16 +41,16 @@ const useJobStore = create<JobState>()(devtools((set, get) => ({
     isLoading: {},
     errorMessage: null,
     expandedJobId: null,
-    fetchJobSummaries: async (token: string) => {
+    fetchJobSummaries: async () => {
+        console.log('fetchJobSummaries called');
         const { jobSummaries } = get();
         if (jobSummaries.length > 0) return; // Vérifie si les données sont déjà présentes
 
         set({ isLoading: { summaries: true } });
         try {
-            const response = await fetch(`${import.meta.env.VITE_APP_API_URL}/post/getPosts`, {
+            const response = await fetchWithToken(`${import.meta.env.VITE_APP_API_URL}/post/getPosts`, {
                 method: 'GET',
                 headers: {
-                    'authorization': `Bearer ${token}`,
                     'Content-Type': 'application/json',
                 },
             });
@@ -59,7 +59,7 @@ const useJobStore = create<JobState>()(devtools((set, get) => ({
             const jobSummaries = data.map((job: JobDetail) => ({
                 _id: job._id,
                 title: job.title,
-                descriptionShort: job.descriptionShort,
+                descriptionShort: job.body.description, // Correction ici pour utiliser data.body.description
                 start_date: job.start_date,
                 duration: job.duration,
                 field: job.field,
@@ -72,7 +72,7 @@ const useJobStore = create<JobState>()(devtools((set, get) => ({
             set({ errorMessage: 'Failed to fetch job summaries', isLoading: { summaries: false } });
         }
     },
-    fetchJobDetail: async (jobId: string, token: string) => {
+    fetchJobDetail: async (jobId: string) => {
         const { jobDetails } = get();
         if (jobDetails[jobId]) return; // Vérifie si les détails du job sont déjà présents
 
@@ -81,7 +81,6 @@ const useJobStore = create<JobState>()(devtools((set, get) => ({
             const response = await fetchWithToken(`${import.meta.env.VITE_APP_API_URL}/post/getPostById/${jobId}`, {
                 method: 'GET',
                 headers: {
-                    'authorization': `Bearer ${token}`,
                     'Content-Type': 'application/json',
                 },
             });
@@ -90,7 +89,7 @@ const useJobStore = create<JobState>()(devtools((set, get) => ({
             const jobDetail: JobDetail = {
                 _id: data._id,
                 title: data.title,
-                descriptionShort: data.body.description,
+                descriptionShort: data.body.description, // Correction ici pour utiliser data.body.description
                 start_date: data.start_date,
                 duration: data.duration,
                 field: data.field,

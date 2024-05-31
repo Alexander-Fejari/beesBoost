@@ -81,7 +81,7 @@ const JobList: React.FC = () => {
                                 </Avatar>
                                 <CardTitle>{job.title}</CardTitle>
                             </div>
-                            <CardDescription>{job.descriptionShort}</CardDescription>
+                            <CardDescription>{job.descriptionShort}</CardDescription> {/* Affichage de descriptionShort */}
                             {isExpanded ? (
                                 <TfiClose onClick={() => handleExpand(job._id)}
                                           className="absolute top-2 right-2 cursor-pointer" />
