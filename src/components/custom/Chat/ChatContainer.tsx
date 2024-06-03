@@ -1,6 +1,6 @@
 // src/components/custom/Chat/ChatContainer.tsx
 import React from 'react';
-import BentoElement from '@/components/custom/BentoElement';
+import BentoElement from '@/components/custom/Common/BentoElement.tsx';
 import ChatApp from './ChatInterface';
 
 const ChatContainer: React.FC = () => {

@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { postFormSchema, PostValues } from "@/components/formSchema"; // Adjust the import path
+import { Button } from "@/components/ui/button.tsx";
+import { Input } from "@/components/ui/input.tsx";
+import { Label } from "@/components/ui/label.tsx";
+import { postFormSchema, PostValues } from "@/components/formSchema.ts"; // Adjust the import path
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from "react-router-dom";
-import { useAuthStore } from "@/store/Store"; // Adjust the import path
+import { useAuthStore } from "@/store/Store.tsx"; // Adjust the import path
 
 const formatDisplayDate = (dateString: string): string => {
   const date = new Date(dateString);

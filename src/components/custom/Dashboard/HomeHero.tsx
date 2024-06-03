@@ -1,8 +1,9 @@
 import {useTranslation} from "react-i18next";
-import AnimatedTitle from "@/components/custom/AnimatedTitle";
-import {Button} from "@/components/ui/button";
+import AnimatedTitle from "@/components/custom/Dashboard/AnimatedTitle.tsx";
+import {Button} from "@/components/ui/button.tsx";
 import {NavLink} from "react-router-dom";
-import LastRegisteredStudents from "@/components/custom/LastRegisteredStudents";
+import TypeWritedTitle  from "@/components/custom/Dashboard/TypeWritedTitle.tsx";
+import LastRegisteredStudents from "@/components/custom/Dashboard/LastRegisteredStudents.tsx";
 
 const HomeHero = () => {
     const {t} = useTranslation('dashboard')
@@ -13,7 +14,7 @@ const HomeHero = () => {
                     <h1 className={'text-2xl font-normal md:text-3xl'}>
                         {t('dashboard.title')}
                     </h1>
-                    <AnimatedTitle />
+                    <TypeWritedTitle />
                 </section>
                 <section className="w-full flex justify-center items-center gap-x-8 md:justify-start md:mb-4">
                     <Button size={'sm'} variant={'default'} className={'md:text-base'}  asChild>

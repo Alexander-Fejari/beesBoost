@@ -1,11 +1,11 @@
 import React from 'react';
 import { useMatch } from 'react-router-dom';
-import Header from '@/components/custom/Header';
-import Footer from '@/components/custom/Footer';
-import Sidebar from '@/components/custom/Sidebar';
+import Header from '@/components/custom/Common/Header.tsx';
+import Footer from '@/components/custom/Common/Footer.tsx';
+import Sidebar from '@/components/custom/Common/Sidebar.tsx';
 import { useAuthStore } from '@/store/Store';
-import BentoGrid from '@/components/custom/BentoGrid';
-import Breadcrumbs from "@/components/custom/Breadcrumb.tsx";
+import BentoGrid from '@/components/custom/Common/BentoGrid.tsx';
+import Breadcrumbs from "@/components/custom/Common/Breadcrumb.tsx";
 
 interface LayoutProps {
     children?: React.ReactNode;

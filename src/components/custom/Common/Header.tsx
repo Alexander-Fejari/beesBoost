@@ -1,10 +1,10 @@
 import { useLayoutEffect, useState } from 'react';
-import LanguageSwitcher from '@/components/custom/LanguageSwitcher';
-import { ModeToggle } from '@/components/mode-toggle';
+import LanguageSwitcher from '@/components/custom/LanguageSwitcher.tsx';
+import { ModeToggle } from '@/components/mode-toggle.tsx';
 import CTALogsUser from '@/components/custom/CTALogsUser.tsx';
-import Logo from '@/components/custom/Logo';
-import Nav from '@/components/custom/Nav';
-import BtnMenu from '@/components/custom/BtnMenu';
+import Logo from '@/components/custom/Logo.tsx';
+import Nav from '@/components/custom/Nav.tsx';
+import BtnMenu from '@/components/custom/BtnMenu.tsx';
 
 interface HeaderProps {
     className?: string;

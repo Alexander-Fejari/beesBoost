@@ -1,5 +1,5 @@
 import Layout from "@/components/Layout";
-import HeroBanner from "@/components/custom/HeroBanner";
+import HeroBanner from "@/components/custom/Dashboard/HeroBanner.tsx";
 
 const Dashboard = () => {
     return (

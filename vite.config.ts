@@ -4,6 +4,9 @@ import path from 'path';
 
 export default defineConfig({
   plugins: [react()],
+  optimizeDeps: {
+    include: ['typewriter-effect']
+  },
   resolve: {
     alias: {
       '@': path.resolve(__dirname, 'src'),

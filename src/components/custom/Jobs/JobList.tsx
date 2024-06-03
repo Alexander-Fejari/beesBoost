@@ -1,15 +1,15 @@
 import React, { useEffect } from 'react';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
-import { Badge } from '@/components/ui/badge';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar.tsx';
+import { Button } from '@/components/ui/button.tsx';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card.tsx';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover.tsx';
+import { Badge } from '@/components/ui/badge.tsx';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs.tsx';
 import { BsThreeDotsVertical } from "react-icons/bs";
 import { TfiClose } from "react-icons/tfi";
-import { Skeleton } from '@/components/ui/skeleton';
-import { useAuthStore } from '@/store/Store';
-import useJobStore from '@/store/JobStore';
+import { Skeleton } from '@/components/ui/skeleton.tsx';
+import { useAuthStore } from '@/store/Store.tsx';
+import useJobStore from '@/store/JobStore.tsx';
 import { useTranslation } from 'react-i18next';
 
 const JobList: React.FC = () => {

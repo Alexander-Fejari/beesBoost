@@ -1,5 +1,5 @@
-import {useAuthStore} from "@/store/Store";
-import HomeHero from "@/components/custom/HomeHero";
+import {useAuthStore} from "@/store/Store.tsx";
+import HomeHero from "@/components/custom/Dashboard/HomeHero.tsx";
 
 
 const HeroBanner = () => {

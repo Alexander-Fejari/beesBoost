@@ -1,12 +1,12 @@
 import {useForm} from "react-hook-form";
 import {zodResolver} from "@hookform/resolvers/zod";
-import {Button} from "@/components/ui/button";
-import {Input} from "@/components/ui/input";
-import {Label} from "@/components/ui/label";
-import {loginSchema, LoginValues} from "@/components/formSchema";
+import {Button} from "@/components/ui/button.tsx";
+import {Input} from "@/components/ui/input.tsx";
+import {Label} from "@/components/ui/label.tsx";
+import {loginSchema, LoginValues} from "@/components/formSchema.ts";
 import {useTranslation} from 'react-i18next';
 import {useNavigate} from "react-router-dom";
-import {useAuthStore} from "@/store/Store"; // Ajustez ce chemin selon la structure de votre projet
+import {useAuthStore} from "@/store/Store.tsx"; // Ajustez ce chemin selon la structure de votre projet
 
 const LogIn = () => {
     const {t} = useTranslation();

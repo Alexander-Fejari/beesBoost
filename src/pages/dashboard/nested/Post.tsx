@@ -1,5 +1,5 @@
 import Layout from "@/components/Layout";
-import PostForm from "@/components/custom/PostForm";
+import PostForm from "@/components/custom/Jobs/PostForm.tsx";
 
 const PostJobForm = () => {
 

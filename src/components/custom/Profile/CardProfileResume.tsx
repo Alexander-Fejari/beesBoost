@@ -1,4 +1,4 @@
-import BentoElement from "@/components/custom/BentoElement";
+import BentoElement from "@/components/custom/Common/BentoElement.tsx";
 import UserDetails from "@/store/UserDetailsStore"
 import {Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle,} from "@/components/ui/card"
 import CardProfileEdit from "@/components/custom/Profile/customHook/useCardProfileEdit";

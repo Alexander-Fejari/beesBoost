@@ -1,9 +1,9 @@
-import {LegalSelector} from '../legal-selector';
+import {LegalSelector} from '../../legal-selector.tsx';
 import Nav from "@/components/custom/Nav.tsx";
 import Logo from "@/components/custom/Logo.tsx";
 import LanguageSwitcher from "@/components/custom/LanguageSwitcher.tsx";
-import SocialMediaLinks from "@/components/custom/SocialMediaLinks";
-import {Separator} from "@/components/ui/separator"
+import SocialMediaLinks from "@/components/custom/SocialMediaLinks.tsx";
+import {Separator} from "@/components/ui/separator.tsx"
 
 
 interface FooterProps {

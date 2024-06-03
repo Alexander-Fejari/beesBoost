@@ -1,9 +1,9 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button.tsx";
+import { Input } from "@/components/ui/input.tsx";
 import { Label } from "@/components/ui/label.tsx";
-import { formSchema, FormValues } from "@/components/formSchema";
+import { formSchema, FormValues } from "@/components/formSchema.ts";
 import { useTranslation } from 'react-i18next';
 
 const SignIn = () => {

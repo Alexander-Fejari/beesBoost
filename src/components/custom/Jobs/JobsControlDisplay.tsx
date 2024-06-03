@@ -1,8 +1,8 @@
 import React, { useEffect } from 'react';
-import useJobStore from '@/store/JobStore'; // Adjust the import path
-import { useAuthStore } from '@/store/Store'; // Adjust the import path
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { Button } from "@/components/ui/button";
+import useJobStore from '@/store/JobStore.tsx'; // Adjust the import path
+import { useAuthStore } from '@/store/Store.tsx'; // Adjust the import path
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table.tsx';
+import { Button } from "@/components/ui/button.tsx";
 import { useNavigate } from 'react-router-dom';
 
 const JobControlList: React.FC = () => {

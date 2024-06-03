@@ -1,14 +1,14 @@
 import React, {useEffect, useState} from 'react';
 import {SubmitHandler, useForm} from "react-hook-form";
 import {zodResolver} from "@hookform/resolvers/zod";
-import {Button} from "@/components/ui/button";
-import {Input} from "@/components/ui/input";
-import {Label} from "@/components/ui/label";
-import {postFormSchema, PostValues} from "@/components/formSchema"; // Adjust the import path
+import {Button} from "@/components/ui/button.tsx";
+import {Input} from "@/components/ui/input.tsx";
+import {Label} from "@/components/ui/label.tsx";
+import {postFormSchema, PostValues} from "@/components/formSchema.ts"; // Adjust the import path
 import {useTranslation} from 'react-i18next';
 import {useNavigate, useParams} from "react-router-dom";
-import {useAuthStore} from "@/store/Store"; // Adjust the import path
-import useJobStore, {JobDetail} from '@/store/JobStore'; // Adjust the import path
+import {useAuthStore} from "@/store/Store.tsx"; // Adjust the import path
+import useJobStore, {JobDetail} from '@/store/JobStore.tsx'; // Adjust the import path
 
 const formatDisplayDate = (dateString: string): string => {
     const date = new Date(dateString);

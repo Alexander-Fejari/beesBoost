@@ -7,7 +7,7 @@ import Profile from "@/pages/dashboard/nested/Profile";
 import Settings from "@/pages/dashboard/nested/Settings";
 import PostJobForm from "@/pages/dashboard/nested/Post";
 import JobListMain from "./pages/dashboard/nested/Joblist";
-import EditPostForm from "./components/custom/JobsControlDetail";
+import EditPostForm from "./components/custom/Jobs/JobsControlDetail.tsx";
 
 const router = createBrowserRouter(
     createRoutesFromElements(
