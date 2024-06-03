@@ -7,7 +7,9 @@ import Profile from "@/pages/dashboard/nested/Profile";
 import Settings from "@/pages/dashboard/nested/Settings";
 import PostJobForm from "@/pages/dashboard/nested/Post";
 import JobListMain from "./pages/dashboard/nested/Joblist";
+import JobDetail from "./components/custom/Jobs/JobDetail.tsx"
 import EditPostForm from "./components/custom/Jobs/JobsControlDetail.tsx";
+import ChatGlobal from "@/pages/dashboard/nested/Messages.tsx";
 
 const router = createBrowserRouter(
     createRoutesFromElements(
@@ -19,7 +21,9 @@ const router = createBrowserRouter(
             <Route path="dashboard/settings" element={<ProtectedRoute><Settings /></ProtectedRoute>} />
             <Route path="dashboard/post" element={<ProtectedRoute><PostJobForm /></ProtectedRoute>} />
             <Route path="dashboard/jobs" element={<ProtectedRoute><JobListMain /></ProtectedRoute>} />
+            <Route path="dashboard/jobs/:jobId" element={<ProtectedRoute><JobDetail /></ProtectedRoute>} />
             <Route path="/edit/:jobId" element={<ProtectedRoute><EditPostForm /></ProtectedRoute>} />
+            <Route path="dashboard/messages" element={<ProtectedRoute><ChatGlobal /></ProtectedRoute>} />
             
         </Route>
     )

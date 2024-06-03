@@ -43,7 +43,8 @@
   "logIn": {
     "email": "E-mail:",
     "password": "Mot de passe:",
-    "connect": "Connexion"
+    "connect": "Connexion",
+    "passwordPh": "Entrez votre mot de passe"
   },
   "logOut": {
     "out": "Déconnexion",

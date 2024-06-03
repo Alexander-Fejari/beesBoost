@@ -62,7 +62,7 @@ const LogIn = () => {
                 <Input
                     id={'password'}
                     type="password"
-                    placeholder="password"
+                    placeholder={t('logIn.passwordPh')}
                     autoComplete="current-password"
                     {...register("password")}
                     error={formState.errors.password?.message}

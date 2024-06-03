@@ -40,7 +40,8 @@
     "logIn": {
         "email": "Email:",
         "password": "Wachtwoord",
-        "connect": "Login"
+        "connect": "Login",
+        "passwordPh": "Enter uw wachtwoord"
     },
     "logOut": {
         "out": "Logout",

@@ -1,7 +1,7 @@
 import { useLayoutEffect, useState } from 'react';
 import LanguageSwitcher from '@/components/custom/LanguageSwitcher.tsx';
 import { ModeToggle } from '@/components/mode-toggle.tsx';
-import CTALogsUser from '@/components/custom/CTALogsUser.tsx';
+import CTALogsUser from '@/components/custom/Auth/CTALogsUser.tsx';
 import Logo from '@/components/custom/Logo.tsx';
 import Nav from '@/components/custom/Nav.tsx';
 import BtnMenu from '@/components/custom/BtnMenu.tsx';

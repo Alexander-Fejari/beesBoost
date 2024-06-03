@@ -6,14 +6,14 @@ import {
     DialogHeader,
     DialogTitle,
     DialogTrigger,
-} from "@/components/ui/dialog"
-import {Button} from "@/components/ui/button"
+} from "@/components/ui/dialog.tsx"
+import {Button} from "@/components/ui/button.tsx"
 import {useTranslation} from "react-i18next";
 import SignIn from "@/components/custom/Auth/SignIn.tsx";
 import LogIn from "@/components/custom/Auth/LogIn.tsx";
 import LogOut from "@/components/custom/Auth/logOut.tsx";
 import { jwtDecode } from "jwt-decode";
-import { useAuthStore } from "@/store/Store";
+import { useAuthStore } from "@/store/Store.tsx";
 
 
 interface DecodedToken {
