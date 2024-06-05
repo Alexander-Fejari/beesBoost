@@ -4,9 +4,9 @@ import { MessageModel } from '../models/message.model';
 class MessageController {
   public async getMessages(req: Request, res: Response): Promise<void> {
     try {
-      const { userId } = req.params;
+      const { user_id } = req.params;
       const messages = await MessageModel.find({
-        $or: [{ sender: userId }, { receiver: userId }]
+        $or: [{ sender: user_id }, { receiver: user_id }]
       });
       res.status(200).json(messages);
     } 

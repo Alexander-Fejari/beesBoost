@@ -4,9 +4,9 @@ const message_model_1 = require("../models/message.model");
 class MessageController {
     async getMessages(req, res) {
         try {
-            const { userId } = req.params;
+            const { user_id } = req.params;
             const messages = await message_model_1.MessageModel.find({
-                $or: [{ sender: userId }, { receiver: userId }]
+                $or: [{ sender: user_id }, { receiver: user_id }]
             });
             res.status(200).json(messages);
         }
