@@ -105,6 +105,7 @@ const IS_DETAILS: { [key in keyof ISDetails]: Record<string, any> } = {
 };
 
 interface IUser extends Document {
+  _id: string;
   username: string;
   password: string;
   reset_token_pass?: string | null;

@@ -3,6 +3,9 @@ import swaggerUi from 'swagger-ui-express';
 import swaggerSpec from './config/swagger.config';
 import cors from 'cors';
 import dotenv from 'dotenv';
+import http from 'http';
+import { Server as SocketIOServer } from 'socket.io';
+import { socketHandler } from './config/webSocket.config';
 
 import { connectToDatabase, closeDatabase } from './config/database.config';
 import userRouter from './routes/user.route';
@@ -16,16 +19,38 @@ dotenv.config();
 // Initialize
 const app = express();
 const port = process.env.PORT || 5000;
+const server = http.createServer(app); // Creates HTTP server
 
 // Middleware
 app.use(express.json()); // Creates the app 
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec)); // Swagger - Documents the app
 
 app.use(cors({
-  origin: [`http://localhost:5000`, `http://localhost:5173`, `http://localhost:5174`, `http://localhost:8000`, `http://127.0.0.1:5173`, `https://cinemania.space`, `http://172.21.40.20:5175`],
+  origin: [
+    `http://localhost:5000`,
+    `http://localhost:5173`,
+    `http://localhost:5174`, 
+    `http://localhost:8000`, 
+    `http://127.0.0.1:5173`, 
+    `https://cinemania.space`, 
+  ],
   
+  credentials: true
+})); // cors - Protects the connection with the front
+
+const io = new SocketIOServer(server, {
+  cors: {
+    origin: [
+      'http://localhost:5000',
+      'http://localhost:5173',
+      'http://localhost:5174',
+      'http://localhost:8000',
+      'http://127.0.0.1:5173',
+      'https://cinemania.space',
+    ],
     credentials: true
-  })); // cors - Protects the connection with the front
+  }
+});
 
 // Test route
 app.get('/home', (req: Request, res: Response) => {
@@ -43,13 +68,17 @@ app.use(`/post`, cOffersRouter); // Companies Offers
 // Connection database + Launching server
 connectToDatabase()
   .then(() => {
-    app.listen(port, () => {
+    server.listen(port, () => {
       console.log(`Server launched on http://localhost:${port} and Documentation available on http://localhost:${port}/api-docs`);
     });
   })
   .catch((err) => {
     console.error('Error connecting to MongoDB :', err);
   });
+
+io.on('connection', socket => {
+  socketHandler(socket, io);
+});
 
 // Closing database when server is closed
 process.on(('SIGINT' || 'SIGTERM'), async () => {

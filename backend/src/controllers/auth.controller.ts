@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import bcrypt from 'bcrypt';
-import { UserModel } from '../models/user.model';
+import { UserModel, IUser } from '../models/user.model';
 import userController from './user.controller';
 import jwt from 'jsonwebtoken';
 import mailerService from '../services/mailer.service';
@@ -28,7 +28,7 @@ class AuthController {
       const { username, password } = req.body;
       let { email } = req.body;
       
-      let user;
+      let user: IUser | null = null;
 
       if (email) {
         email = email.toLowerCase();

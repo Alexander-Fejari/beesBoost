@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import { UserModel } from '../models/user.model';
 import { CompanyModel } from '../models/company.model';
-import { COfferModel } from '../models/companyOffers.model';
+import { COfferModel, ICOffer } from '../models/companyOffers.model';
 import { isValidObjectId } from 'mongoose';
 
 class CompanyOfferController {
@@ -47,7 +47,7 @@ class CompanyOfferController {
 
       newOffer.location = req.body.location ? req.body.location : company.contact_info?.city;
       
-      const offer = await newOffer.save();
+      const offer: ICOffer = await newOffer.save();
 
       company.offers?.push(offer._id);
       await company.save();

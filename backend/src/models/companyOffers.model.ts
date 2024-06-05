@@ -9,6 +9,7 @@ interface IMissionBody {
 }
 
 interface ICOffer extends Document {
+  _id: string;
   poster_id?: string;
   company_name?: string;
   field?: string;

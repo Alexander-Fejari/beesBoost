@@ -25,7 +25,7 @@ class AuthController {
         try {
             const { username, password } = req.body;
             let { email } = req.body;
-            let user;
+            let user = null;
             if (email) {
                 email = email.toLowerCase();
                 user = await user_model_1.UserModel.findOne({ email: email });
