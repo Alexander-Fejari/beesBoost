@@ -20,7 +20,7 @@ const CardProfileAbout = ({userId, userDetails, updateUserDetails, submitUserDet
         <BentoElement size={'col-span-4'} className={'relative'}>
             <Card className={'bg-transparent border-none'}>
                 <CardHeader className={"flex flex-row items-center space-y-0 gap-x-4"}>
-                        <CardTitle className={'font-bold uppercase'}>{t('about.title')}</CardTitle>
+                        <CardTitle className={'font-bold text-xl uppercase'}>{t('about.title')}</CardTitle>
                 </CardHeader>
                 <CardContent className={'text-sm'}>
                     {userDetails.description}

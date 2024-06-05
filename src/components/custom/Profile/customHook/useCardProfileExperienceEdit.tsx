@@ -1,6 +1,9 @@
 import { useState, useEffect, useCallback } from "react";
 import { useTranslation } from "react-i18next";
-import { useStudentDetailsStore, StudentDetails } from "@/store/StudentDetailsStore"; // Assurez-vous d'importer correctement le store
+import { Button } from "@/components/ui/button";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { MdEdit } from "react-icons/md";
 import {
     Dialog,
     DialogContent,
@@ -10,35 +13,42 @@ import {
     DialogTitle,
     DialogTrigger
 } from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
-import { MdEdit } from "react-icons/md";
+import { Calendar } from "@/components/ui/calendar";
+import { useStudentDetailsStore, StudentDetails } from "@/store/StudentDetailsStore";
 
 interface CardProfileExperienceEditProps {
-    userId: string;
     studentDetails: StudentDetails;
+    experienceIndex: number;
+    userId: string;
 }
 
-const useCardProfileExperienceEdit = ({ userId, studentDetails }: CardProfileExperienceEditProps) => {
+const useCardProfileExperienceEdit = ({ studentDetails, experienceIndex }: CardProfileExperienceEditProps) => {
     const { t } = useTranslation('dashboardProfile');
     const [isModified, setIsModified] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');
-    const [newTitle, setNewTitle] = useState(
-        studentDetails.experience && studentDetails.experience.length > 0
-            ? studentDetails.experience[0].title
-            : ''
-    );
 
     const updateExperience = useStudentDetailsStore((state) => state.updateExperience);
-    const submitStudentDetails = useStudentDetailsStore((state) => state.submitStudentDetails);
+
+    const experience = studentDetails.experience[experienceIndex];
+
+    const [newTitle, setNewTitle] = useState(experience.title);
+    const [newCompany, setNewCompany] = useState(experience.company);
+    const [newLocation, setNewLocation] = useState(experience.location);
+    const [selectedDates, setSelectedDates] = useState<{ startDate: Date | undefined, endDate: Date | undefined }>({
+        startDate: new Date(experience.start_date),
+        endDate: new Date(experience.end_date)
+    });
 
     const checkIfModified = useCallback(() => {
         const modified = (
-            newTitle !== (studentDetails.experience && studentDetails.experience.length > 0 ? studentDetails.experience[0].title : '')
+            newTitle !== experience.title ||
+            newCompany !== experience.company ||
+            newLocation !== experience.location ||
+            selectedDates.startDate?.toISOString() !== new Date(experience.start_date).toISOString() ||
+            selectedDates.endDate?.toISOString() !== new Date(experience.end_date).toISOString()
         );
         setIsModified(modified);
-    }, [newTitle, studentDetails]);
+    }, [newTitle, newCompany, newLocation, selectedDates, experience]);
 
     useEffect(() => {
         checkIfModified();
@@ -49,12 +59,19 @@ const useCardProfileExperienceEdit = ({ userId, studentDetails }: CardProfileExp
             setErrorMessage('Aucune modification apportée.');
             return;
         }
-        const updatedDetails = {
-            experience: [{ ...studentDetails.experience[0], title: newTitle }]
+
+        const updatedExperience = {
+            ...experience,
+            title: newTitle,
+            company: newCompany,
+            location: newLocation,
+            start_date: selectedDates.startDate?.toISOString(),
+            end_date: selectedDates.endDate?.toISOString()
         };
-        updateExperience(studentDetails.experience[0]._id, { title: newTitle });
-        await submitStudentDetails(userId, updatedDetails);
-        setErrorMessage(''); // Clear error message on successful save
+
+        updateExperience(experience._id, updatedExperience);
+
+        setErrorMessage('');
     };
 
     return (
@@ -65,17 +82,31 @@ const useCardProfileExperienceEdit = ({ userId, studentDetails }: CardProfileExp
             <DialogContent className="sm:max-w-[425px]">
                 <DialogHeader>
                     <DialogTitle>{t('resume.title')}</DialogTitle>
-                    <DialogDescription>
-                        {t('resume.desc')}
-                    </DialogDescription>
+                    <DialogDescription>{t('resume.desc')}</DialogDescription>
                 </DialogHeader>
                 <section>
                     <div className="grid gap-4 py-4 h-full">
                         <div className="grid grid-cols-4 items-center gap-4">
-                            <Label htmlFor="title" className="break-normal w-full ">
-                                {t('resume.title')}
-                            </Label>
+                            <Label htmlFor="title" className="break-normal w-full ">{t('experience.title')}</Label>
                             <Textarea id="title" value={newTitle} onChange={(e) => setNewTitle(e.target.value)} className="col-span-3" />
+
+                            <Label htmlFor="company" className="break-normal w-full ">{t('experience.company')}</Label>
+                            <Textarea id="company" value={newCompany} onChange={(e) => setNewCompany(e.target.value)} className="col-span-3" />
+
+                            <Label htmlFor="location" className="break-normal w-full ">{t('experience.location')}</Label>
+                            <Textarea id="location" value={newLocation} onChange={(e) => setNewLocation(e.target.value)} className="col-span-3" />
+
+                            <Label htmlFor="dates" className="break-normal w-full ">{t('experience.dates')}</Label>
+                            <Calendar
+                                selected={selectedDates}
+                                onSelect={(date: Date | undefined, isStartDate: boolean) => {
+                                    setSelectedDates(prevDates => ({
+                                        ...prevDates,
+                                        [isStartDate ? 'startDate' : 'endDate']: date
+                                    }));
+                                }}
+                                className="col-span-3"
+                            />
                         </div>
                     </div>
                 </section>

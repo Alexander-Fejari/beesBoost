@@ -13,6 +13,9 @@
     "about": {
         "title": "About me"
     },
+    "experience": {
+        "title": "Ervaring"
+    },
     "edit": {
         "cta": "Save changes"
     }
