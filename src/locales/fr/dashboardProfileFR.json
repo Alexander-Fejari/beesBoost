@@ -7,7 +7,20 @@
         "firstname": "Prénom:",
         "lastname": "Nom:",
         "occupation": "Poste:",
-        "pickUpLine": "Bio: "
+        "pickUpLine": "Bio: ",
+        "description": "Description: "
+    },
+    "about": {
+        "title": "À propos"
+    },
+    "experience": {
+        "title": "Expériences",
+        "titleEdit": "Titre de la fonction: ",
+        "company": "Nom de l'entreprise",
+        "location": "Lieux: ",
+        "startDate": "Date d'entrée: ",
+        "endDate": "Date de fin: ",
+        "description": "Description: "
     },
     "edit": {
         "cta": "Sauvegarder"

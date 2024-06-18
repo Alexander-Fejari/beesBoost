@@ -91,7 +91,6 @@ const fetchWithToken = async (url: string, options: RequestInit = {}): Promise<R
             authorization: `Bearer ${token}`,
         };
     }
-
     let response = await fetch(url, options);
 
     if (response.status === 401) {

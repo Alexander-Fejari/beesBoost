@@ -35,7 +35,6 @@ interface DecodedToken {
                     if (decoded.exp && decoded.exp * 1000 > new Date().getTime()) {
                         setUsername(decoded.username ?? null);
                     } else {
-                        console.log('Token expired');
                         setTokens(null, refreshToken);
                     }
                 } catch (error) {

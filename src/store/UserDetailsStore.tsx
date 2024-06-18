@@ -2,13 +2,13 @@ import {create} from 'zustand';
 import {fetchWithToken} from "@/store/Store";
 
 export default interface UserDetails {
-
     firstname: string;
     lastname: string;
     username: string
     occupation: string
     profile_pic: string
     pick_up_line: string
+    description: string
 }
 
 interface UserDetailsState {
@@ -54,8 +54,7 @@ export const useUserDetailsStore = create<UserDetailsState>((set: any, get: any)
             if (!response.ok) {
                 throw new Error('Failed to update user details');
             }
-            // Refetch user details after successful update
-            await get().fetchUserDetails(userId);
+            get().fetchUserDetails(userId);
         } catch (error) {
             set({isLoading: false, error: error instanceof Error ? error : new Error('Failed to update user details')});
         }

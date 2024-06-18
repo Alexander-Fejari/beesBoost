@@ -12,6 +12,7 @@ interface LayoutProps {
 }
 
 const Layout = ({ children }: LayoutProps) => {
+    useRenewTokenOnRouteChange();
     const { isAuthenticated } = useAuthStore();
 
     // Vérifie si la route est une route imbriquée de dashboard (ex: /dashboard/*)
